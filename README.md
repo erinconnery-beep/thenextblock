@@ -1,0 +1,120 @@
+# The Next Block
+
+## A. What this is
+
+This is the **static, copy-paste version** of The Next Block (Version 1). There is no build step, no framework, no backend, no API, no accounts, no database, and no analytics. It's plain HTML, CSS, and JavaScript.
+
+The AI interview does **not** run on this website. The site's only job is to let someone:
+
+1. Pick a mode (Solo / With a Coach / Exploring).
+2. Click that card's button, which copies the real, complete interview prompt to their clipboard.
+3. Click "Open Claude," which opens claude.ai in a new tab.
+4. Paste the prompt into a new Claude chat.
+5. Answer Claude's seven-question interview there. Claude builds the offline "Next Block" HTML file directly in that chat.
+
+Nothing about a person's answers, prompts, or generated files ever touches a server this project controls — it's a pure static frontend.
+
+## B. How to run locally
+
+This site needs to be *served*, not opened by double-clicking `index.html` — browsers block `fetch()` on `file://` pages, and the copy buttons rely on `fetch()` to load the real prompt text.
+
+From inside this folder, run one of:
+
+```
+npx serve .
+```
+
+or
+
+```
+python3 -m http.server 8000
+```
+
+Then open the printed `localhost` URL in your browser.
+
+## C. How to build
+
+There is no build step. This is a zero-build static site — the files in this folder (`index.html`, `styles.css`, `app.js`, `prompts/`) are exactly what gets deployed. "Building for production" simply means deploying this folder as-is.
+
+## D. Where the prompt files live
+
+```
+prompts/
+  solo-sprint.md      — Solo mode
+  coaching-loop.md     — With a Coach mode
+  research-phase.md    — Exploring mode
+```
+
+Each file is complete and self-contained — it explains what The Next Block is, how the model should behave, runs the full seven-question interview (customized per mode), and specifies the offline HTML file Claude must build at the end. None of the three files reference each other or depend on anything else in this repo. Pasting any one of them alone into a fresh Claude chat is enough to run a full session.
+
+**The prompt text lives only in these three files.** `app.js` does not contain any prompt copy, template, or summary — it only knows the file path for each button and fetches that file's raw text when clicked.
+
+## E. How to edit text
+
+**Homepage copy** (hero text, card titles, subtitles, descriptions, footer, nav, Design/Disclaimer/Feedback content) lives in `index.html`. Visual styling (colors, spacing, fonts) is controlled by `styles.css`.
+
+**The actual interview prompts** Claude runs live only in the three files under `prompts/`. Editing a prompt means editing its `.md` file directly, in any plain text editor — no other file needs to change, and the browser cache is bypassed on every click, so edits show up on the next copy.
+
+## F. How to edit icons
+
+The three mode icons (Solo, With a Coach, Exploring) are inline custom SVGs written directly in `index.html`, inside each card's `.title-row`, next to the black mode title. Their sizing and alignment (fixed icon box, shared SVG viewBox, color) are controlled by the `.title-row`, `.icon-box`, and `.path-symbol` rules in `styles.css`. There are no icon library dependencies or image files to manage — every icon is hand-drawn SVG paths in the markup.
+
+## G. How to deploy to Vercel
+
+1. Push this project to GitHub (see the GitHub steps below if you haven't done this).
+2. Go to [vercel.com](https://vercel.com) and sign in (you can use your GitHub account to sign in).
+3. Click **Add New Project**.
+4. Import the GitHub repo you just pushed.
+5. Let Vercel detect the build settings — this is a static site, so no build command or output directory is needed. Leave Vercel's defaults as-is.
+6. Click **Deploy**.
+7. Test the temporary `*.vercel.app` URL Vercel gives you once the deploy finishes, before connecting your real domain.
+
+## H. How to connect thenextblock.org
+
+Your domain is registered at Namecheap; hosting lives on Vercel. You do not need Namecheap hosting, WordPress, PremiumDNS, SiteLock, paid SSL, or business email for this site — Vercel issues free SSL automatically once DNS is pointed at it.
+
+1. In Vercel, open **Project Settings → Domains**.
+2. Add `thenextblock.org`.
+3. Add `www.thenextblock.org`.
+4. Copy the exact DNS records Vercel shows you (typically an `A` record for the root domain and a `CNAME` for `www`).
+5. In Namecheap, go to **Domain List → Manage → Advanced DNS**.
+6. Add or update the Host Records there to match exactly what Vercel provided.
+7. Wait for DNS to update — this can take anywhere from a few minutes to about 24-48 hours. Vercel's Domains page shows a green checkmark once it detects correct resolution, and SSL is issued automatically at that point.
+
+## Launch checklist
+
+Go through this before sharing the link with anyone:
+
+- [ ] Homepage loads
+- [ ] Mobile layout works
+- [ ] Logo and icons look right
+- [ ] Copy Solo Prompt works
+- [ ] Copy Coach Prompt works
+- [ ] Copy Exploring Prompt works
+- [ ] Open Claude link works
+- [ ] Design nav link works
+- [ ] Disclaimer nav link works
+- [ ] Feedback nav link works
+- [ ] Footer Share It works
+- [ ] Footer Send Feedback opens email
+- [ ] No old Witness branding is visible anywhere
+- [ ] No API keys or secrets are in the repo
+- [ ] Vercel preview URL works
+- [ ] thenextblock.org resolves after DNS setup
+- [ ] www.thenextblock.org resolves after DNS setup
+
+## Manual QA for the copy buttons specifically
+
+With the site served locally (not opened via `file://`):
+
+- Click **Copy Solo Prompt**, paste into a plain text editor, confirm it's Solo-Sprint-specific language and the button briefly reads "Prompt copied."
+- Click **Copy Coach Prompt**, confirm it contains therapist/coach/accountability-partner language and the professional-scope note.
+- Click **Copy Exploring Prompt**, confirm it contains open-ended-decision/research language (job search, moving, strategy).
+- Confirm all three are genuinely different documents, not the same text three times.
+- Paste one full prompt into a fresh Claude chat and confirm Claude greets briefly, asks Question 1, and pushes back on a deliberately vague first answer (e.g. "work on my stuff").
+
+## What was intentionally left out of this version
+
+- No server, no API route, no account, no database — everything here is plain static files.
+- No in-site chat interface. The interview only ever runs inside Claude, in a tab the person controls.
+- No analytics, no tracking, no payments.

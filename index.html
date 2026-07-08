@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Next Block — a free prompt, an offline file, the next step</title>
+<meta name="description" content="A free prompt that turns a loose intention into one finishable session, then builds an offline file that keeps the work, the reason, and the next step in front of you while you do it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+        <rect x="1" y="1" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="11" cy="11" r="3.2" fill="currentColor"/>
+      </svg>
+      <span class="brand-name">THE NEXT BLOCK</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#" data-info="design">Design</a>
+      <a href="#" data-info="disclaimer">Disclaimer</a>
+      <a href="#" data-info="feedback">Feedback</a>
+    </nav>
+    <span class="free-tag">FREE — NO ACCOUNT</span>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero wrap">
+    <p class="hero-line hero-line-lead">The Next Block is a free AI prompt that refuses to let a goal stay vague. It narrows the work to one block, then builds an offline file that keeps the work, the reason, and the next step in front of you while you do it.</p>
+    <p class="hero-line">Choose a mode. Copy the prompt. Paste it into Claude.</p>
+  </section>
+
+  <section id="paths" class="paths wrap">
+
+    <a class="btn btn-outline hero-open-claude" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
+
+    <div class="path-grid">
+
+      <article class="path-card" data-category="individual" data-category-label="Solo — The Solo Sprint">
+        <div class="title-row">
+          <h3>Solo</h3>
+          <span class="icon-box">
+            <svg class="path-symbol" viewBox="0 0 54 24" aria-hidden="true">
+              <g stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 5.5 L14 18.5 M14 5.5 L2 18.5"/>
+                <path d="M25 12 H30"/>
+                <path d="M28 9.5 L33 12 L28 14.5"/>
+              </g>
+              <rect x="40" y="5.5" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6"/>
+              <circle cx="46.5" cy="12" r="2.8" fill="currentColor"/>
+            </svg>
+          </span>
+        </div>
+        <p class="path-sub mono">The Solo Sprint</p>
+        <p class="path-desc">For people who already know what they want to get done. The Next Block starts there — then helps with the hard part: starting, staying with it, and finishing one real block.</p>
+        <div class="examples" role="group" aria-label="Solo starting points">
+          <span class="example-tag">Writing</span>
+          <span class="example-tag">Cleaning my house</span>
+          <span class="example-tag">Studying</span>
+          <span class="example-tag is-other">Or your own idea</span>
+        </div>
+        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/solo-sprint.md">Copy Solo Prompt</button>
+        <div class="post-copy" hidden>
+          <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
+          <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
+        </div>
+        <details class="path-detail">
+          <summary>The loop</summary>
+          <ol>
+            <li>Copy the prompt</li>
+            <li>Paste it into Claude and answer the Q/A interview</li>
+            <li>Claude builds one offline file for one real work session</li>
+            <li>Run the session and log what happened</li>
+            <li>Use what you learned to make the next file</li>
+          </ol>
+        </details>
+      </article>
+
+      <article class="path-card" data-category="habit" data-category-label="With a Coach — The Coaching Loop">
+        <div class="title-row">
+          <h3>With a Coach</h3>
+          <span class="icon-box">
+            <svg class="path-symbol" viewBox="0 0 54 24" aria-hidden="true">
+              <g stroke="currentColor" stroke-width="2.4" fill="none">
+                <circle cx="21" cy="12" r="6.5"/>
+                <circle cx="33" cy="12" r="6.5"/>
+              </g>
+            </svg>
+          </span>
+        </div>
+        <p class="path-sub mono">The Coaching Loop</p>
+        <p class="path-desc">For anyone working with a therapist, coach, or accountability partner. Build the Next Block file together around goals and avoidance patterns. Bring the log back to see what worked, where momentum slipped, and what to change next.</p>
+        <div class="examples" role="group" aria-label="With a Coach starting points">
+          <span class="example-tag">Avoidance</span>
+          <span class="example-tag">Initiation</span>
+          <span class="example-tag">Internet off</span>
+          <span class="example-tag">Staying on task</span>
+          <span class="example-tag is-other">Or your own idea</span>
+        </div>
+        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/coaching-loop.md">Copy Coaching Loop Prompt</button>
+        <div class="post-copy" hidden>
+          <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
+          <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
+        </div>
+        <details class="path-detail">
+          <summary>The loop</summary>
+          <ol>
+            <li>Bring the goal or block into a session with your therapist, coach, or accountability partner</li>
+            <li>Copy the prompt and answer the Q/A interview together</li>
+            <li>Claude builds the file for the work between sessions</li>
+            <li>Use the file as the homework</li>
+            <li>Bring the log back and adjust the next file</li>
+          </ol>
+        </details>
+      </article>
+
+      <article class="path-card" data-category="journey" data-category-label="Exploring — The Research Phase">
+        <div class="title-row">
+          <h3>Exploring</h3>
+          <span class="icon-box">
+            <svg class="path-symbol" viewBox="0 0 54 24" aria-hidden="true">
+              <path d="M4 9.2 C4 6.6 6.3 5.5 8.6 5.5 C11 5.5 13 6.8 13 8.9 C13 11.1 9.6 11.1 9.6 13.5"
+                stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9.6" cy="17.2" r="1.5" fill="currentColor"/>
+              <g stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M25 12 H30"/>
+                <path d="M28 9.5 L33 12 L28 14.5"/>
+              </g>
+              <rect x="40" y="5.5" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6"/>
+              <circle cx="46.5" cy="12" r="2.8" fill="currentColor"/>
+            </svg>
+          </span>
+        </div>
+        <p class="path-sub mono">The Research Phase</p>
+        <p class="path-desc">For open-ended life decisions — starting a job search, deciding where to move, or starting a new project. The interview turns an unknown into one concrete, time-boxed research block.</p>
+        <div class="examples" role="group" aria-label="Exploring starting points">
+          <span class="example-tag">New job</span>
+          <span class="example-tag">Moving</span>
+          <span class="example-tag">Strategy thinking</span>
+          <span class="example-tag is-other">Or your own idea</span>
+        </div>
+        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/research-phase.md">Copy Exploring Prompt</button>
+        <div class="post-copy" hidden>
+          <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
+          <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
+        </div>
+        <details class="path-detail">
+          <summary>The loop</summary>
+          <ol>
+            <li>Copy the prompt</li>
+            <li>Paste it into Claude and answer the Q/A interview</li>
+            <li>Claude turns the open question into one concrete research step</li>
+            <li>Do the step and log what you learned</li>
+            <li>Use that learning to build the next step</li>
+            <li>Repeat until you know your next real move</li>
+          </ol>
+        </details>
+      </article>
+
+    </div>
+  </section>
+
+
+</main>
+
+<footer class="site-footer wrap">
+  <p class="free-line mono">IF THE NEXT BLOCK HELPS, <button type="button" id="share-btn" class="footer-link">SHARE IT</button>. IF IT COULD BE BETTER, <a id="feedback-link" class="footer-link" href="mailto:hello@thenextblock.org">SEND FEEDBACK</a>.</p>
+  <p id="share-status" class="footer-status mono" hidden>Link copied.</p>
+</footer>
+
+<!-- Info content, shown only inside the info-modal when triggered from the header nav -->
+<template id="info-design">
+  <h2 class="mono info-modal-label">DESIGN</h2>
+  <p>The Next Block was made out of necessity — to finish a big writing project. And it worked. So here it is, shared with others.</p>
+  <p><strong>It moves straight into action.</strong> Most “productivity” tools are thinking or planning. This is execution.</p>
+  <p><strong>It ends with the next session built.</strong> Tomorrow you just open the file and work.</p>
+  <p><strong>It trusts you to know.</strong> The Next Block trusts that a motivated person can articulate what to do, why it matters, and how — then it sets the structure for that to happen.</p>
+  <p><strong>It acts as an externalized prefrontal cortex.</strong> It holds your working memory and your motivation outside your head, somewhere indecision and distraction can’t easily erase them.</p>
+  <p><strong>It gets you in a chair at a set time, internet off.</strong> That’s 90% of the battle.</p>
+  <p><strong>Why an offline file?</strong> If we are honest with ourselves, most focused work can be done offline. Consider scheduling a Freedom session alongside your session to block distractions. Or unplug your router for an hour.</p>
+</template>
+
+<template id="info-disclaimer">
+  <h2 class="mono info-modal-label">DISCLAIMER</h2>
+  <p>The Next Block is a free self-directed tool. Your files and logs live on your device, not with us. We do not have accounts, storage, or a dashboard where we can see what you write. Unless you send something to us, we literally can't read it. Be careful with your private data, and thoughtful about where you share it. Anything you put into an AI service is governed by that service's terms.</p>
+  <p>Use The Next Block at your own discretion; it is not medical or psychological advice.</p>
+</template>
+
+<template id="info-feedback">
+  <h2 class="mono info-modal-label">FEEDBACK</h2>
+  <p>Tell us what's working, what's not, or any new ideas.</p>
+  <p>Send us an email.</p>
+  <p class="mono contact-email">hello@thenextblock.org</p>
+</template>
+
+<div id="info-modal" class="info-modal" hidden role="dialog" aria-modal="true" aria-label="Site information">
+  <div class="info-modal-inner">
+    <button id="info-modal-close" class="flow-close" aria-label="Close" type="button">×</button>
+    <div id="info-modal-content"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
