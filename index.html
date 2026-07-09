@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<!-- Vercel Web Analytics (privacy-friendly, cookieless). No prompt text, user-entered
+     text, or personal data is ever sent — see README for exactly what is/isn't tracked. -->
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -39,8 +45,6 @@
 
   <section id="paths" class="paths wrap">
 
-    <a class="btn btn-outline hero-open-claude" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
-
     <div class="path-grid">
 
       <article class="path-card" data-category="individual" data-category-label="Solo — The Solo Sprint">
@@ -59,28 +63,13 @@
           </span>
         </div>
         <p class="path-sub mono">The Solo Sprint</p>
-        <p class="path-desc">For people who already know what they want to get done. The Next Block starts there — then helps with the hard part: starting, staying with it, and finishing one real block.</p>
-        <div class="examples" role="group" aria-label="Solo starting points">
-          <span class="example-tag">Writing</span>
-          <span class="example-tag">Cleaning my house</span>
-          <span class="example-tag">Studying</span>
-          <span class="example-tag is-other">Or your own idea</span>
-        </div>
-        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/solo-sprint.md">Copy Solo Prompt</button>
+        <p class="path-desc">For people who already know what they want done. Knowing isn't the hard part. The Next Block is built for what is: sitting down, staying with it, and finishing one real block.</p>
+        <p class="examples-line mono"><span class="examples-label">Examples:</span> Writing · Studying · Creative project · Application · Or your own idea</p>
+        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Solo.md">Copy Solo Prompt</button>
         <div class="post-copy" hidden>
           <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
           <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
         </div>
-        <details class="path-detail">
-          <summary>The loop</summary>
-          <ol>
-            <li>Copy the prompt</li>
-            <li>Paste it into Claude and answer the Q/A interview</li>
-            <li>Claude builds one offline file for one real work session</li>
-            <li>Run the session and log what happened</li>
-            <li>Use what you learned to make the next file</li>
-          </ol>
-        </details>
       </article>
 
       <article class="path-card" data-category="habit" data-category-label="With a Coach — The Coaching Loop">
@@ -96,29 +85,13 @@
           </span>
         </div>
         <p class="path-sub mono">The Coaching Loop</p>
-        <p class="path-desc">For anyone working with a therapist, coach, or accountability partner. Build the Next Block file together around goals and avoidance patterns. Bring the log back to see what worked, where momentum slipped, and what to change next.</p>
-        <div class="examples" role="group" aria-label="With a Coach starting points">
-          <span class="example-tag">Avoidance</span>
-          <span class="example-tag">Initiation</span>
-          <span class="example-tag">Internet off</span>
-          <span class="example-tag">Staying on task</span>
-          <span class="example-tag is-other">Or your own idea</span>
-        </div>
-        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/coaching-loop.md">Copy Coaching Loop Prompt</button>
+        <p class="path-desc">For anyone working with a therapist, coach, or accountability partner. Build the file together around goals and avoidance patterns. Bring the log to your next session: what got done, where the friction was, and the next block planned around it.</p>
+        <p class="examples-line mono"><span class="examples-label">Examples:</span> Avoidance · Initiation · Follow-through · Internet off · Your own goal</p>
+        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Coaching.md">Copy Coaching Prompt</button>
         <div class="post-copy" hidden>
           <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
           <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
         </div>
-        <details class="path-detail">
-          <summary>The loop</summary>
-          <ol>
-            <li>Bring the goal or block into a session with your therapist, coach, or accountability partner</li>
-            <li>Copy the prompt and answer the Q/A interview together</li>
-            <li>Claude builds the file for the work between sessions</li>
-            <li>Use the file as the homework</li>
-            <li>Bring the log back and adjust the next file</li>
-          </ol>
-        </details>
       </article>
 
       <article class="path-card" data-category="journey" data-category-label="Exploring — The Research Phase">
@@ -139,34 +112,80 @@
           </span>
         </div>
         <p class="path-sub mono">The Research Phase</p>
-        <p class="path-desc">For open-ended life decisions — starting a job search, deciding where to move, or starting a new project. The interview turns an unknown into one concrete, time-boxed research block.</p>
-        <div class="examples" role="group" aria-label="Exploring starting points">
-          <span class="example-tag">New job</span>
-          <span class="example-tag">Moving</span>
-          <span class="example-tag">Strategy thinking</span>
-          <span class="example-tag is-other">Or your own idea</span>
-        </div>
-        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/research-phase.md">Copy Exploring Prompt</button>
+        <p class="path-desc">For open-ended life decisions — a new job, a new city, a new project. The interview turns an unknown into one concrete, time-boxed research block.</p>
+        <p class="examples-line mono"><span class="examples-label">Examples:</span> New job · New city · New project · Strategy question · Or your own idea</p>
+        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Explorer.md">Copy Exploring Prompt</button>
         <div class="post-copy" hidden>
           <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
           <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
         </div>
-        <details class="path-detail">
-          <summary>The loop</summary>
-          <ol>
-            <li>Copy the prompt</li>
-            <li>Paste it into Claude and answer the Q/A interview</li>
-            <li>Claude turns the open question into one concrete research step</li>
-            <li>Do the step and log what you learned</li>
-            <li>Use that learning to build the next step</li>
-            <li>Repeat until you know your next real move</li>
-          </ol>
-        </details>
       </article>
 
     </div>
   </section>
 
+  <section id="showcase" class="showcase wrap">
+    <h2 class="section-heading">See it in action</h2>
+    <p class="section-intro">The interview narrows the work. The file holds the block. The log points to the next one.</p>
+
+    <div class="showcase-grid">
+
+      <article class="showcase-panel">
+        <h3>1. The interview refuses vagueness</h3>
+        <p class="showcase-caption">The prompt does not accept the fuzzy version. It keeps asking until the work becomes one concrete block.</p>
+        <div class="transcript">
+          <div class="transcript-example">
+            <p class="t-line"><span class="t-label">User</span>"Work on my book."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"That's a project, not a block. Which scene, and what physical action starts it?"</p>
+            <p class="t-line"><span class="t-label">User</span>"Reread the last page of Caves, then draft the descent — 9:00 to 10:30."</p>
+          </div>
+          <div class="transcript-example">
+            <p class="t-line"><span class="t-label">User</span>"Work on my story."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"That's too vague. Which scene? What exactly will be done by the end of the block?"</p>
+            <p class="t-line"><span class="t-label">User</span>"Revise the opening scene."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Still too broad. What concrete jobs have to happen?"</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="showcase-panel">
+        <h3>2. The file holds the block</h3>
+        <p class="showcase-caption">After the interview, Claude builds a simple offline file: jobs, reason, start time, check-ins, and a local log.</p>
+        <div class="file-mock">
+          <p class="fm-label">TASK</p>
+          <p class="fm-title">Draft the descent</p>
+          <p class="fm-label">WHY THIS MATTERS</p>
+          <p class="fm-why">Finish it clean and it leaves the house — out to editors.</p>
+          <p class="fm-label">THE JOBS</p>
+          <p class="fm-plain">Reread the last page · Draft the descent · Mark the weak paragraph</p>
+          <p class="fm-btn">Begin — Draft the descent 9:00</p>
+          <p class="fm-label">RUNNING LOG</p>
+          <p class="fm-plain">1 block logged so far</p>
+        </div>
+        <a class="btn btn-outline showcase-download" href="samples/sample-next-block.html" download>Download sample file</a>
+      </article>
+
+      <article class="showcase-panel">
+        <h3>3. The block becomes the next block</h3>
+        <p class="showcase-caption">Mid-block, the file returns your own reason. At the end, the log captures what happened and where to start next.</p>
+        <div class="checkin-mock">
+          <p class="fm-label">CHECK-IN</p>
+          <p class="fm-plain">Still with it?</p>
+          <p class="mock-choices"><span>Yes</span><span>Sort of</span><span>No</span></p>
+          <p class="fm-quote">"You said this mattered because: Finish it clean and it leaves the house — out to editors."</p>
+          <p class="fm-label">AVOIDANCE NAMED</p>
+          <p class="fm-quote">"Watch for: polishing the opening instead of finishing the scene."</p>
+        </div>
+        <div class="endlog-mock">
+          <p class="fm-label">WHAT GOT DONE</p>
+          <p class="fm-plain">Drafted the descent scene and marked the weak paragraph.</p>
+          <p class="fm-label">WHERE TO START NEXT</p>
+          <p class="fm-plain">Open the draft and reread the last paragraph before revising the ending.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
 
 </main>
 
@@ -178,13 +197,15 @@
 <!-- Info content, shown only inside the info-modal when triggered from the header nav -->
 <template id="info-design">
   <h2 class="mono info-modal-label">DESIGN</h2>
-  <p>The Next Block was made out of necessity — to finish a big writing project. And it worked. So here it is, shared with others.</p>
-  <p><strong>It moves straight into action.</strong> Most “productivity” tools are thinking or planning. This is execution.</p>
-  <p><strong>It ends with the next session built.</strong> Tomorrow you just open the file and work.</p>
-  <p><strong>It trusts you to know.</strong> The Next Block trusts that a motivated person can articulate what to do, why it matters, and how — then it sets the structure for that to happen.</p>
-  <p><strong>It acts as an externalized prefrontal cortex.</strong> It holds your working memory and your motivation outside your head, somewhere indecision and distraction can’t easily erase them.</p>
-  <p><strong>It gets you in a chair at a set time, internet off.</strong> That’s 90% of the battle.</p>
-  <p><strong>Why an offline file?</strong> If we are honest with ourselves, most focused work can be done offline. Consider scheduling a Freedom session alongside your session to block distractions. Or unplug your router for an hour.</p>
+  <p>The Next Block was built for one reason: to finish a long writing project. It worked. So here it is.</p>
+  <p><strong>It refuses to let you stay vague.</strong> You already know what to do — the tool trusts that. What it will not accept is the fuzzy version. It asks until the work is one concrete block: what you will do, why it matters, and the physical action that starts it.</p>
+  <p><strong>It drafts the work, then makes you edit.</strong> The Next Block turns the goal into a short list of concrete jobs to do inside the block. You have to correct that list before the file gets built. The plan has to be yours.</p>
+  <p><strong>It plans just enough to start.</strong> Most productivity tools are for planning. This one plans only what the next block needs, and the plan gets spent the same hour it is made.</p>
+  <p><strong>It gives your own words back to you.</strong> The file holds your intention in the language you chose, then returns it mid-block — right when you are about to drift, stall, or bail. That is the motivation. It is harder to argue with your own reasons.</p>
+  <p><strong>Some days it feels silly.</strong> Then, an hour in, the file is doing what your head cannot: holding the work, the reason, and the next step somewhere indecision and distraction cannot erase them. An externalized prefrontal cortex.</p>
+  <p><strong>It ends with tomorrow’s block already built.</strong> Sit down at the set time, file open, and start. The deciding is already done.</p>
+  <p><strong>It does not replace people.</strong> A therapist, a coach, a good friend — the tool is not competition for any of them. Between conversations, it turns this week’s intention into the next concrete block.</p>
+  <p><strong>Why a file?</strong> Once it is built: no account, no service, nothing to log into. The log stays in your browser, and the whole thing works with the Wi-Fi off — which is where most focused work happens anyway. Unplug the router for an hour and find out.</p>
 </template>
 
 <template id="info-disclaimer">
@@ -196,8 +217,7 @@
 <template id="info-feedback">
   <h2 class="mono info-modal-label">FEEDBACK</h2>
   <p>Tell us what's working, what's not, or any new ideas.</p>
-  <p>Send us an email.</p>
-  <p class="mono contact-email">hello@thenextblock.org</p>
+  <p>Send us an email: <a class="mono contact-email" href="mailto:hello@thenextblock.org?subject=The%20Next%20Block%20feedback&body=What%20worked%3F%0AWhat%20did%20not%3F%0AAny%20ideas%3F">hello@thenextblock.org</a></p>
 </template>
 
 <div id="info-modal" class="info-modal" hidden role="dialog" aria-modal="true" aria-label="Site information">
