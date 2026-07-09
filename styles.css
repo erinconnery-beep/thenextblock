@@ -84,8 +84,8 @@ button{ font-family: inherit; cursor: pointer; }
 .site-nav a:hover{ border-color: var(--signal); color: var(--ink); }
 .free-tag{
   font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em;
-  color: var(--signal); border: 1px solid var(--signal); padding: 4px 8px;
-  white-space: nowrap;
+  color: var(--signal); background: var(--signal-pale); border: none; padding: 4px 10px;
+  white-space: nowrap; cursor: default;
 }
 @media (max-width: 720px){
   .site-nav{ display:none; }
@@ -156,13 +156,11 @@ button{ font-family: inherit; cursor: pointer; }
 .path-card h3{ font-size: 1.15rem; line-height: 1; }
 .path-sub{ color: var(--signal); font-size: 0.75rem; letter-spacing: 0.06em; margin: 0; }
 .path-desc{ font-size: 0.92rem; }
-.examples{ display:flex; flex-wrap:wrap; gap:8px; margin-top: 4px; }
-.example-tag{
-  font-family: var(--font-mono); font-size: 0.78rem;
-  background: transparent; border: 1px solid var(--grid-strong); color: var(--muted);
-  padding: 7px 11px; display:inline-block;
+.examples-line{
+  font-size: 0.78rem; color: var(--muted); margin: 4px 0 0; line-height: 1.5;
+  letter-spacing: 0.01em; cursor: default;
 }
-.example-tag.is-other{ border-style: dashed; }
+.examples-line .examples-label{ color: var(--muted); }
 .btn-copy{
   border: 1px solid var(--signal); background: transparent; color: var(--signal);
 }
@@ -191,6 +189,67 @@ button{ font-family: inherit; cursor: pointer; }
   .path-grid{ grid-template-columns: 1fr; }
 }
 
+/* ---------- showcase ("See it in action") ---------- */
+.showcase{ padding: 12px 24px 64px; }
+.section-heading{ font-size: 1.35rem; text-align:center; margin-bottom: 8px; }
+.section-intro{
+  text-align:center; max-width: 620px; margin: 0 auto 28px;
+  color: var(--muted); font-size: 0.95rem;
+}
+.showcase-grid{
+  display:grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--grid-strong); border: 1px solid var(--grid-strong); text-align:left;
+}
+.showcase-panel{
+  background: var(--surface); padding: 24px 22px;
+  display:flex; flex-direction:column; gap: 12px;
+}
+.showcase-panel h3{ font-size: 0.98rem; line-height: 1.3; }
+.showcase-caption{ font-size: 0.85rem; color: var(--muted); margin: 0; }
+
+.transcript{ display:flex; flex-direction:column; gap: 12px; }
+.transcript-example{
+  border: 1px solid var(--grid-strong); background: var(--paper);
+  padding: 12px 14px; display:flex; flex-direction:column; gap: 8px;
+}
+.t-line{ font-size: 0.82rem; line-height: 1.5; margin: 0; }
+.t-label{
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em;
+  color: var(--muted); margin-right: 6px; display:inline-block; min-width: 32px;
+}
+.t-label-ai{ color: var(--signal); }
+
+.file-mock, .checkin-mock, .endlog-mock{
+  border: 1px solid var(--grid-strong); background: var(--paper);
+  padding: 14px 16px; font-size: 0.85rem; cursor: default;
+}
+.endlog-mock{ margin-top: 12px; }
+.fm-label{
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em;
+  color: var(--muted); margin: 10px 0 3px;
+}
+.fm-label:first-child{ margin-top: 0; }
+.fm-title{ font-weight: 600; margin: 0; }
+.fm-why{ font-style: italic; margin: 0; }
+.fm-plain{ margin: 0; color: var(--line); }
+.fm-quote{ font-style: italic; margin: 0; }
+.fm-btn{
+  font-family: var(--font-mono); font-size: 0.78rem;
+  border: 1px solid var(--grid-strong); background: var(--paper-deep); color: var(--muted);
+  padding: 8px 12px; text-align:center; margin: 6px 0 0; cursor: default;
+}
+.mock-choices{ display:flex; gap: 8px; margin: 6px 0; }
+.mock-choices span{
+  font-family: var(--font-mono); font-size: 0.76rem; color: var(--muted);
+  border: 1px solid var(--grid-strong); background: var(--paper-deep);
+  padding: 6px 10px; cursor: default;
+}
+.showcase-download{ align-self:flex-start; margin-top: 4px; }
+
+@media (max-width: 860px){
+  .showcase-grid{ grid-template-columns: 1fr; }
+}
+
 /* ---------- resume ---------- */
 .resume{ padding: 0 24px 64px; }
 .resume-card{ border: 1px solid var(--grid-strong); background: var(--surface); padding: 28px 24px; }
@@ -205,7 +264,8 @@ button{ font-family: inherit; cursor: pointer; }
 
 /* ---------- footer ---------- */
 .site-footer{
-  padding: 40px 24px; margin-top: 24px;
+  padding: 12px 24px; margin-top: 0;
+  background: rgba(238,241,245,0.9);
   border-top: 1px solid var(--grid-strong);
 }
 .contact-email{ color: var(--signal); font-size: 0.95rem; }
@@ -215,6 +275,7 @@ button{ font-family: inherit; cursor: pointer; }
 }
 .footer-link{
   font-family: inherit; font-size: inherit; letter-spacing: inherit;
+  font-weight: 700;
   color: var(--muted); background: none; border: none; padding: 0; margin: 0;
   text-decoration: none; cursor: pointer;
 }

@@ -12,6 +12,24 @@
 (function(){
   "use strict";
 
+  /* ---------- analytics helper ----------
+     Fires a Vercel Web Analytics custom event by name only. Never pass prompt
+     text, user-entered text, emails, or any other personal/content data as the
+     event's "data" payload — these calls only ever send a fixed event name. */
+  function trackEvent(name){
+    if (typeof window.va === "function"){
+      try { window.va("event", { name: name }); } catch (e){ /* analytics must never break the site */ }
+    }
+  }
+
+  /* Maps each prompt file to its analytics event name (event name only — never
+     the prompt's actual text). */
+  var PROMPT_EVENT_NAMES = {
+    "prompts/Solo.md": "copy_solo_prompt",
+    "prompts/Coaching.md": "copy_coaching_loop_prompt",
+    "prompts/Explorer.md": "copy_exploring_prompt"
+  };
+
   /* ---------- clipboard helper (with a manual-copy fallback) ---------- */
   async function copyText(text){
     if (navigator.clipboard && navigator.clipboard.writeText){
@@ -66,6 +84,7 @@
       } catch (e){
         label = "Couldn't load prompt — check your connection";
       }
+      if (ok && PROMPT_EVENT_NAMES[promptFile]) trackEvent(PROMPT_EVENT_NAMES[promptFile]);
       btn.textContent = label;
       if (ok && postCopy) postCopy.hidden = false;
       setTimeout(function(){
@@ -73,6 +92,11 @@
         btn.disabled = false;
       }, 2400);
     });
+  });
+
+  /* ---------- open_claude event on every "Open Claude" link ---------- */
+  document.querySelectorAll('a[href="https://claude.ai/new"]').forEach(function(link){
+    link.addEventListener("click", function(){ trackEvent("open_claude"); });
   });
 
   /* ---------- info modal (Design / Disclaimer / Feedback) ---------- */
@@ -97,6 +121,13 @@
   infoModal.addEventListener("click", function(e){ if (e.target === infoModal) closeInfoModal(); });
   document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !infoModal.hidden) closeInfoModal(); });
 
+  /* send_feedback event for the mailto link inside the Feedback modal (delegated,
+     since that link is only added to the DOM when the modal's template is cloned) */
+  infoContent.addEventListener("click", function(e){
+    var target = e.target.closest && e.target.closest('a[href^="mailto:"]');
+    if (target) trackEvent("send_feedback");
+  });
+
   /* ---------- footer: SEND FEEDBACK (mailto) ---------- */
   var feedbackLink = document.getElementById("feedback-link");
   if (feedbackLink){
@@ -105,6 +136,7 @@
     feedbackLink.href = feedbackLink.href.split("?")[0]
       + "?subject=" + encodeURIComponent(feedbackSubject)
       + "&body=" + encodeURIComponent(feedbackBody);
+    feedbackLink.addEventListener("click", function(){ trackEvent("send_feedback"); });
   }
 
   /* ---------- footer: SHARE IT (native share, falls back to copy link) ---------- */
@@ -112,6 +144,7 @@
   var shareStatus = document.getElementById("share-status");
   if (shareBtn){
     shareBtn.addEventListener("click", async function(){
+      trackEvent("share_site");
       var shareData = {
         title: "The Next Block",
         text: "A free prompt that turns a loose intention into one finishable work block.",

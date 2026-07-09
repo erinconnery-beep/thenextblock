@@ -2,7 +2,7 @@
 
 ## A. What this is
 
-This is the **static, copy-paste version** of The Next Block (Version 1). There is no build step, no framework, no backend, no API, no accounts, no database, and no analytics. It's plain HTML, CSS, and JavaScript.
+This is the **static, copy-paste version** of The Next Block (Version 1). There is no build step, no framework, no backend, no API, no accounts, and no database. It's plain HTML, CSS, and JavaScript. It uses privacy-friendly Vercel Web Analytics for basic traffic counts only — see [section I](#i-analytics) for exactly what is and isn't tracked.
 
 The AI interview does **not** run on this website. The site's only job is to let someone:
 
@@ -40,9 +40,9 @@ There is no build step. This is a zero-build static site — the files in this f
 
 ```
 prompts/
-  solo-sprint.md      — Solo mode
-  coaching-loop.md     — With a Coach mode
-  research-phase.md    — Exploring mode
+  Solo.md       — Solo mode
+  Coaching.md   — With a Coach mode
+  Explorer.md   — Exploring mode
 ```
 
 Each file is complete and self-contained — it explains what The Next Block is, how the model should behave, runs the full seven-question interview (customized per mode), and specifies the offline HTML file Claude must build at the end. None of the three files reference each other or depend on anything else in this repo. Pasting any one of them alone into a fresh Claude chat is enough to run a full session.
@@ -81,6 +81,44 @@ Your domain is registered at Namecheap; hosting lives on Vercel. You do not need
 6. Add or update the Host Records there to match exactly what Vercel provided.
 7. Wait for DNS to update — this can take anywhere from a few minutes to about 24-48 hours. Vercel's Domains page shows a green checkmark once it detects correct resolution, and SSL is issued automatically at that point.
 
+## I. Analytics
+
+**How it was added.** This project has no build step, so it uses Vercel Web Analytics' plain-HTML script method rather than the `@vercel/analytics` npm package (that package is for framework projects like Next.js/React that have a bundler). Two small script tags were added to the `<head>` of `NextBlock-v1.html`:
+
+```html
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+```
+
+That second script is served automatically by Vercel once Web Analytics is turned on for the project — there's nothing to install.
+
+**You still need to do one manual step:** in your Vercel dashboard, open the project, click **Analytics** in the sidebar, and click **Enable**. Nothing tracks until that's on and the site is redeployed with these script tags live.
+
+**Note on file scope:** these script tags are currently only in `NextBlock-v1.html` (the working copy), not yet in the live `index.html`. Analytics won't actually start collecting on thenextblock.org until this file becomes the one that's deployed, or the same script tags are copied into `index.html`.
+
+**Where to view it:** Vercel dashboard → your project → **Analytics** in the sidebar. Visits, page views, referrers, and device/browser breakdowns are on the free Hobby plan. **Custom events (the button-click events below) require a Pro or Enterprise plan to view in the dashboard** — the code fires them regardless, but they'll only show up if your Vercel plan includes the Custom Events feature.
+
+**What is tracked:**
+- Page visits and page views (built into Vercel Web Analytics automatically)
+- Referrers (what site or link sent someone here)
+- Device and browser type (aggregated, not individually identifying)
+- Six custom click events, tracked by name only, with no additional data attached:
+  - `copy_solo_prompt` — Copy Solo Prompt clicked
+  - `copy_coaching_loop_prompt` — Copy Coaching Prompt clicked
+  - `copy_exploring_prompt` — Copy Exploring Prompt clicked
+  - `open_claude` — any "Open Claude ↗" link clicked
+  - `send_feedback` — SEND FEEDBACK (footer) or the Feedback modal's email link clicked
+  - `share_site` — SHARE IT clicked
+
+**What is never tracked:**
+- No prompt text or file content — the events fire on the click itself, never on what was copied
+- No user-entered text of any kind (nothing on this site accepts free-text input)
+- No email addresses or personal data
+- No IP address stored or shown to this project (Vercel Web Analytics is cookieless and doesn't expose raw IPs to site owners)
+- No cookies, no accounts, no cross-site tracking, no ad identifiers
+
 ## Launch checklist
 
 Go through this before sharing the link with anyone:
@@ -117,4 +155,4 @@ With the site served locally (not opened via `file://`):
 
 - No server, no API route, no account, no database — everything here is plain static files.
 - No in-site chat interface. The interview only ever runs inside Claude, in a tab the person controls.
-- No analytics, no tracking, no payments.
+- No payments, no cookies, no cross-site tracking, no ad identifiers. Analytics is limited to privacy-friendly, cookieless Vercel Web Analytics — see [section I](#i-analytics).

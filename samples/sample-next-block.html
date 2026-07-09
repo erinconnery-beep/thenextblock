@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft the descent — The Next Block (sample)</title>
+<style>
+*,*::before,*::after{ box-sizing: border-box; }
+:root{
+  --paper: #eef1f5; --paper-deep: #e3e9f1; --grid-strong: #aab8cc;
+  --ink: #10141b; --line: #3c4658; --muted: #5b6577; --signal: #2453ff;
+  --signal-pale: #d9e2ff; --surface: #ffffff;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+html{ -webkit-text-size-adjust: 100%; }
+body{ margin:0; background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+.mono{ font-family: var(--font-mono); }
+.small{ font-size: 0.78rem; }
+.wrap{ max-width: 640px; margin: 0 auto; padding: 36px 20px 64px; }
+.sample-banner{
+  background: var(--ink); color: var(--paper); text-align:center; font-family: var(--font-mono);
+  font-size: 0.72rem; letter-spacing: 0.06em; padding: 8px 12px;
+}
+.hd{ margin-bottom: 22px; border-bottom: 2px solid var(--ink); padding-bottom: 16px; }
+.eyebrow{ color: var(--signal); font-size: 0.75rem; letter-spacing: 0.08em; margin: 0 0 10px; font-family: var(--font-mono); }
+h1{ font-size: 1.6rem; margin: 0 0 6px; letter-spacing: -0.01em; }
+.project-line{ margin:0; color: var(--muted); font-size: 0.95rem; }
+.block{ border: 1px solid var(--grid-strong); background: var(--surface); padding: 18px 20px; margin-bottom: 16px; }
+.label{ font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 8px; }
+.why-block{ background: var(--signal-pale); border-left: 4px solid var(--signal); }
+.why-text{ font-size: 1.02rem; font-style: italic; margin: 0; }
+.small-why{ font-size: 0.92rem; }
+#checklist .item{ display:flex; align-items:flex-start; gap:10px; padding: 8px 0; border-bottom: 1px dashed var(--grid-strong); }
+#checklist .item:last-child{ border-bottom: none; }
+#checklist input[type=checkbox]{ width: 18px; height: 18px; margin-top: 3px; accent-color: var(--signal); }
+#checklist .item.done span{ text-decoration: line-through; color: var(--muted); }
+.risks-block ul{ margin:0; padding-left: 20px; }
+.first-step-block{ background: var(--paper-deep); }
+.controls{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 10px; }
+button{ font-family: var(--font-mono); font-size: 0.88rem; cursor:pointer; border-radius: 0; }
+.btn-primary{ padding: 12px 20px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); }
+.btn-primary:hover{ background: var(--signal); border-color: var(--signal); color: #fff; }
+.btn-outline{ padding: 12px 20px; border: 1px solid var(--ink); background: transparent; color: var(--ink); }
+.btn-outline:hover{ background: var(--ink); color: var(--paper); }
+.elapsed{ color: var(--muted); margin: 0 0 16px; }
+.checkin-actions{ display:flex; gap:8px; margin-top: 10px; }
+.checkin-actions button{ flex:1; padding: 10px; border: 1px solid var(--ink); background: transparent; }
+.checkin-actions button:hover{ background: var(--ink); color: var(--paper); }
+.checkin-btn-flash{ animation: flash 1s ease-in-out infinite; }
+@keyframes flash{ 0%,100%{ box-shadow: 0 0 0 0 rgba(36,83,255,0.5);} 50%{ box-shadow: 0 0 0 6px rgba(36,83,255,0);} }
+.win-banner{ background: var(--ink); color: var(--paper); padding: 12px 14px; font-size: 1rem; }
+.field{ margin-bottom: 12px; }
+.field label{ display:block; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 5px; }
+select, textarea{ width:100%; font-family: var(--font-body); font-size: 0.95rem; padding: 8px 10px; border: 1px solid var(--grid-strong); background: var(--paper); color: var(--ink); }
+.table-wrap{ overflow-x:auto; margin-bottom: 12px; }
+table{ border-collapse: collapse; width: 100%; font-size: 0.78rem; }
+th,td{ border: 1px solid var(--grid-strong); padding: 6px 8px; text-align:left; white-space:nowrap; }
+th{ background: var(--paper-deep); font-family: var(--font-mono); font-size: 0.68rem; }
+.footnote{ color: var(--muted); font-size: 0.8rem; text-align:center; margin-top: 28px; }
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+@media (max-width: 420px){ .wrap{ padding: 22px 14px 48px; } h1{ font-size: 1.3rem; } .checkin-actions{ flex-direction:column; } }
+</style>
+</head>
+<body>
+
+<div class="sample-banner">SAMPLE FILE — this is what Claude builds at the end of a Next Block interview</div>
+
+<div id="app" class="wrap">
+  <header class="hd">
+    <p class="eyebrow mono" id="path-badge">THE NEXT BLOCK — SOLO</p>
+    <h1 id="task-h1">Draft the descent</h1>
+    <p class="project-line" id="project-line">Part of: Caves (novel manuscript)</p>
+  </header>
+
+  <div class="block">
+    <p class="label">TIME WINDOW</p>
+    <p id="time-window-text" class="mono">9:00 – 10:30</p>
+  </div>
+
+  <div class="block">
+    <p class="label">WHAT COUNTS AS DONE</p>
+    <p id="done-line-text">The descent scene is drafted start to finish, and the weak paragraph is marked for revision.</p>
+  </div>
+
+  <div class="block why-block">
+    <p class="label">WHY THIS MATTERS TODAY</p>
+    <p id="why-text" class="why-text">Finish it clean and it leaves the house — out to editors.</p>
+  </div>
+
+  <div class="block">
+    <p class="label">THE JOBS</p>
+    <div id="checklist"></div>
+  </div>
+
+  <div class="block risks-block">
+    <p class="label">WATCH FOR</p>
+    <ul>
+      <li>Polishing the opening instead of finishing the scene</li>
+      <li>Reorganizing notes instead of drafting</li>
+    </ul>
+  </div>
+
+  <div class="block first-step-block">
+    <p class="label">FIRST STEP</p>
+    <p id="first-step-text">Reread the last page of Caves, then start typing the descent.</p>
+  </div>
+
+  <div class="controls">
+    <button id="start-btn" class="btn-primary" type="button">Begin — Draft the descent 9:00</button>
+    <button id="checkin-btn" class="btn-outline" type="button" hidden>Check in</button>
+    <button id="end-btn" class="btn-outline" type="button" hidden>End block</button>
+  </div>
+  <div id="elapsed-readout" class="mono elapsed" hidden></div>
+
+  <div id="checkin-panel" class="block checkin-panel" hidden>
+    <p class="label">CHECK-IN</p>
+    <p class="why-text small-why" id="checkin-why"></p>
+    <p>Still with it?</p>
+    <div class="checkin-actions">
+      <button data-answer="yes" type="button">Yes</button>
+      <button data-answer="sortof" type="button">Sort of</button>
+      <button data-answer="no" type="button">No</button>
+    </div>
+  </div>
+
+  <div id="end-panel" class="block end-panel" hidden>
+    <p class="label">END OF BLOCK</p>
+    <p class="win-banner" id="win-banner"></p>
+    <div class="field"><label>Status</label>
+      <select id="r-status">
+        <option value="done">Done</option>
+        <option value="partial">Partially done</option>
+        <option value="not-started">Didn't get going</option>
+      </select>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="r-notes" rows="2" placeholder="Anything worth remembering about today."></textarea></div>
+    <div class="field"><label>Where to start next</label><textarea id="r-next" rows="2" placeholder="Where the next block should begin."></textarea></div>
+    <button id="save-log-btn" class="btn-primary" type="button">Save to log</button>
+  </div>
+
+  <div id="log-block" class="block" hidden>
+    <p class="label">RUNNING LOG</p>
+    <div class="table-wrap"><table id="log-table"><thead><tr><th>Date</th><th>Task</th><th>Window</th><th>Jobs done</th><th>Status</th><th>Notes</th><th>Next start</th></tr></thead><tbody></tbody></table></div>
+    <button id="copy-csv-btn" class="btn-outline" type="button">Copy CSV log</button>
+    <p id="copy-status" class="mono small" aria-live="polite"></p>
+  </div>
+
+  <p class="footnote">This file runs entirely offline, in your browser. Nothing on this page is sent anywhere. This particular copy is a sample for demonstration — your real file is generated during your own Claude chat.</p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var TASK = "Draft the descent";
+  var WHY_TODAY = "Finish it clean and it leaves the house — out to editors.";
+  var CHECKLIST = [
+    "Reread the last page of the previous scene",
+    "Draft the descent, beginning to end",
+    "Mark the weak paragraph for revision",
+    "Leave the opening pages untouched"
+  ];
+  var SLUG = "caves-descent";
+  var LOG_KEY = "next_block_log_" + SLUG + "_v1";
+
+  function pad2(n){ return (n<10?"0":"")+n; }
+  function csvEscape(v){
+    v = String(v==null?"":v);
+    if(/[",\n]/.test(v)) return '"' + v.replace(/"/g,'""') + '"';
+    return v;
+  }
+
+  document.getElementById("checkin-why").textContent = WHY_TODAY;
+
+  var checklistEl = document.getElementById("checklist");
+  CHECKLIST.forEach(function(item, i){
+    var row = document.createElement("label");
+    row.className = "item";
+    row.id = "item-row-" + i;
+    var cb = document.createElement("input");
+    cb.type = "checkbox"; cb.id = "item-" + i;
+    var span = document.createElement("span");
+    span.textContent = item;
+    row.appendChild(cb); row.appendChild(span);
+    cb.addEventListener("change", function(){ row.classList.toggle("done", cb.checked); });
+    checklistEl.appendChild(row);
+  });
+
+  var sessionStartTs = null, elapsedIntervalId = null, checkinFlashTimeoutId = null;
+  var lastDoneStr = "";
+
+  var startBtn = document.getElementById("start-btn");
+  var checkinBtn = document.getElementById("checkin-btn");
+  var endBtn = document.getElementById("end-btn");
+  var elapsedReadout = document.getElementById("elapsed-readout");
+  var checkinPanel = document.getElementById("checkin-panel");
+  var endPanel = document.getElementById("end-panel");
+
+  startBtn.addEventListener("click", function(){
+    sessionStartTs = Date.now();
+    startBtn.hidden = true;
+    checkinBtn.hidden = false;
+    endBtn.hidden = false;
+    elapsedReadout.hidden = false;
+    elapsedIntervalId = setInterval(updateElapsed, 1000);
+    updateElapsed();
+    checkinFlashTimeoutId = setTimeout(function(){ checkinBtn.classList.add("checkin-btn-flash"); }, 28*60*1000);
+  });
+
+  function updateElapsed(){
+    var totalSec = Math.floor((Date.now()-sessionStartTs)/1000);
+    var h = Math.floor(totalSec/3600), m = Math.floor((totalSec%3600)/60), s = totalSec%60;
+    elapsedReadout.textContent = (h>0?(h+":"):"") + pad2(m) + ":" + pad2(s) + " elapsed";
+  }
+
+  checkinBtn.addEventListener("click", function(){
+    checkinBtn.classList.remove("checkin-btn-flash");
+    checkinPanel.hidden = !checkinPanel.hidden;
+  });
+
+  checkinPanel.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-answer]");
+    if(!btn) return;
+    checkinPanel.hidden = true;
+  });
+
+  endBtn.addEventListener("click", function(){
+    if(elapsedIntervalId) clearInterval(elapsedIntervalId);
+    if(checkinFlashTimeoutId) clearTimeout(checkinFlashTimeoutId);
+    checkinBtn.hidden = true; endBtn.hidden = true; checkinPanel.hidden = true;
+    var doneCount = 0;
+    CHECKLIST.forEach(function(item, i){
+      var cb = document.getElementById("item-"+i);
+      if(cb && cb.checked) doneCount++;
+    });
+    lastDoneStr = doneCount + "/" + CHECKLIST.length;
+    document.getElementById("win-banner").textContent = "What counts as done: " + document.getElementById("done-line-text").textContent;
+    if(doneCount === CHECKLIST.length) document.getElementById("r-status").value = "done";
+    else if(doneCount === 0) document.getElementById("r-status").value = "not-started";
+    else document.getElementById("r-status").value = "partial";
+    endPanel.hidden = false;
+    endPanel.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  function loadLog(){
+    try{ var raw = localStorage.getItem(LOG_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+    return [];
+  }
+  function saveLogRows(rows){
+    try{ localStorage.setItem(LOG_KEY, JSON.stringify(rows)); }catch(e){}
+  }
+  var logRows = loadLog();
+
+  function renderLog(){
+    var tbody = document.querySelector("#log-table tbody");
+    tbody.innerHTML = "";
+    logRows.forEach(function(row){
+      var tr = document.createElement("tr");
+      ["date","task","timeWindow","jobsDone","status","notes","nextStart"].forEach(function(k){
+        var td = document.createElement("td"); td.textContent = row[k] || ""; tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    document.getElementById("log-block").hidden = logRows.length === 0;
+  }
+  renderLog();
+
+  document.getElementById("save-log-btn").addEventListener("click", function(){
+    var today = new Date();
+    var dateStr = today.getFullYear()+"-"+pad2(today.getMonth()+1)+"-"+pad2(today.getDate());
+    var row = {
+      date: dateStr, task: TASK, timeWindow: "9:00 – 10:30",
+      jobsDone: lastDoneStr, status: document.getElementById("r-status").value,
+      notes: document.getElementById("r-notes").value || "",
+      nextStart: document.getElementById("r-next").value || ""
+    };
+    logRows.push(row);
+    saveLogRows(logRows);
+    renderLog();
+    this.disabled = true; this.textContent = "Saved";
+  });
+
+  document.getElementById("copy-csv-btn").addEventListener("click", function(){
+    var headers = ["date","task","timeWindow","jobsDone","status","notes","nextStart"];
+    var lines = [headers.join(",")];
+    logRows.forEach(function(row){ lines.push(headers.map(function(h){ return csvEscape(row[h]); }).join(",")); });
+    var csv = lines.join("\n");
+    var statusEl = document.getElementById("copy-status");
+    function ok(){ statusEl.textContent = "Copied " + logRows.length + " row(s) to clipboard."; }
+    function fail(){
+      var ta = document.createElement("textarea");
+      ta.value = csv; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try{ document.execCommand("copy"); ok(); }
+      catch(e){ statusEl.textContent = "Could not copy automatically — select and copy the log manually."; }
+      document.body.removeChild(ta);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(csv).then(ok).catch(fail);
+    } else { fail(); }
+  });
+})();
+</script>
+</body>
+</html>
