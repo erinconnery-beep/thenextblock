@@ -3,8 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Next Block — a free prompt, an offline file, the next step</title>
-<meta name="description" content="A free prompt that turns a loose intention into one finishable session, then builds an offline file that keeps the work, the reason, and the next step in front of you while you do it.">
+<title>The Next Block — Free AI Prompt, Offline Focus File</title>
+<meta name="description" content="A free AI prompt that narrows vague work into one concrete block, then builds an offline focus file that keeps the work, the reason, and the next step in front of you.">
+<meta property="og:title" content="The Next Block — Free AI Prompt, Offline Focus File">
+<meta property="og:description" content="A free AI prompt that narrows vague work into one concrete block, then builds an offline focus file that keeps the work, the reason, and the next step in front of you.">
+<meta name="twitter:title" content="The Next Block — Free AI Prompt, Offline Focus File">
+<meta name="twitter:description" content="A free AI prompt that narrows vague work into one concrete block, then builds an offline focus file that keeps the work, the reason, and the next step in front of you.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.thenextblock.org/">
+<meta property="og:image" content="https://www.thenextblock.org/assets/og-next-block.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.thenextblock.org/assets/og-next-block.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -28,7 +37,7 @@
       <span class="brand-name">THE NEXT BLOCK</span>
     </a>
     <nav class="site-nav">
-      <a href="#" data-info="design">Design</a>
+      <a href="#" data-info="design">Design notes</a>
       <a href="#" data-info="disclaimer">Disclaimer</a>
       <a href="#" data-info="feedback">Feedback</a>
     </nav>
@@ -39,8 +48,9 @@
 <main id="top">
 
   <section class="hero wrap">
-    <p class="hero-line hero-line-lead">The Next Block is a free AI prompt that refuses to let a goal stay vague. It narrows the work to one block, then builds an offline file that keeps the work, the reason, and the next step in front of you while you do it.</p>
-    <p class="hero-line">Choose a mode. Copy the prompt. Paste it into Claude.</p>
+    <p class="hero-headline">The Next Block is a free AI prompt that refuses to let a goal stay vague.</p>
+    <p class="hero-subhead">It narrows the work to one block, then builds an offline focus file that keeps the work, the reason, and the next step in front of you while you do it.</p>
+    <p class="hero-line mono">Choose a mode. Copy the prompt. Paste it into Claude.</p>
   </section>
 
   <section id="paths" class="paths wrap">
@@ -48,24 +58,12 @@
     <div class="path-grid">
 
       <article class="path-card" data-category="individual" data-category-label="Solo — The Solo Sprint">
-        <div class="title-row">
-          <h3>Solo</h3>
-          <span class="icon-box">
-            <svg class="path-symbol" viewBox="0 0 54 24" aria-hidden="true">
-              <g stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 5.5 L14 18.5 M14 5.5 L2 18.5"/>
-                <path d="M25 12 H30"/>
-                <path d="M28 9.5 L33 12 L28 14.5"/>
-              </g>
-              <rect x="40" y="5.5" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6"/>
-              <circle cx="46.5" cy="12" r="2.8" fill="currentColor"/>
-            </svg>
-          </span>
-        </div>
-        <p class="path-sub mono">The Solo Sprint</p>
+        <h3>Solo</h3>
+        <p class="path-sub mono">Immediate execution</p>
         <p class="path-desc">For people who already know what they want done. Knowing isn't the hard part. The Next Block is built for what is: sitting down, staying with it, and finishing one real block.</p>
         <p class="examples-line mono"><span class="examples-label">Examples:</span> Writing · Studying · Creative project · Application · Or your own idea</p>
-        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Solo.md">Copy Solo Prompt</button>
+        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Solo.md">Copy prompt</button>
+        <p class="copy-status mono" aria-live="polite" hidden></p>
         <div class="post-copy" hidden>
           <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
           <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
@@ -73,21 +71,12 @@
       </article>
 
       <article class="path-card" data-category="habit" data-category-label="With a Coach — The Coaching Loop">
-        <div class="title-row">
-          <h3>With a Coach</h3>
-          <span class="icon-box">
-            <svg class="path-symbol" viewBox="0 0 54 24" aria-hidden="true">
-              <g stroke="currentColor" stroke-width="2.4" fill="none">
-                <circle cx="21" cy="12" r="6.5"/>
-                <circle cx="33" cy="12" r="6.5"/>
-              </g>
-            </svg>
-          </span>
-        </div>
-        <p class="path-sub mono">The Coaching Loop</p>
-        <p class="path-desc">For anyone working with a therapist, coach, or accountability partner. Build the file together around goals and avoidance patterns. Bring the log to your next session: what got done, where the friction was, and the next block planned around it.</p>
-        <p class="examples-line mono"><span class="examples-label">Examples:</span> Avoidance · Initiation · Follow-through · Internet off · Your own goal</p>
-        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Coaching.md">Copy Coaching Prompt</button>
+        <h3>With a Coach</h3>
+        <p class="path-sub mono">Practice, log, adjust</p>
+        <p class="path-desc">For work with a therapist, coach, or accountability partner. Build the file together around goals, sticking points, and follow-through. Bring the log to your next session: what got done, where the friction was, and plan the next block around it.</p>
+        <p class="examples-line mono"><span class="examples-label">Examples:</span> Avoidance · Initiation · Internet off · Your own goal</p>
+        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Coaching.md">Copy prompt</button>
+        <p class="copy-status mono" aria-live="polite" hidden></p>
         <div class="post-copy" hidden>
           <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
           <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
@@ -95,26 +84,12 @@
       </article>
 
       <article class="path-card" data-category="journey" data-category-label="Exploring — The Research Phase">
-        <div class="title-row">
-          <h3>Exploring</h3>
-          <span class="icon-box">
-            <svg class="path-symbol" viewBox="0 0 54 24" aria-hidden="true">
-              <path d="M4 9.2 C4 6.6 6.3 5.5 8.6 5.5 C11 5.5 13 6.8 13 8.9 C13 11.1 9.6 11.1 9.6 13.5"
-                stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="9.6" cy="17.2" r="1.5" fill="currentColor"/>
-              <g stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M25 12 H30"/>
-                <path d="M28 9.5 L33 12 L28 14.5"/>
-              </g>
-              <rect x="40" y="5.5" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6"/>
-              <circle cx="46.5" cy="12" r="2.8" fill="currentColor"/>
-            </svg>
-          </span>
-        </div>
-        <p class="path-sub mono">The Research Phase</p>
+        <h3>Exploring</h3>
+        <p class="path-sub mono">Unknown → next move</p>
         <p class="path-desc">For open-ended life decisions — a new job, a new city, a new project. The interview turns an unknown into one concrete, time-boxed research block.</p>
         <p class="examples-line mono"><span class="examples-label">Examples:</span> New job · New city · New project · Strategy question · Or your own idea</p>
-        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Explorer.md">Copy Exploring Prompt</button>
+        <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Explorer.md">Copy prompt</button>
+        <p class="copy-status mono" aria-live="polite" hidden></p>
         <div class="post-copy" hidden>
           <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
           <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
@@ -143,14 +118,14 @@
             <p class="t-line"><span class="t-label">User</span>"Work on my story."</p>
             <p class="t-line"><span class="t-label t-label-ai">AI</span>"That's too vague. Which scene? What exactly will be done by the end of the block?"</p>
             <p class="t-line"><span class="t-label">User</span>"Revise the opening scene."</p>
-            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Still too broad. What concrete jobs have to happen?"</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Still broad. I'd make the block: reread the opening once, cut the throat-clearing paragraph, and rewrite the last six lines so the scene lands. Edit these before I build the file."</p>
           </div>
         </div>
       </article>
 
       <article class="showcase-panel">
         <h3>2. The file holds the block</h3>
-        <p class="showcase-caption">After the interview, Claude builds a simple offline file: jobs, reason, start time, check-ins, and a local log.</p>
+        <p class="showcase-caption">After the interview, Claude builds a simple offline file: action list, reason, start time, check-ins, and a local log.</p>
         <div class="file-mock">
           <p class="fm-label">TASK</p>
           <p class="fm-title">Draft the descent</p>
@@ -171,10 +146,13 @@
         <div class="checkin-mock">
           <p class="fm-label">CHECK-IN</p>
           <p class="fm-plain">Still with it?</p>
-          <p class="mock-choices"><span>Yes</span><span>Sort of</span><span>No</span></p>
-          <p class="fm-quote">"You said this mattered because: Finish it clean and it leaves the house — out to editors."</p>
-          <p class="fm-label">AVOIDANCE NAMED</p>
-          <p class="fm-quote">"Watch for: polishing the opening instead of finishing the scene."</p>
+          <div class="mock-choices" role="group" aria-label="Check-in demo — Still with it?">
+            <button type="button" class="checkin-demo-btn" data-answer="yes">Yes</button>
+            <button type="button" class="checkin-demo-btn" data-answer="sortof">Sort of</button>
+            <button type="button" class="checkin-demo-btn" data-answer="no">No</button>
+          </div>
+          <p class="checkin-demo-hint mono">Tap a response.</p>
+          <div class="checkin-demo-response" aria-live="polite"></div>
         </div>
         <div class="endlog-mock">
           <p class="fm-label">WHAT GOT DONE</p>
@@ -185,13 +163,15 @@
       </article>
 
     </div>
+
+    <p class="showcase-cta"><a class="showcase-cta-link mono" href="#paths">Pick a mode ↑</a></p>
   </section>
 
 </main>
 
 <footer class="site-footer wrap">
   <p class="free-line mono">IF THE NEXT BLOCK HELPS, <button type="button" id="share-btn" class="footer-link">SHARE IT</button>. IF IT COULD BE BETTER, <a id="feedback-link" class="footer-link" href="mailto:hello@thenextblock.org">SEND FEEDBACK</a>.</p>
-  <p id="share-status" class="footer-status mono" hidden>Link copied.</p>
+  <p id="share-status" class="footer-status mono" aria-live="polite" hidden></p>
 </footer>
 
 <!-- Info content, shown only inside the info-modal when triggered from the header nav -->

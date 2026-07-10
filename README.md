@@ -96,7 +96,7 @@ That second script is served automatically by Vercel once Web Analytics is turne
 
 **You still need to do one manual step:** in your Vercel dashboard, open the project, click **Analytics** in the sidebar, and click **Enable**. Nothing tracks until that's on and the site is redeployed with these script tags live.
 
-**Note on file scope:** these script tags are currently only in `NextBlock-v1.html` (the working copy), not yet in the live `index.html`. Analytics won't actually start collecting on thenextblock.org until this file becomes the one that's deployed, or the same script tags are copied into `index.html`.
+**Note on file scope:** these script tags live directly in `index.html`, the one file this project deploys. Analytics starts collecting on thenextblock.org as soon as this file is live and Web Analytics is enabled in the Vercel dashboard.
 
 **Where to view it:** Vercel dashboard → your project → **Analytics** in the sidebar. Visits, page views, referrers, and device/browser breakdowns are on the free Hobby plan. **Custom events (the button-click events below) require a Pro or Enterprise plan to view in the dashboard** — the code fires them regardless, but they'll only show up if your Vercel plan includes the Custom Events feature.
 
@@ -118,6 +118,8 @@ That second script is served automatically by Vercel once Web Analytics is turne
 - No email addresses or personal data
 - No IP address stored or shown to this project (Vercel Web Analytics is cookieless and doesn't expose raw IPs to site owners)
 - No cookies, no accounts, no cross-site tracking, no ad identifiers
+
+**Analytics recommendation:** Vercel Web Analytics (above) is already wired up and is the recommended option for this project since it's already deployed here. If you ever move off Vercel, GoatCounter or Plausible are good privacy-respecting alternatives — either one, cookieless, no personal data collected, tracking only basic page views plus the same core click events already listed above (copy prompt per mode, share, feedback, download sample file, pick-a-mode). No user-entered content should ever be tracked, on this analytics tool or any other. Do not add Google Analytics, and do not wire up a Plausible/GoatCounter script unless a real site URL/account for one actually exists — a placeholder tracking script pointed at no real account is worse than no analytics at all.
 
 ## Launch checklist
 

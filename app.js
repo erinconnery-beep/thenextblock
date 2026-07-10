@@ -69,28 +69,58 @@
   document.querySelectorAll(".copy-prompt-btn").forEach(function(btn){
     var promptFile = btn.getAttribute("data-prompt-file");
     var originalText = btn.textContent;
-    var postCopy = btn.nextElementSibling && btn.nextElementSibling.classList.contains("post-copy")
-      ? btn.nextElementSibling
-      : null;
+    var card = btn.closest(".path-card");
+    var statusEl = card ? card.querySelector(".copy-status") : null;
+    var postCopy = card ? card.querySelector(".post-copy") : null;
 
     btn.addEventListener("click", async function(){
       btn.disabled = true;
-      var label = "Prompt copied";
       var ok = false;
+      var statusMsg = "";
       try {
         var text = await loadPromptFile(promptFile);
         ok = await copyText(text);
-        if (!ok) label = "Couldn't copy — select and copy manually";
+        statusMsg = ok
+          ? "Copied to clipboard."
+          : "Copy failed. Select and copy the prompt manually.";
       } catch (e){
-        label = "Couldn't load prompt — check your connection";
+        statusMsg = "Couldn't load the prompt — check your connection.";
       }
       if (ok && PROMPT_EVENT_NAMES[promptFile]) trackEvent(PROMPT_EVENT_NAMES[promptFile]);
-      btn.textContent = label;
+      btn.textContent = ok ? "Copied ✓" : originalText;
+      if (statusEl){
+        statusEl.textContent = statusMsg;
+        statusEl.classList.toggle("is-error", !ok);
+        statusEl.hidden = false;
+      }
       if (ok && postCopy) postCopy.hidden = false;
       setTimeout(function(){
         btn.textContent = originalText;
         btn.disabled = false;
-      }, 2400);
+        if (statusEl){
+          statusEl.hidden = true;
+          statusEl.textContent = "";
+          statusEl.classList.remove("is-error");
+        }
+      }, 2000);
+    });
+  });
+
+  /* ---------- showcase panel 3: static check-in demo (no logging, no timers) ---------- */
+  var CHECKIN_DEMO_YES = '<p class="fm-plain">Good. Keep going.</p>';
+  var CHECKIN_DEMO_REPLAY =
+    '<p class="fm-quote">"You said this mattered because: Finish it clean and it leaves the house — out to editors."</p>' +
+    '<p class="fm-label">AVOIDANCE NAMED</p>' +
+    '<p class="fm-quote">"Watch for: polishing the opening instead of finishing the scene."</p>';
+
+  document.querySelectorAll(".checkin-demo-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var group = btn.closest(".checkin-mock");
+      var responseEl = group ? group.querySelector(".checkin-demo-response") : null;
+      var hintEl = group ? group.querySelector(".checkin-demo-hint") : null;
+      if (!responseEl) return;
+      responseEl.innerHTML = btn.getAttribute("data-answer") === "yes" ? CHECKIN_DEMO_YES : CHECKIN_DEMO_REPLAY;
+      if (hintEl) hintEl.hidden = true;
     });
   });
 
@@ -145,20 +175,24 @@
   if (shareBtn){
     shareBtn.addEventListener("click", async function(){
       trackEvent("share_site");
+      var shareUrl = window.location.origin || window.location.href;
       var shareData = {
         title: "The Next Block",
-        text: "A free prompt that turns a loose intention into one finishable work block.",
-        url: window.location.href
+        text: "A free AI prompt that builds an offline focus file.",
+        url: shareUrl
       };
       if (navigator.share){
         try { await navigator.share(shareData); }
         catch (e){ /* user cancelled the native share sheet — do nothing further */ }
         return;
       }
-      var ok = await copyText(window.location.href);
-      if (ok && shareStatus){
+      var ok = await copyText(shareUrl);
+      if (shareStatus){
+        shareStatus.textContent = ok
+          ? "Link copied ✓"
+          : "Copy this link: https://www.thenextblock.org/";
         shareStatus.hidden = false;
-        setTimeout(function(){ shareStatus.hidden = true; }, 2400);
+        setTimeout(function(){ shareStatus.hidden = true; }, ok ? 2400 : 6000);
       }
     });
   }
