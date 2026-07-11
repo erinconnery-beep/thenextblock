@@ -12,22 +12,36 @@
 (function(){
   "use strict";
 
-  /* ---------- analytics helper ----------
-     Fires a Vercel Web Analytics custom event by name only. Never pass prompt
-     text, user-entered text, emails, or any other personal/content data as the
-     event's "data" payload — these calls only ever send a fixed event name. */
+  /* ---------- analytics helpers ----------
+     Fire a custom event by name only (plus, for Plausible, a small fixed set of
+     non-content properties like "mode"). Never pass prompt text, user-entered
+     text, emails, or any other personal/content data. */
   function trackEvent(name){
     if (typeof window.va === "function"){
       try { window.va("event", { name: name }); } catch (e){ /* analytics must never break the site */ }
     }
   }
 
-  /* Maps each prompt file to its analytics event name (event name only — never
-     the prompt's actual text). */
+  function trackPlausible(name, props){
+    if (typeof window.plausible === "function"){
+      try { window.plausible(name, props ? { props: props } : undefined); }
+      catch (e){ /* analytics must never break the site */ }
+    }
+  }
+
+  /* Maps each prompt file to its Vercel analytics event name (event name only —
+     never the prompt's actual text). */
   var PROMPT_EVENT_NAMES = {
     "prompts/Solo.md": "copy_solo_prompt",
     "prompts/Coaching.md": "copy_coaching_loop_prompt",
     "prompts/Explorer.md": "copy_exploring_prompt"
+  };
+
+  /* Maps each prompt file to its Plausible "mode" property value. */
+  var PROMPT_MODE_NAMES = {
+    "prompts/Solo.md": "solo",
+    "prompts/Coaching.md": "coaching",
+    "prompts/Explorer.md": "exploring"
   };
 
   /* ---------- clipboard helper (with a manual-copy fallback) ---------- */
@@ -87,6 +101,7 @@
         statusMsg = "Couldn't load the prompt — check your connection.";
       }
       if (ok && PROMPT_EVENT_NAMES[promptFile]) trackEvent(PROMPT_EVENT_NAMES[promptFile]);
+      if (ok && PROMPT_MODE_NAMES[promptFile]) trackPlausible("copy_prompt", { mode: PROMPT_MODE_NAMES[promptFile] });
       btn.textContent = ok ? "Copied ✓" : originalText;
       if (statusEl){
         statusEl.textContent = statusMsg;
@@ -109,9 +124,11 @@
   /* ---------- showcase panel 3: static check-in demo (no logging, no timers) ---------- */
   var CHECKIN_DEMO_YES = '<p class="fm-plain">Good. Keep going.</p>';
   var CHECKIN_DEMO_REPLAY =
-    '<p class="fm-quote">"You said this mattered because: Finish it clean and it leaves the house — out to editors."</p>' +
-    '<p class="fm-label">AVOIDANCE NAMED</p>' +
-    '<p class="fm-quote">"Watch for: polishing the opening instead of finishing the scene."</p>';
+    '<p class="fm-label">YOU SAID THIS MATTERED BECAUSE</p>' +
+    '<p class="fm-quote">"Stop turning the job search into background dread. I do not need the whole career figured out today. I need five real openings, one first application, and a place to start tomorrow."</p>' +
+    '<p class="fm-label">WATCH FOR</p>' +
+    '<p class="fm-quote">"Opening thirty tabs, reading company reviews, or redesigning the resume instead of choosing."</p>' +
+    '<p class="fm-plain">Write down what you have so far before you open anything else.</p>';
 
   document.querySelectorAll(".checkin-demo-btn").forEach(function(btn){
     btn.addEventListener("click", function(){
@@ -126,8 +143,19 @@
 
   /* ---------- open_claude event on every "Open Claude" link ---------- */
   document.querySelectorAll('a[href="https://claude.ai/new"]').forEach(function(link){
-    link.addEventListener("click", function(){ trackEvent("open_claude"); });
+    link.addEventListener("click", function(){
+      trackEvent("open_claude");
+      trackPlausible("open_claude");
+    });
   });
+
+  /* ---------- download_sample_file event on the showcase's sample download link.
+     The click listener only reports the click — it never interferes with the
+     browser's normal download behavior. ---------- */
+  var downloadLink = document.querySelector(".showcase-download");
+  if (downloadLink){
+    downloadLink.addEventListener("click", function(){ trackPlausible("download_sample_file"); });
+  }
 
   /* ---------- info modal (Design / Disclaimer / Feedback) ---------- */
   var infoModal = document.getElementById("info-modal");
@@ -138,6 +166,8 @@
     link.addEventListener("click", function(e){
       e.preventDefault();
       var key = link.getAttribute("data-info");
+      if (key === "design") trackPlausible("design_notes_click");
+      if (key === "disclaimer") trackPlausible("disclaimer_click");
       var tpl = document.getElementById("info-" + key);
       if (!tpl) return;
       infoContent.innerHTML = "";
@@ -155,7 +185,10 @@
      since that link is only added to the DOM when the modal's template is cloned) */
   infoContent.addEventListener("click", function(e){
     var target = e.target.closest && e.target.closest('a[href^="mailto:"]');
-    if (target) trackEvent("send_feedback");
+    if (target){
+      trackEvent("send_feedback");
+      trackPlausible("feedback_click");
+    }
   });
 
   /* ---------- footer: SEND FEEDBACK (mailto) ---------- */
@@ -166,7 +199,10 @@
     feedbackLink.href = feedbackLink.href.split("?")[0]
       + "?subject=" + encodeURIComponent(feedbackSubject)
       + "&body=" + encodeURIComponent(feedbackBody);
-    feedbackLink.addEventListener("click", function(){ trackEvent("send_feedback"); });
+    feedbackLink.addEventListener("click", function(){
+      trackEvent("send_feedback");
+      trackPlausible("feedback_click");
+    });
   }
 
   /* ---------- footer: SHARE IT (native share, falls back to copy link) ---------- */
@@ -175,6 +211,7 @@
   if (shareBtn){
     shareBtn.addEventListener("click", async function(){
       trackEvent("share_site");
+      trackPlausible("share_click");
       var shareUrl = window.location.origin || window.location.href;
       var shareData = {
         title: "The Next Block",

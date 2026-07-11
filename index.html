@@ -24,6 +24,13 @@
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
+<!-- Privacy-friendly analytics by Plausible. Custom events only send a fixed
+     event name plus a mode label — see README. -->
+<script async src="https://plausible.io/js/pa-oqBnf5_V4SRV4lbtttuo3.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
 </head>
 <body>
 
@@ -55,11 +62,11 @@
 
   <section id="paths" class="paths wrap">
 
-    <div class="path-grid">
+    <div id="modes" class="path-grid">
 
       <article class="path-card" data-category="individual" data-category-label="Solo — The Solo Sprint">
         <h3>Solo</h3>
-        <p class="path-sub mono">Immediate execution</p>
+        <p class="path-sub mono">Clear task → start</p>
         <p class="path-desc">For people who already know what they want done. Knowing isn't the hard part. The Next Block is built for what is: sitting down, staying with it, and finishing one real block.</p>
         <p class="examples-line mono"><span class="examples-label">Examples:</span> Writing · Studying · Creative project · Application · Or your own idea</p>
         <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Solo.md">Copy prompt</button>
@@ -74,7 +81,7 @@
         <h3>With a Coach</h3>
         <p class="path-sub mono">Practice, log, adjust</p>
         <p class="path-desc">For work with a therapist, coach, or accountability partner. Build the file together around goals, sticking points, and follow-through. Bring the log to your next session: what got done, where the friction was, and plan the next block around it.</p>
-        <p class="examples-line mono"><span class="examples-label">Examples:</span> Avoidance · Initiation · Internet off · Your own goal</p>
+        <p class="examples-line mono"><span class="examples-label">Examples:</span> Avoidance · Initiation · Internet off · Follow-through · Or your own goal</p>
         <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Coaching.md">Copy prompt</button>
         <p class="copy-status mono" aria-live="polite" hidden></p>
         <div class="post-copy" hidden>
@@ -85,9 +92,9 @@
 
       <article class="path-card" data-category="journey" data-category-label="Exploring — The Research Phase">
         <h3>Exploring</h3>
-        <p class="path-sub mono">Unknown → next move</p>
+        <p class="path-sub mono">Unknown → first step</p>
         <p class="path-desc">For open-ended life decisions — a new job, a new city, a new project. The interview turns an unknown into one concrete, time-boxed research block.</p>
-        <p class="examples-line mono"><span class="examples-label">Examples:</span> New job · New city · New project · Strategy question · Or your own idea</p>
+        <p class="examples-line mono"><span class="examples-label">Examples:</span> Job search · Research · Brainstorming · New project · Strategy question · Or your own idea</p>
         <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Explorer.md">Copy prompt</button>
         <p class="copy-status mono" aria-live="polite" hidden></p>
         <div class="post-copy" hidden>
@@ -107,18 +114,15 @@
 
       <article class="showcase-panel">
         <h3>1. The interview refuses vagueness</h3>
-        <p class="showcase-caption">The prompt does not accept the fuzzy version. It keeps asking until the work becomes one concrete block.</p>
+        <p class="showcase-caption">The prompt does not accept the fuzzy version. It keeps asking until the work is small enough to start and clear enough to finish.</p>
         <div class="transcript">
           <div class="transcript-example">
-            <p class="t-line"><span class="t-label">User</span>"Work on my book."</p>
-            <p class="t-line"><span class="t-label t-label-ai">AI</span>"That's a project, not a block. Which scene, and what physical action starts it?"</p>
-            <p class="t-line"><span class="t-label">User</span>"Reread the last page of Caves, then draft the descent — 9:00 to 10:30."</p>
-          </div>
-          <div class="transcript-example">
-            <p class="t-line"><span class="t-label">User</span>"Work on my story."</p>
-            <p class="t-line"><span class="t-label t-label-ai">AI</span>"That's too vague. Which scene? What exactly will be done by the end of the block?"</p>
-            <p class="t-line"><span class="t-label">User</span>"Revise the opening scene."</p>
-            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Still broad. I'd make the block: reread the opening once, cut the throat-clearing paragraph, and rewrite the last six lines so the scene lands. Edit these before I build the file."</p>
+            <p class="t-line"><span class="t-label">User</span>"I need to start my job search."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"That is too open for one sitting. If this question were answered, what would you do tomorrow?"</p>
+            <p class="t-line"><span class="t-label">User</span>"I would apply to roles that actually fit instead of scrolling forever."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Good. Then this block is not the whole job search. It is answering one question: which five roles are worth applying to first? I’d make the block: find eight possible roles, cut to five, choose the first application, and write tomorrow’s first move. Edit that before I build the file."</p>
+            <p class="t-line"><span class="t-label">User</span>"Add: no rewriting my resume and no company-review rabbit holes."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Good. The block is: build a five-role shortlist from the materials you already have. Start at 9:00. Stop at 10:30 with one first application chosen."</p>
           </div>
         </div>
       </article>
@@ -128,16 +132,18 @@
         <p class="showcase-caption">After the interview, Claude builds a simple offline file: action list, reason, start time, check-ins, and a local log.</p>
         <div class="file-mock">
           <p class="fm-label">TASK</p>
-          <p class="fm-title">Draft the descent</p>
+          <p class="fm-title">Build the first job-search shortlist</p>
           <p class="fm-label">WHY THIS MATTERS</p>
-          <p class="fm-why">Finish it clean and it leaves the house — out to editors.</p>
-          <p class="fm-label">THE JOBS</p>
-          <p class="fm-plain">Reread the last page · Draft the descent · Mark the weak paragraph</p>
-          <p class="fm-btn">Begin — Draft the descent 9:00</p>
+          <p class="fm-why">Stop turning the job search into background dread. I do not need the whole career figured out today. I need five real openings, one first application, and a place to start tomorrow.</p>
+          <p class="fm-label">ACTION LIST</p>
+          <p class="fm-plain">Open saved job-search bookmark · Capture eight possible roles · Choose five worth applying to · Pick the first application · Write tomorrow’s first move</p>
+          <p class="fm-label">WATCH FOR</p>
+          <p class="fm-plain">Opening thirty tabs, reading company reviews, or redesigning the resume instead of choosing.</p>
+          <p class="fm-btn">Begin — shortlist chosen by 10:30</p>
           <p class="fm-label">RUNNING LOG</p>
           <p class="fm-plain">1 block logged so far</p>
         </div>
-        <a class="btn btn-outline showcase-download" href="samples/sample-next-block.html" download>Download sample file</a>
+        <a class="btn showcase-download" href="samples/sample-next-block.html" download>Download sample Focus File</a>
       </article>
 
       <article class="showcase-panel">
@@ -145,8 +151,8 @@
         <p class="showcase-caption">Mid-block, the file returns your own reason. At the end, the log captures what happened and where to start next.</p>
         <div class="checkin-mock">
           <p class="fm-label">CHECK-IN</p>
-          <p class="fm-plain">Still with it?</p>
-          <div class="mock-choices" role="group" aria-label="Check-in demo — Still with it?">
+          <p class="fm-plain">Are you closing in on an answer?</p>
+          <div class="mock-choices" role="group" aria-label="Check-in demo — Are you closing in on an answer?">
             <button type="button" class="checkin-demo-btn" data-answer="yes">Yes</button>
             <button type="button" class="checkin-demo-btn" data-answer="sortof">Sort of</button>
             <button type="button" class="checkin-demo-btn" data-answer="no">No</button>
@@ -156,15 +162,17 @@
         </div>
         <div class="endlog-mock">
           <p class="fm-label">WHAT GOT DONE</p>
-          <p class="fm-plain">Drafted the descent scene and marked the weak paragraph.</p>
+          <p class="fm-plain">Listed seven roles, chose five, and picked the first application.</p>
+          <p class="fm-label">WHERE MOMENTUM BROKE</p>
+          <p class="fm-plain">Got pulled into company reviews for fifteen minutes, then came back and chose.</p>
           <p class="fm-label">WHERE TO START NEXT</p>
-          <p class="fm-plain">Open the draft and reread the last paragraph before revising the ending.</p>
+          <p class="fm-plain">Tomorrow at 9:00, tailor the first paragraph and send the first application.</p>
         </div>
       </article>
 
     </div>
 
-    <p class="showcase-cta"><a class="showcase-cta-link mono" href="#paths">Pick a mode ↑</a></p>
+    <p class="showcase-cta"><a class="showcase-cta-link mono" href="#modes">Pick a mode ↑</a></p>
   </section>
 
 </main>
@@ -177,15 +185,15 @@
 <!-- Info content, shown only inside the info-modal when triggered from the header nav -->
 <template id="info-design">
   <h2 class="mono info-modal-label">DESIGN</h2>
-  <p>The Next Block was built for one reason: to finish a long writing project. It worked. So here it is.</p>
-  <p><strong>It refuses to let you stay vague.</strong> You already know what to do — the tool trusts that. What it will not accept is the fuzzy version. It asks until the work is one concrete block: what you will do, why it matters, and the physical action that starts it.</p>
-  <p><strong>It drafts the work, then makes you edit.</strong> The Next Block turns the goal into a short list of concrete jobs to do inside the block. You have to correct that list before the file gets built. The plan has to be yours.</p>
-  <p><strong>It plans just enough to start.</strong> Most productivity tools are for planning. This one plans only what the next block needs, and the plan gets spent the same hour it is made.</p>
-  <p><strong>It gives your own words back to you.</strong> The file holds your intention in the language you chose, then returns it mid-block — right when you are about to drift, stall, or bail. That is the motivation. It is harder to argue with your own reasons.</p>
-  <p><strong>Some days it feels silly.</strong> Then, an hour in, the file is doing what your head cannot: holding the work, the reason, and the next step somewhere indecision and distraction cannot erase them. An externalized prefrontal cortex.</p>
-  <p><strong>It ends with tomorrow’s block already built.</strong> Sit down at the set time, file open, and start. The deciding is already done.</p>
-  <p><strong>It does not replace people.</strong> A therapist, a coach, a good friend — the tool is not competition for any of them. Between conversations, it turns this week’s intention into the next concrete block.</p>
-  <p><strong>Why a file?</strong> Once it is built: no account, no service, nothing to log into. The log stays in your browser, and the whole thing works with the Wi-Fi off — which is where most focused work happens anyway. Unplug the router for an hour and find out.</p>
+  <p>The Next Block was built for one reason: to finish a long writing project. It worked. So here it is — free, in case you have something to finish too.</p>
+  <p><strong>It refuses to let you stay vague.</strong> It asks (and keeps asking) until the work is one concrete block: what you will do, why it matters, and exactly where you will start.</p>
+  <p><strong>It will not think for you.</strong> The agenda is yours, in your own words. The AI only narrows and structures, and nothing gets built until you approve it.</p>
+  <p><strong>It plans just enough to start.</strong> Most productivity tools keep you thinking about work instead of doing it. This one is designed to end: the moment the plan exists, you begin.</p>
+  <p><strong>It knocks while you work.</strong> Every so often, the focus file knocks with your own words: what you said you would do, why it mattered to you, and your usual escape (mine: organizing notes instead of writing). It is harder to argue with your own reasons.</p>
+  <p><strong>Some days the ritual feels silly.</strong> You already know what to do — why write it out for an AI? Because an hour in, the file is doing what your head cannot: holding the work, the reason, and the next step somewhere indecision and distraction cannot erase them. An externalized prefrontal cortex.</p>
+  <p><strong>It ends with the next block already built.</strong> That is how the book got finished: the focus file made the night before, waiting open beside the draft like a note from yesterday’s self. Sit down at the set time; the deciding is already done.</p>
+  <p><strong>It does not replace people.</strong> A therapist, a coach, a good friend. The tool works the stretch between conversations — and the log keeps the record, good or bad, plus where the next block starts: an honest baseline to bring back to them.</p>
+  <p><strong>Why a file?</strong> It works with the Wi-Fi off — which is where most focused work happens anyway. Unplug for a block and find out.</p>
 </template>
 
 <template id="info-disclaimer">

@@ -146,6 +146,7 @@ button{ font-family: inherit; cursor: pointer; }
 .paths{ padding: 12px 24px 64px; text-align:center; }
 .hero-open-claude{ margin-bottom: 22px; }
 .path-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--grid-strong); border: 1px solid var(--grid-strong); text-align:left; }
+#modes{ scroll-margin-top: 72px; }
 .path-card{
   background: var(--surface); padding: 28px 24px; position:relative;
   display:flex; flex-direction:column; gap: 12px;
@@ -204,7 +205,11 @@ button{ font-family: inherit; cursor: pointer; }
 
 /* ---------- showcase ("See it in action") ---------- */
 .showcase{ padding: 12px 24px 64px; }
-.section-heading{ font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: 700; text-align:center; margin-bottom: 8px; }
+.section-heading{
+  font-family: var(--font-display); font-weight: 700; color: var(--ink);
+  font-size: clamp(1.6rem, 3.4vw, 2.15rem); line-height: 1.25;
+  text-align:center; margin-bottom: 8px;
+}
 .section-intro{
   text-align:center; max-width: 620px; margin: 0 auto 28px;
   color: var(--signal); font-size: 0.95rem;
@@ -264,7 +269,13 @@ button{ font-family: inherit; cursor: pointer; }
 .checkin-demo-response:empty{ margin-top: 0; }
 .checkin-demo-response .fm-quote, .checkin-demo-response .fm-plain, .checkin-demo-response .fm-label{ margin: 6px 0 0; }
 .checkin-demo-response .fm-label:first-child{ margin-top: 6px; }
-.showcase-download{ align-self:flex-start; margin-top: 4px; }
+.showcase-download{
+  align-self:flex-start; margin-top: 4px;
+  border: 1px solid var(--signal); background: transparent; color: var(--signal);
+}
+.showcase-download:hover, .showcase-download:focus-visible{
+  background: var(--signal-pale); color: var(--signal);
+}
 .showcase-cta{ text-align:center; margin-top: 28px; }
 .showcase-cta-link{
   font-size: 0.85rem; color: var(--signal);

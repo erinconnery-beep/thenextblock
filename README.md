@@ -83,7 +83,11 @@ Your domain is registered at Namecheap; hosting lives on Vercel. You do not need
 
 ## I. Analytics
 
-**How it was added.** This project has no build step, so it uses Vercel Web Analytics' plain-HTML script method rather than the `@vercel/analytics` npm package (that package is for framework projects like Next.js/React that have a bundler). Two small script tags were added to the `<head>` of `NextBlock-v1.html`:
+This project runs two privacy-friendly, cookieless analytics tools side by side — Vercel Web Analytics and Plausible. Neither uses cookies, neither collects personal data, and neither ever sees prompt text, file content, or anything a visitor types. **No Google Analytics is used anywhere in this project.**
+
+### Vercel Web Analytics
+
+**How it was added.** This project has no build step, so it uses Vercel Web Analytics' plain-HTML script method rather than the `@vercel/analytics` npm package (that package is for framework projects like Next.js/React that have a bundler). These script tags live in the `<head>` of `index.html`:
 
 ```html
 <script>
@@ -96,30 +100,48 @@ That second script is served automatically by Vercel once Web Analytics is turne
 
 **You still need to do one manual step:** in your Vercel dashboard, open the project, click **Analytics** in the sidebar, and click **Enable**. Nothing tracks until that's on and the site is redeployed with these script tags live.
 
-**Note on file scope:** these script tags live directly in `index.html`, the one file this project deploys. Analytics starts collecting on thenextblock.org as soon as this file is live and Web Analytics is enabled in the Vercel dashboard.
+**Where to view it:** Vercel dashboard → your project → **Analytics** in the sidebar. Visits, page views, referrers, and device/browser breakdowns are on the free Hobby plan. **Custom events require a Pro or Enterprise plan to view in the dashboard** — the code fires them regardless, but they'll only show up if your Vercel plan includes the Custom Events feature.
 
-**Where to view it:** Vercel dashboard → your project → **Analytics** in the sidebar. Visits, page views, referrers, and device/browser breakdowns are on the free Hobby plan. **Custom events (the button-click events below) require a Pro or Enterprise plan to view in the dashboard** — the code fires them regardless, but they'll only show up if your Vercel plan includes the Custom Events feature.
+**Custom events tracked (name only, no extra data):**
+- `copy_solo_prompt` / `copy_coaching_loop_prompt` / `copy_exploring_prompt` — a mode's Copy prompt button clicked
+- `open_claude` — any "Open Claude ↗" link clicked
+- `send_feedback` — SEND FEEDBACK (footer) or the Feedback modal's email link clicked
+- `share_site` — SHARE IT clicked
 
-**What is tracked:**
-- Page visits and page views (built into Vercel Web Analytics automatically)
-- Referrers (what site or link sent someone here)
-- Device and browser type (aggregated, not individually identifying)
-- Six custom click events, tracked by name only, with no additional data attached:
-  - `copy_solo_prompt` — Copy Solo Prompt clicked
-  - `copy_coaching_loop_prompt` — Copy Coaching Prompt clicked
-  - `copy_exploring_prompt` — Copy Exploring Prompt clicked
-  - `open_claude` — any "Open Claude ↗" link clicked
-  - `send_feedback` — SEND FEEDBACK (footer) or the Feedback modal's email link clicked
-  - `share_site` — SHARE IT clicked
+### Plausible Analytics
 
-**What is never tracked:**
-- No prompt text or file content — the events fire on the click itself, never on what was copied
+**How it was added.** The exact install snippet from the Plausible dashboard for this site was added to the `<head>` of `index.html`, right after the Vercel tags:
+
+```html
+<script async src="https://plausible.io/js/pa-oqBnf5_V4SRV4lbtttuo3.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+```
+
+The site identifier is embedded in the script URL itself (`pa-oqBnf5_V4SRV4lbtttuo3.js`), so there's no separate `data-domain` attribute to configure. The inline snippet still queues events safely (via `window.plausible`) even if they fire before the async script finishes loading — the custom `copy_prompt`, `open_claude`, etc. calls in `app.js` didn't need to change.
+
+**Where to view it:** your Plausible dashboard for the `thenextblock.org` site. Visits and page views are automatic; the custom events below appear under Plausible's Goals/Events view once the site starts getting traffic.
+
+**Custom events tracked:**
+- `copy_prompt` — a mode's Copy prompt button clicked, with one property: `mode` = `solo`, `coaching`, or `exploring` (never the prompt text itself)
+- `open_claude` — any "Open Claude ↗" link clicked
+- `download_sample_file` — the showcase's "Download sample file" link clicked (the download itself is untouched — the event just reports the click)
+- `share_click` — SHARE IT clicked
+- `feedback_click` — SEND FEEDBACK (footer) or the Feedback modal's email link clicked
+- `design_notes_click` — the "Design notes" nav link clicked
+- `disclaimer_click` — the "Disclaimer" nav link clicked
+
+### What is never tracked, on either tool
+- No prompt text or file content — every event fires on the click itself, never on what was copied
 - No user-entered text of any kind (nothing on this site accepts free-text input)
 - No email addresses or personal data
-- No IP address stored or shown to this project (Vercel Web Analytics is cookieless and doesn't expose raw IPs to site owners)
+- No IP address stored or shown to this project (both tools are cookieless and don't expose raw IPs to site owners)
 - No cookies, no accounts, no cross-site tracking, no ad identifiers
+- **Nothing is ever tracked inside a generated offline focus file, the downloadable sample file, or a local browser log/CSV** — those run entirely on the visitor's own device, disconnected from this website, and this project has no way to see inside them even if it wanted to.
 
-**Analytics recommendation:** Vercel Web Analytics (above) is already wired up and is the recommended option for this project since it's already deployed here. If you ever move off Vercel, GoatCounter or Plausible are good privacy-respecting alternatives — either one, cookieless, no personal data collected, tracking only basic page views plus the same core click events already listed above (copy prompt per mode, share, feedback, download sample file, pick-a-mode). No user-entered content should ever be tracked, on this analytics tool or any other. Do not add Google Analytics, and do not wire up a Plausible/GoatCounter script unless a real site URL/account for one actually exists — a placeholder tracking script pointed at no real account is worse than no analytics at all.
+**Analytics policy:** do not add Google Analytics. Do not add a new analytics tool's script unless a real site URL/account for it actually exists — a placeholder tracking script pointed at no real account is worse than no analytics at all.
 
 ## Launch checklist
 

@@ -1,304 +1,222 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Draft the descent — The Next Block (sample)</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Next Block — Sample Focus File</title>
 <style>
-*,*::before,*::after{ box-sizing: border-box; }
-:root{
-  --paper: #eef1f5; --paper-deep: #e3e9f1; --grid-strong: #aab8cc;
-  --ink: #10141b; --line: #3c4658; --muted: #5b6577; --signal: #2453ff;
-  --signal-pale: #d9e2ff; --surface: #ffffff;
-  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-}
-html{ -webkit-text-size-adjust: 100%; }
-body{ margin:0; background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
-.mono{ font-family: var(--font-mono); }
-.small{ font-size: 0.78rem; }
-.wrap{ max-width: 640px; margin: 0 auto; padding: 36px 20px 64px; }
-.sample-banner{
-  background: var(--ink); color: var(--paper); text-align:center; font-family: var(--font-mono);
-  font-size: 0.72rem; letter-spacing: 0.06em; padding: 8px 12px;
-}
-.hd{ margin-bottom: 22px; border-bottom: 2px solid var(--ink); padding-bottom: 16px; }
-.eyebrow{ color: var(--signal); font-size: 0.75rem; letter-spacing: 0.08em; margin: 0 0 10px; font-family: var(--font-mono); }
-h1{ font-size: 1.6rem; margin: 0 0 6px; letter-spacing: -0.01em; }
-.project-line{ margin:0; color: var(--muted); font-size: 0.95rem; }
-.block{ border: 1px solid var(--grid-strong); background: var(--surface); padding: 18px 20px; margin-bottom: 16px; }
-.label{ font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 8px; }
-.why-block{ background: var(--signal-pale); border-left: 4px solid var(--signal); }
-.why-text{ font-size: 1.02rem; font-style: italic; margin: 0; }
-.small-why{ font-size: 0.92rem; }
-#checklist .item{ display:flex; align-items:flex-start; gap:10px; padding: 8px 0; border-bottom: 1px dashed var(--grid-strong); }
-#checklist .item:last-child{ border-bottom: none; }
-#checklist input[type=checkbox]{ width: 18px; height: 18px; margin-top: 3px; accent-color: var(--signal); }
-#checklist .item.done span{ text-decoration: line-through; color: var(--muted); }
-.risks-block ul{ margin:0; padding-left: 20px; }
-.first-step-block{ background: var(--paper-deep); }
-.controls{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 10px; }
-button{ font-family: var(--font-mono); font-size: 0.88rem; cursor:pointer; border-radius: 0; }
-.btn-primary{ padding: 12px 20px; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); }
-.btn-primary:hover{ background: var(--signal); border-color: var(--signal); color: #fff; }
-.btn-outline{ padding: 12px 20px; border: 1px solid var(--ink); background: transparent; color: var(--ink); }
-.btn-outline:hover{ background: var(--ink); color: var(--paper); }
-.elapsed{ color: var(--muted); margin: 0 0 16px; }
-.checkin-actions{ display:flex; gap:8px; margin-top: 10px; }
-.checkin-actions button{ flex:1; padding: 10px; border: 1px solid var(--ink); background: transparent; }
-.checkin-actions button:hover{ background: var(--ink); color: var(--paper); }
-.checkin-btn-flash{ animation: flash 1s ease-in-out infinite; }
-@keyframes flash{ 0%,100%{ box-shadow: 0 0 0 0 rgba(36,83,255,0.5);} 50%{ box-shadow: 0 0 0 6px rgba(36,83,255,0);} }
-.win-banner{ background: var(--ink); color: var(--paper); padding: 12px 14px; font-size: 1rem; }
-.field{ margin-bottom: 12px; }
-.field label{ display:block; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 5px; }
-select, textarea{ width:100%; font-family: var(--font-body); font-size: 0.95rem; padding: 8px 10px; border: 1px solid var(--grid-strong); background: var(--paper); color: var(--ink); }
-.table-wrap{ overflow-x:auto; margin-bottom: 12px; }
-table{ border-collapse: collapse; width: 100%; font-size: 0.78rem; }
-th,td{ border: 1px solid var(--grid-strong); padding: 6px 8px; text-align:left; white-space:nowrap; }
-th{ background: var(--paper-deep); font-family: var(--font-mono); font-size: 0.68rem; }
-.footnote{ color: var(--muted); font-size: 0.8rem; text-align:center; margin-top: 28px; }
-@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
-@media (max-width: 420px){ .wrap{ padding: 22px 14px 48px; } h1{ font-size: 1.3rem; } .checkin-actions{ flex-direction:column; } }
+  :root{
+    --ink:#10141c;--muted:#536175;--line:#aebdd2;--paper:#f4f7fb;--box:#ffffff;--soft:#e8edf4;--blue:#1f5cff;--blue-soft:#dbe5ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;line-height:1.5}
+  body:before{content:"";position:fixed;inset:0;z-index:-1;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:32px 32px;opacity:.55}
+  .sample-bar{background:#0f141c;color:#fff;text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;letter-spacing:.06em;padding:10px 12px}
+  main{max-width:760px;margin:48px auto 80px;padding:0 20px}
+  .eyebrow{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--blue);letter-spacing:.14em;text-transform:uppercase;font-size:14px;margin:0 0 16px}
+  h1{font-size:34px;line-height:1.1;margin:0 0 8px;letter-spacing:-.03em}
+  .sub{color:var(--muted);font-size:17px;margin:0 0 28px}
+  hr{border:0;border-top:3px solid var(--ink);margin:0 0 28px}
+  section{background:var(--box);border:1px solid var(--line);padding:26px;margin:0 0 20px}
+  section.why{background:var(--blue-soft);border-color:#8fa6ee;border-left:5px solid var(--blue)}
+  section.first-step{background:#e8edf4}
+  h2{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-size:13px;margin:0 0 18px}
+  .big{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:22px;letter-spacing:.02em;margin:0}
+  .clock{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);font-size:14px;margin-top:10px}
+  input.time{font:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:22px;border:0;border-bottom:1px solid var(--line);background:transparent;padding:2px 0;width:7ch}
+  .craft{font-size:18px}
+  .craft p{margin:0 0 12px}
+  .jobs{display:grid;gap:0}
+  label.job{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:14px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+  label.job:last-child{border-bottom:0}
+  input[type="checkbox"]{width:20px;height:20px;margin-top:3px;accent-color:var(--blue)}
+  .job-title{font-size:18px;font-weight:650}
+  .job-sub{color:var(--muted);font-size:14px;margin-top:3px}
+  .watch{font-size:18px;margin:0}.watch li{margin:0 0 6px}
+  .button-row{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 18px}
+  button,.button{appearance:none;border:1px solid var(--ink);background:var(--ink);color:#fff;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;letter-spacing:.03em;padding:14px 18px;cursor:pointer;text-decoration:none;display:inline-block}
+  button.secondary,.button.secondary{background:transparent;color:var(--blue);border-color:var(--blue)}
+  button:focus,.button:focus{outline:3px solid var(--blue-soft);outline-offset:2px}
+  .note{color:var(--muted);font-size:14px;margin:18px 4px 0}
+  .hidden{display:none!important}
+  .overlay{position:fixed;inset:0;background:rgba(16,20,28,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:10}
+  .modal{background:#fff;border:2px solid var(--ink);max-width:560px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(16,20,28,.25)}
+  .modal h3{font-size:26px;margin:0 0 12px}.modal p{margin:0 0 12px;font-size:17px}.modal .choices{display:flex;gap:10px;margin-top:18px}.modal button{background:transparent;color:var(--ink);border-color:var(--line)}
+  textarea,input.text{width:100%;border:1px solid var(--line);font:inherit;padding:12px;background:#fff;margin:6px 0 16px;min-height:74px}
+  .win{background:var(--ink);color:#fff;padding:20px;margin:0 0 20px;font-weight:700}
+  table{width:100%;border-collapse:collapse;font-size:13px;background:#fff}th,td{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+  @media(max-width:640px){main{margin-top:28px}.modal .choices{flex-direction:column}h1{font-size:28px}section{padding:20px}}
 </style>
 </head>
 <body>
+<div class="sample-bar">SAMPLE FOCUS FILE — this is what Claude builds at the end of a Next Block interview</div>
+<main>
+  <p class="eyebrow">The Next Block — Research Phase</p>
+  <h1>Build the first job-search shortlist</h1>
+  <p class="sub">Answer one question: which five roles are worth applying to first, and which application starts tomorrow?</p>
+  <hr>
 
-<div class="sample-banner">SAMPLE FILE — this is what Claude builds at the end of a Next Block interview</div>
+  <section>
+    <h2>Time window</h2>
+    <p class="big"><input id="startTime" class="time" value="9:00"> — 10:30</p>
+    <p class="clock" id="clock">Clock loading.</p>
+  </section>
 
-<div id="app" class="wrap">
-  <header class="hd">
-    <p class="eyebrow mono" id="path-badge">THE NEXT BLOCK — SOLO</p>
-    <h1 id="task-h1">Draft the descent</h1>
-    <p class="project-line" id="project-line">Part of: Caves (novel manuscript)</p>
-  </header>
+  <section>
+    <h2>What counts as done</h2>
+    <p>Five real roles are listed with one reason each. One first application is chosen. Tomorrow’s first move is named.</p>
+  </section>
 
-  <div class="block">
-    <p class="label">TIME WINDOW</p>
-    <p id="time-window-text" class="mono">9:00 – 10:30</p>
-  </div>
-
-  <div class="block">
-    <p class="label">WHAT COUNTS AS DONE</p>
-    <p id="done-line-text">The descent scene is drafted start to finish, and the weak paragraph is marked for revision.</p>
-  </div>
-
-  <div class="block why-block">
-    <p class="label">WHY THIS MATTERS TODAY</p>
-    <p id="why-text" class="why-text">Finish it clean and it leaves the house — out to editors.</p>
-  </div>
-
-  <div class="block">
-    <p class="label">THE JOBS</p>
-    <div id="checklist"></div>
-  </div>
-
-  <div class="block risks-block">
-    <p class="label">WATCH FOR</p>
-    <ul>
-      <li>Polishing the opening instead of finishing the scene</li>
-      <li>Reorganizing notes instead of drafting</li>
-    </ul>
-  </div>
-
-  <div class="block first-step-block">
-    <p class="label">FIRST STEP</p>
-    <p id="first-step-text">Reread the last page of Caves, then start typing the descent.</p>
-  </div>
-
-  <div class="controls">
-    <button id="start-btn" class="btn-primary" type="button">Begin — Draft the descent 9:00</button>
-    <button id="checkin-btn" class="btn-outline" type="button" hidden>Check in</button>
-    <button id="end-btn" class="btn-outline" type="button" hidden>End block</button>
-  </div>
-  <div id="elapsed-readout" class="mono elapsed" hidden></div>
-
-  <div id="checkin-panel" class="block checkin-panel" hidden>
-    <p class="label">CHECK-IN</p>
-    <p class="why-text small-why" id="checkin-why"></p>
-    <p>Still with it?</p>
-    <div class="checkin-actions">
-      <button data-answer="yes" type="button">Yes</button>
-      <button data-answer="sortof" type="button">Sort of</button>
-      <button data-answer="no" type="button">No</button>
+  <section class="why">
+    <h2>Why this matters today</h2>
+    <div class="craft">
+      <p><em>Stop turning the job search into background dread. I do not need the whole career figured out today. I need five real openings, one first application, and a place to start tomorrow.</em></p>
     </div>
-  </div>
+  </section>
 
-  <div id="end-panel" class="block end-panel" hidden>
-    <p class="label">END OF BLOCK</p>
-    <p class="win-banner" id="win-banner"></p>
-    <div class="field"><label>Status</label>
-      <select id="r-status">
-        <option value="done">Done</option>
-        <option value="partial">Partially done</option>
-        <option value="not-started">Didn't get going</option>
-      </select>
+  <section>
+    <h2>Action list</h2>
+    <div class="jobs" id="jobs">
+      <label class="job"><input type="checkbox" data-title="Open the saved job-search bookmark"><span><span class="job-title">Open the saved job-search bookmark</span><span class="job-sub">Use the search you already made. No new system, no new spreadsheet.</span></span></label>
+      <label class="job"><input type="checkbox" data-title="Capture eight possible roles"><span><span class="job-title">Capture eight possible roles</span><span class="job-sub">For each one, write title, company, link, and one sentence on why it might fit.</span></span></label>
+      <label class="job"><input type="checkbox" data-title="Choose five worth applying to"><span><span class="job-title">Choose five worth applying to</span><span class="job-sub">Cut the weak ones. Do not keep a role just because choosing feels hard.</span></span></label>
+      <label class="job"><input type="checkbox" data-title="Pick the first application"><span><span class="job-title">Pick the first application</span><span class="job-sub">Name the one that gets tomorrow’s work block, not the perfect one.</span></span></label>
+      <label class="job"><input type="checkbox" data-title="Write tomorrow’s first move"><span><span class="job-title">Write tomorrow’s first move</span><span class="job-sub">One sentence: what opens first, what changes, and what “sent” will mean.</span></span></label>
     </div>
-    <div class="field"><label>Notes</label><textarea id="r-notes" rows="2" placeholder="Anything worth remembering about today."></textarea></div>
-    <div class="field"><label>Where to start next</label><textarea id="r-next" rows="2" placeholder="Where the next block should begin."></textarea></div>
-    <button id="save-log-btn" class="btn-primary" type="button">Save to log</button>
-  </div>
+  </section>
 
-  <div id="log-block" class="block" hidden>
-    <p class="label">RUNNING LOG</p>
-    <div class="table-wrap"><table id="log-table"><thead><tr><th>Date</th><th>Task</th><th>Window</th><th>Jobs done</th><th>Status</th><th>Notes</th><th>Next start</th></tr></thead><tbody></tbody></table></div>
-    <button id="copy-csv-btn" class="btn-outline" type="button">Copy CSV log</button>
-    <p id="copy-status" class="mono small" aria-live="polite"></p>
-  </div>
+  <section>
+    <h2>Watch for</h2>
+    <ul class="watch"><li>Opening thirty tabs, reading company reviews, or redesigning the resume instead of choosing.</li></ul>
+  </section>
 
-  <p class="footnote">This file runs entirely offline, in your browser. Nothing on this page is sent anywhere. This particular copy is a sample for demonstration — your real file is generated during your own Claude chat.</p>
+  <section class="first-step">
+    <h2>First step</h2>
+    <p>Open the saved job-search bookmark, then make a note called “5 roles / 1 first application.”</p>
+  </section>
+
+  <div class="button-row" id="preStartButtons">
+    <button id="begin">Begin — shortlist chosen by 10:30</button>
+    <button class="secondary" id="preview">Preview check-in</button>
+  </div>
+  <p class="note">This sample file runs entirely in your browser. No account. No service. Nothing on this page is sent anywhere.</p>
+
+  <section id="reflection" class="hidden">
+    <h2>End-of-block reflection</h2>
+    <label>What got done?</label>
+    <textarea id="doneText">Listed seven roles, chose five, and picked the first application.</textarea>
+    <label>How did it feel?</label>
+    <textarea id="feltText">Less vague. Not solved, but no longer floating.</textarea>
+    <label>What is the next real move, and is it action or more research?</label>
+    <textarea id="nextMove">action: Tomorrow at 9:00, tailor the first paragraph and send the first application.</textarea>
+    <div class="button-row"><button id="saveLog">Save log row</button><button class="secondary" id="copyCsv">Copy CSV</button></div>
+  </section>
+
+  <div id="win" class="win hidden">Finished: Five roles listed, one first application chosen, tomorrow’s first move named.</div>
+
+  <section>
+    <h2>CSV log</h2>
+    <div id="logTable"></div>
+  </section>
+</main>
+
+<div id="overlay" class="overlay hidden" role="dialog" aria-modal="true">
+  <div class="modal">
+    <h3 id="overlayTitle">Are you closing in on an answer?</h3>
+    <div id="overlayBody">
+      <p>Still with the shortlist?</p>
+    </div>
+    <div class="choices" id="choices">
+      <button data-choice="yes">Yes</button><button data-choice="sortof">Sort of</button><button data-choice="no">No</button>
+    </div>
+    <div class="button-row hidden" id="closeRow"><button id="closeOverlay">Back to the block</button></div>
+  </div>
 </div>
 
 <script>
 (function(){
-  "use strict";
-  var TASK = "Draft the descent";
-  var WHY_TODAY = "Finish it clean and it leaves the house — out to editors.";
-  var CHECKLIST = [
-    "Reread the last page of the previous scene",
-    "Draft the descent, beginning to end",
-    "Mark the weak paragraph for revision",
-    "Leave the opening pages untouched"
-  ];
-  var SLUG = "caves-descent";
-  var LOG_KEY = "next_block_log_" + SLUG + "_v1";
+  const slug='sample_job_search_shortlist';
+  const key='next_block_log_'+slug+'_v1';
+  const why='Stop turning the job search into background dread. I do not need the whole career figured out today. I need five real openings, one first application, and a place to start tomorrow.';
+  const avoid='Opening thirty tabs, reading company reviews, or redesigning the resume instead of choosing.';
+  const overlay=document.getElementById('overlay');
+  const body=document.getElementById('overlayBody');
+  const choices=document.getElementById('choices');
+  const closeRow=document.getElementById('closeRow');
+  const reflection=document.getElementById('reflection');
+  const win=document.getElementById('win');
+  let timer=null, flashTimer=null, originalTitle=document.title;
 
-  function pad2(n){ return (n<10?"0":"")+n; }
-  function csvEscape(v){
-    v = String(v==null?"":v);
-    if(/[",\n]/.test(v)) return '"' + v.replace(/"/g,'""') + '"';
-    return v;
+  function updateClock(){
+    const now=new Date();
+    document.getElementById('clock').textContent='Now: '+now.toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'});
   }
+  setInterval(updateClock,1000); updateClock();
 
-  document.getElementById("checkin-why").textContent = WHY_TODAY;
-
-  var checklistEl = document.getElementById("checklist");
-  CHECKLIST.forEach(function(item, i){
-    var row = document.createElement("label");
-    row.className = "item";
-    row.id = "item-row-" + i;
-    var cb = document.createElement("input");
-    cb.type = "checkbox"; cb.id = "item-" + i;
-    var span = document.createElement("span");
-    span.textContent = item;
-    row.appendChild(cb); row.appendChild(span);
-    cb.addEventListener("change", function(){ row.classList.toggle("done", cb.checked); });
-    checklistEl.appendChild(row);
-  });
-
-  var sessionStartTs = null, elapsedIntervalId = null, checkinFlashTimeoutId = null;
-  var lastDoneStr = "";
-
-  var startBtn = document.getElementById("start-btn");
-  var checkinBtn = document.getElementById("checkin-btn");
-  var endBtn = document.getElementById("end-btn");
-  var elapsedReadout = document.getElementById("elapsed-readout");
-  var checkinPanel = document.getElementById("checkin-panel");
-  var endPanel = document.getElementById("end-panel");
-
-  startBtn.addEventListener("click", function(){
-    sessionStartTs = Date.now();
-    startBtn.hidden = true;
-    checkinBtn.hidden = false;
-    endBtn.hidden = false;
-    elapsedReadout.hidden = false;
-    elapsedIntervalId = setInterval(updateElapsed, 1000);
-    updateElapsed();
-    checkinFlashTimeoutId = setTimeout(function(){ checkinBtn.classList.add("checkin-btn-flash"); }, 28*60*1000);
-  });
-
-  function updateElapsed(){
-    var totalSec = Math.floor((Date.now()-sessionStartTs)/1000);
-    var h = Math.floor(totalSec/3600), m = Math.floor((totalSec%3600)/60), s = totalSec%60;
-    elapsedReadout.textContent = (h>0?(h+":"):"") + pad2(m) + ":" + pad2(s) + " elapsed";
+  function titleFlash(on){
+    if(on){let flip=false; flashTimer=setInterval(()=>{document.title=flip?'CHECK-IN — The Next Block':originalTitle;flip=!flip},800)}
+    else{clearInterval(flashTimer);document.title=originalTitle}
   }
-
-  checkinBtn.addEventListener("click", function(){
-    checkinBtn.classList.remove("checkin-btn-flash");
-    checkinPanel.hidden = !checkinPanel.hidden;
-  });
-
-  checkinPanel.addEventListener("click", function(e){
-    var btn = e.target.closest("button[data-answer]");
-    if(!btn) return;
-    checkinPanel.hidden = true;
-  });
-
-  endBtn.addEventListener("click", function(){
-    if(elapsedIntervalId) clearInterval(elapsedIntervalId);
-    if(checkinFlashTimeoutId) clearTimeout(checkinFlashTimeoutId);
-    checkinBtn.hidden = true; endBtn.hidden = true; checkinPanel.hidden = true;
-    var doneCount = 0;
-    CHECKLIST.forEach(function(item, i){
-      var cb = document.getElementById("item-"+i);
-      if(cb && cb.checked) doneCount++;
-    });
-    lastDoneStr = doneCount + "/" + CHECKLIST.length;
-    document.getElementById("win-banner").textContent = "What counts as done: " + document.getElementById("done-line-text").textContent;
-    if(doneCount === CHECKLIST.length) document.getElementById("r-status").value = "done";
-    else if(doneCount === 0) document.getElementById("r-status").value = "not-started";
-    else document.getElementById("r-status").value = "partial";
-    endPanel.hidden = false;
-    endPanel.scrollIntoView({behavior:"smooth", block:"start"});
-  });
-
-  function loadLog(){
-    try{ var raw = localStorage.getItem(LOG_KEY); if(raw) return JSON.parse(raw); }catch(e){}
-    return [];
+  function showCheckin(preview=false){
+    document.getElementById('overlayTitle').textContent=preview?'Preview check-in':'Are you closing in on an answer?';
+    body.innerHTML='<p>Still with the shortlist?</p>';
+    choices.classList.remove('hidden'); closeRow.classList.add('hidden'); overlay.classList.remove('hidden');
+    if(!preview) titleFlash(true);
   }
-  function saveLogRows(rows){
-    try{ localStorage.setItem(LOG_KEY, JSON.stringify(rows)); }catch(e){}
+  function scheduleCheckin(){
+    const minutes=20 + Math.floor(Math.random()*6);
+    timer=setTimeout(()=>showCheckin(false), minutes*60*1000);
   }
-  var logRows = loadLog();
+  document.getElementById('begin').addEventListener('click',()=>{
+    document.getElementById('preStartButtons').classList.add('hidden');
+    scheduleCheckin();
+  });
+  document.getElementById('preview').addEventListener('click',()=>showCheckin(true));
+  choices.addEventListener('click',(e)=>{
+    if(!e.target.matches('button')) return;
+    const c=e.target.dataset.choice;
+    choices.classList.add('hidden'); closeRow.classList.remove('hidden'); titleFlash(false);
+    if(c==='yes') body.innerHTML='<p>Good. Keep going.</p>';
+    else body.innerHTML='<p><strong>You said this mattered because:</strong><br>'+why+'</p><p><strong>Watch for:</strong><br>'+avoid+'</p><p>Write down what you have so far before you open anything else.</p>';
+  });
+  document.getElementById('closeOverlay').addEventListener('click',()=>overlay.classList.add('hidden'));
+  document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){overlay.classList.add('hidden');titleFlash(false)}});
 
+  function getCheckedJobs(){
+    return Array.from(document.querySelectorAll('#jobs input[type=checkbox]')).filter(x=>x.checked).map(x=>x.dataset.title);
+  }
+  function csvEscape(s){return '"'+String(s).replaceAll('"','""').replace(/\n/g,' ')+'"'}
+  function rows(){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return[]}}
+  function saveRows(r){localStorage.setItem(key, JSON.stringify(r)); renderLog()}
   function renderLog(){
-    var tbody = document.querySelector("#log-table tbody");
-    tbody.innerHTML = "";
-    logRows.forEach(function(row){
-      var tr = document.createElement("tr");
-      ["date","task","timeWindow","jobsDone","status","notes","nextStart"].forEach(function(k){
-        var td = document.createElement("td"); td.textContent = row[k] || ""; tr.appendChild(td);
-      });
-      tbody.appendChild(tr);
-    });
-    document.getElementById("log-block").hidden = logRows.length === 0;
+    const r=rows();
+    if(!r.length){document.getElementById('logTable').innerHTML='<p class="note">No rows yet.</p>';return}
+    let html='<table><thead><tr><th>Date</th><th>Jobs done</th><th>What got done</th><th>Next move</th><th></th></tr></thead><tbody>';
+    r.forEach((row,i)=>{html+='<tr><td>'+row.date+'</td><td>'+row.jobs_done+'</td><td>'+row.what_got_done+'</td><td>'+row.next_move+'</td><td><button class="secondary" data-del="'+i+'">Delete</button></td></tr>'});
+    html+='</tbody></table>'; document.getElementById('logTable').innerHTML=html;
   }
-  renderLog();
-
-  document.getElementById("save-log-btn").addEventListener("click", function(){
-    var today = new Date();
-    var dateStr = today.getFullYear()+"-"+pad2(today.getMonth()+1)+"-"+pad2(today.getDate());
-    var row = {
-      date: dateStr, task: TASK, timeWindow: "9:00 – 10:30",
-      jobsDone: lastDoneStr, status: document.getElementById("r-status").value,
-      notes: document.getElementById("r-notes").value || "",
-      nextStart: document.getElementById("r-next").value || ""
+  document.getElementById('logTable').addEventListener('click',(e)=>{if(e.target.dataset.del!==undefined){const r=rows();r.splice(Number(e.target.dataset.del),1);saveRows(r)}});
+  document.getElementById('saveLog').addEventListener('click',()=>{
+    const checked=getCheckedJobs();
+    const total=document.querySelectorAll('#jobs input[type=checkbox]').length;
+    const row={
+      date:new Date().toISOString(),
+      title:'Build the first job-search shortlist',
+      start_time:document.getElementById('startTime').value,
+      jobs_done:checked.length+'/'+total+' — '+checked.join('; '),
+      what_got_done:document.getElementById('doneText').value,
+      how_it_felt:document.getElementById('feltText').value,
+      next_move:document.getElementById('nextMove').value
     };
-    logRows.push(row);
-    saveLogRows(logRows);
-    renderLog();
-    this.disabled = true; this.textContent = "Saved";
+    const r=rows(); r.push(row); saveRows(r); win.classList.remove('hidden');
   });
-
-  document.getElementById("copy-csv-btn").addEventListener("click", function(){
-    var headers = ["date","task","timeWindow","jobsDone","status","notes","nextStart"];
-    var lines = [headers.join(",")];
-    logRows.forEach(function(row){ lines.push(headers.map(function(h){ return csvEscape(row[h]); }).join(",")); });
-    var csv = lines.join("\n");
-    var statusEl = document.getElementById("copy-status");
-    function ok(){ statusEl.textContent = "Copied " + logRows.length + " row(s) to clipboard."; }
-    function fail(){
-      var ta = document.createElement("textarea");
-      ta.value = csv; ta.style.position = "fixed"; ta.style.opacity = "0";
-      document.body.appendChild(ta); ta.focus(); ta.select();
-      try{ document.execCommand("copy"); ok(); }
-      catch(e){ statusEl.textContent = "Could not copy automatically — select and copy the log manually."; }
-      document.body.removeChild(ta);
-    }
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(csv).then(ok).catch(fail);
-    } else { fail(); }
+  document.getElementById('copyCsv').addEventListener('click',async()=>{
+    const header=['date','title','start_time','jobs_done','what_got_done','how_it_felt','next_move'];
+    const csv=[header.join(',')].concat(rows().map(row=>header.map(h=>csvEscape(row[h]||'')).join(','))).join('\n');
+    try{await navigator.clipboard.writeText(csv); alert('CSV copied')}catch(e){prompt('Copy CSV', csv)}
   });
+  setTimeout(()=>{reflection.classList.remove('hidden')}, 1000); // visible in sample so users can inspect the full loop
+  renderLog();
 })();
 </script>
 </body>
