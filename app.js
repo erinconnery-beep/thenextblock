@@ -95,7 +95,7 @@
         var text = await loadPromptFile(promptFile);
         ok = await copyText(text);
         statusMsg = ok
-          ? "Copied to clipboard."
+          ? ""
           : "Copy failed. Select and copy the prompt manually.";
       } catch (e){
         statusMsg = "Couldn't load the prompt — check your connection.";
@@ -113,7 +113,7 @@
       if (statusEl){
         statusEl.textContent = statusMsg;
         statusEl.classList.toggle("is-error", !ok);
-        statusEl.hidden = false;
+        statusEl.hidden = !statusMsg;
       }
       if (ok && postCopy) postCopy.hidden = false;
       setTimeout(function(){
@@ -129,7 +129,7 @@
   });
 
   /* ---------- showcase panel 3: static "knock" demo (no logging, no timers) ---------- */
-  var CHECKIN_DEMO_YES = '<p class="fm-plain">Good. Back to the scene.</p>';
+  var CHECKIN_DEMO_YES = '<p class="fm-plain">Good. Back to the draft.</p>';
   var CHECKIN_DEMO_REPLAY =
     '<div class="knock-replay-callout">' +
     '<p class="fm-label">YOU SAID THIS MATTERED BECAUSE</p>' +
@@ -166,6 +166,46 @@
     });
   });
 
+  /* ---------- showcase panel 3: Copy CSV (copies a sample log row to clipboard) ---------- */
+  var LOG_CSV_TEXT =
+    'date,block,planned_start,actual_start,end_time,actions_done,total_actions,output,check_in,where_momentum_broke,how_it_felt,next_start\n' +
+    'Jul 10,Draft 1,500 rough words of the Chapter 9 opening,9:00,9:03,10:30,4,4,"1,500 words","Sort of → returned to draft","Opened the outline file and reorganized notes, then returned to drafting.","Rough, but real. The stall is gone.","Fix the marked paragraph, then keep drafting forward."';
+
+  document.querySelectorAll(".log-copy-csv-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var fallbackEl = btn.parentElement ? btn.parentElement.querySelector(".log-copy-fallback") : null;
+      var defaultLabel = btn.getAttribute("data-default-label") || btn.textContent;
+      var copiedLabel = btn.getAttribute("data-copied-label") || "Copied";
+      var showCopied = function(){
+        if (fallbackEl) fallbackEl.hidden = true;
+        btn.textContent = copiedLabel;
+        trackPlausible("copy_log_csv");
+        setTimeout(function(){ btn.textContent = defaultLabel; }, 2000);
+      };
+      var showFailure = function(){
+        if (fallbackEl) fallbackEl.hidden = false;
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(LOG_CSV_TEXT).then(showCopied, showFailure);
+      } else {
+        try {
+          var ta = document.createElement("textarea");
+          ta.value = LOG_CSV_TEXT;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "absolute";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          if (ok) showCopied(); else showFailure();
+        } catch (e){
+          showFailure();
+        }
+      }
+    });
+  });
+
   /* ---------- open_claude event on every "Open Claude" link ---------- */
   document.querySelectorAll('a[href="https://claude.ai/new"]').forEach(function(link){
     link.addEventListener("click", function(){
@@ -182,7 +222,7 @@
     downloadLink.addEventListener("click", function(){ trackPlausible("download_sample_focus_file"); });
   }
 
-  /* ---------- info modal (Design / Disclaimer / Feedback) ---------- */
+  /* ---------- info modal (Design / Privacy / Feedback) ---------- */
   var infoModal = document.getElementById("info-modal");
   var infoContent = document.getElementById("info-modal-content");
   var infoClose = document.getElementById("info-modal-close");
@@ -206,7 +246,7 @@
   infoModal.addEventListener("click", function(e){ if (e.target === infoModal) closeInfoModal(); });
   document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !infoModal.hidden) closeInfoModal(); });
 
-  /* ---------- mobile-only INFO dropdown (Design notes / Disclaimer / Feedback) ----------
+  /* ---------- mobile-only INFO dropdown (Design notes / Privacy / Feedback) ----------
      The menu items reuse the same [data-info] links/handler above, so opening
      the right modal and firing the right Plausible event already works
      identically to desktop. This just handles the dropdown's own open/close. ---------- */
