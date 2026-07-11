@@ -49,6 +49,14 @@
       <a href="#" data-info="feedback">Feedback</a>
     </nav>
     <span class="free-tag">FREE — NO ACCOUNT</span>
+    <div class="info-menu">
+      <button type="button" id="info-menu-btn" class="info-menu-btn mono" aria-haspopup="true" aria-expanded="false" aria-controls="info-menu-dropdown">INFO</button>
+      <div id="info-menu-dropdown" class="info-menu-dropdown" hidden>
+        <a href="#" data-info="design">Design notes</a>
+        <a href="#" data-info="disclaimer">Disclaimer</a>
+        <a href="#" data-info="feedback">Feedback</a>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -108,65 +116,102 @@
 
   <section id="showcase" class="showcase wrap">
     <h2 class="section-heading">See it in action</h2>
-    <p class="section-intro">The interview narrows the work. The file holds the block. The log points to the next one.</p>
+    <p class="section-intro">A 2-minute setup interview narrows the work. The Focus File holds the block. A 60-second exit names tomorrow's start.</p>
 
     <div class="showcase-grid">
 
       <article class="showcase-panel">
-        <h3>1. The interview refuses vagueness</h3>
+        <p class="stage-eyebrow mono">BEFORE</p>
+        <h3>1. A 2-minute interview refuses vagueness</h3>
         <p class="showcase-caption">The prompt does not accept the fuzzy version. It keeps asking until the work is small enough to start and clear enough to finish.</p>
         <div class="transcript">
           <div class="transcript-example">
-            <p class="t-line"><span class="t-label">User</span>"I need to start my job search."</p>
-            <p class="t-line"><span class="t-label t-label-ai">AI</span>"That is too open for one sitting. If this question were answered, what would you do tomorrow?"</p>
-            <p class="t-line"><span class="t-label">User</span>"I would apply to roles that actually fit instead of scrolling forever."</p>
-            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Good. Then this block is not the whole job search. It is answering one question: which five roles are worth applying to first? I’d make the block: find eight possible roles, cut to five, choose the first application, and write tomorrow’s first move. Edit that before I build the file."</p>
-            <p class="t-line"><span class="t-label">User</span>"Add: no rewriting my resume and no company-review rabbit holes."</p>
-            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Good. The block is: build a five-role shortlist from the materials you already have. Start at 9:00. Stop at 10:30 with one first application chosen."</p>
+            <p class="fm-label">THE NARROWING</p>
+            <p class="t-line"><span class="t-label">User</span>"Work on my book."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"A book is a project, not a place to start. Which scene?"</p>
+            <p class="t-line"><span class="t-label">User</span>"Chapter 9, the opening. I keep stalling on it."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Four jobs, then: reread the last page, draft the scene start to finish — ugly allowed — mark the weakest paragraph, write one line for tomorrow. Edit that."</p>
+            <p class="t-line"><span class="t-label">User</span>"One page of rereading, not more. I'll spiral."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Done — one page."</p>
+          </div>
+          <div class="transcript-example">
+            <p class="fm-label">THE STAKES</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"When do you sit down?"</p>
+            <p class="t-line"><span class="t-label">User</span>"9:00. Out by 10:30."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Why does this matter today? Your words come back when you drift."</p>
+            <p class="t-line"><span class="t-label">User</span><span class="blue-mark">"This book only gets real on the days I don't feel like it — and one drafted scene is the book actually happening."</span></p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Kept, word for word. Last one — 10:30, scene drafted. How does that feel?"</p>
+            <p class="t-line"><span class="t-label">User</span>"Relief. The book moving again."</p>
+            <p class="t-line"><span class="t-label t-label-ai">AI</span>"Building your Focus File."</p>
           </div>
         </div>
       </article>
 
       <article class="showcase-panel">
-        <h3>2. The file holds the block</h3>
-        <p class="showcase-caption">After the interview, Claude builds a simple offline file: action list, reason, start time, check-ins, and a local log.</p>
+        <p class="stage-eyebrow mono">DURING</p>
+        <h3>2. The Focus File holds the block</h3>
+        <p class="showcase-caption">The doing happens here. A small offline dashboard holds the jobs, the reason, the start time, and the watch-for trap while you work.</p>
         <div class="file-mock">
           <p class="fm-label">TASK</p>
-          <p class="fm-title">Build the first job-search shortlist</p>
-          <p class="fm-label">WHY THIS MATTERS</p>
-          <p class="fm-why">Stop turning the job search into background dread. I do not need the whole career figured out today. I need five real openings, one first application, and a place to start tomorrow.</p>
+          <p class="fm-title">Draft the Chapter 9 opening scene</p>
+          <div class="fm-why-callout">
+            <p class="fm-label">WHY THIS MATTERS</p>
+            <p class="fm-why">"This book only gets real on the days I don't feel like it — and one drafted scene is the book actually happening."</p>
+          </div>
           <p class="fm-label">ACTION LIST</p>
-          <p class="fm-plain">Open saved job-search bookmark · Capture eight possible roles · Choose five worth applying to · Pick the first application · Write tomorrow’s first move</p>
+          <ul class="fm-checklist">
+            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title">Reread the last page</span><span class="fm-check-sub">One page only — enough to find your voice again, not enough to spiral.</span></span></li>
+            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title">Draft the scene to its end</span><span class="fm-check-sub">Ugly allowed. A finished bad draft beats a polished fragment.</span></span></li>
+            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title">Mark the weakest paragraph</span><span class="fm-check-sub">Mark it, don't fix it — editing is not today's job.</span></span></li>
+            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title">Write tomorrow's first line</span><span class="fm-check-sub">One sentence, so tomorrow starts moving, not deciding.</span></span></li>
+          </ul>
           <p class="fm-label">WATCH FOR</p>
-          <p class="fm-plain">Opening thirty tabs, reading company reviews, or redesigning the resume instead of choosing.</p>
-          <p class="fm-btn">Begin — shortlist chosen by 10:30</p>
-          <p class="fm-label">RUNNING LOG</p>
-          <p class="fm-plain">1 block logged so far</p>
+          <p class="fm-plain">Opening the outline file and reorganizing notes instead of drafting.</p>
+          <p class="fm-btn">Begin — scene drafted by 10:30</p>
         </div>
-        <a class="btn showcase-download" href="samples/sample-next-block.html" download>Download sample Focus File</a>
+        <a class="btn showcase-download" href="NextBlock_sample_focus_file.html" download>Download sample Focus File</a>
       </article>
 
       <article class="showcase-panel">
-        <h3>3. The block becomes the next block</h3>
-        <p class="showcase-caption">Mid-block, the file returns your own reason. At the end, the log captures what happened and where to start next.</p>
-        <div class="checkin-mock">
-          <p class="fm-label">CHECK-IN</p>
-          <p class="fm-plain">Are you closing in on an answer?</p>
-          <div class="mock-choices" role="group" aria-label="Check-in demo — Are you closing in on an answer?">
+        <p class="stage-eyebrow mono">AFTER</p>
+        <h3>3. A 60-second exit names tomorrow's start</h3>
+        <p class="showcase-caption">Mid-block, the Focus File returns your own reason. At the end, the log captures what happened and where to start next.</p>
+        <div class="checkin-mock knock-thread">
+          <p class="fm-label">THE KNOCK</p>
+          <p class="fm-plain">Still with it?</p>
+          <div class="mock-choices" role="group" aria-label="Check-in demo — Still with it?">
             <button type="button" class="checkin-demo-btn" data-answer="yes">Yes</button>
             <button type="button" class="checkin-demo-btn" data-answer="sortof">Sort of</button>
             <button type="button" class="checkin-demo-btn" data-answer="no">No</button>
           </div>
           <p class="checkin-demo-hint mono">Tap a response.</p>
           <div class="checkin-demo-response" aria-live="polite"></div>
+          <button type="button" class="checkin-demo-back mono" hidden>↺ back</button>
+        </div>
+        <div class="file-mock exit-mock">
+          <p class="fm-label">THE EXIT INTERVIEW</p>
+          <p class="fm-label">WHAT GOT DONE</p>
+          <p class="fm-plain">The scene is drafted to its end. The weakest paragraph is marked for tomorrow.</p>
+          <p class="fm-label">HOW DID IT FEEL</p>
+          <p class="fm-plain">Rough, but real. The stall is gone.</p>
+          <p class="fm-label">WHERE SHOULD THE NEXT BLOCK START</p>
+          <p class="fm-plain blue-mark">Fix the marked paragraph, then keep drafting forward.</p>
         </div>
         <div class="endlog-mock">
-          <p class="fm-label">WHAT GOT DONE</p>
-          <p class="fm-plain">Listed seven roles, chose five, and picked the first application.</p>
-          <p class="fm-label">WHERE MOMENTUM BROKE</p>
-          <p class="fm-plain">Got pulled into company reviews for fifteen minutes, then came back and chose.</p>
-          <p class="fm-label">WHERE TO START NEXT</p>
-          <p class="fm-plain">Tomorrow at 9:00, tailor the first paragraph and send the first application.</p>
+          <p class="fm-label">THE LOG</p>
+          <div class="log-table-wrap">
+            <table class="log-table">
+              <thead>
+                <tr><th>Date</th><th>Jobs</th><th>Next start</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Jul 9</td><td>3/4</td><td><span class="blue-mark">Draft the Chapter 9 opening scene</span></td></tr>
+                <tr><td>Jul 10</td><td>4/4</td><td><span class="blue-mark">Fix the marked paragraph</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="fm-btn fm-btn-blue">Copy CSV</p>
+          <p class="showcase-caption">One tap copies the whole log — an honest record for a coach, a therapist, or yourself.</p>
         </div>
       </article>
 
@@ -177,23 +222,26 @@
 
 </main>
 
-<footer class="site-footer wrap">
-  <p class="free-line mono">IF THE NEXT BLOCK HELPS, <button type="button" id="share-btn" class="footer-link">SHARE IT</button>. IF IT COULD BE BETTER, <a id="feedback-link" class="footer-link" href="mailto:hello@thenextblock.org">SEND FEEDBACK</a>.</p>
-  <p id="share-status" class="footer-status mono" aria-live="polite" hidden></p>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p id="blocks-started-counter" class="blocks-counter mono" hidden></p>
+    <p class="free-line mono">IF IT HELPED YOU, <button type="button" id="share-btn" class="footer-link">SHARE IT</button>. IF IT COULD BE BETTER, <a id="feedback-link" class="footer-link" href="mailto:hello@thenextblock.org">SEND FEEDBACK</a>.</p>
+    <p id="share-status" class="footer-status mono" aria-live="polite" hidden></p>
+  </div>
 </footer>
 
 <!-- Info content, shown only inside the info-modal when triggered from the header nav -->
 <template id="info-design">
   <h2 class="mono info-modal-label">DESIGN</h2>
   <p>The Next Block was built for one reason: to finish a long writing project. It worked. So here it is — free, in case you have something to finish too.</p>
-  <p><strong>It refuses to let you stay vague.</strong> It asks (and keeps asking) until the work is one concrete block: what you will do, why it matters, and exactly where you will start.</p>
+  <p><strong>It refuses to let you stay vague.</strong> In about two minutes, it asks (and keeps asking) until the work is one concrete block: what you will do, why it matters, and exactly where you will start.</p>
   <p><strong>It will not think for you.</strong> The agenda is yours, in your own words. The AI only narrows and structures, and nothing gets built until you approve it.</p>
-  <p><strong>It plans just enough to start.</strong> Most productivity tools keep you thinking about work instead of doing it. This one is designed to end: the moment the plan exists, you begin.</p>
+  <p><strong>It plans just enough to start.</strong> Most productivity tools keep you thinking about work instead of doing it. This one is designed to end quickly: a two-minute setup, then you begin.</p>
   <p><strong>It knocks while you work.</strong> Every so often, the focus file knocks with your own words: what you said you would do, why it mattered to you, and your usual escape (mine: organizing notes instead of writing). It is harder to argue with your own reasons.</p>
   <p><strong>Some days the ritual feels silly.</strong> You already know what to do — why write it out for an AI? Because an hour in, the file is doing what your head cannot: holding the work, the reason, and the next step somewhere indecision and distraction cannot erase them. An externalized prefrontal cortex.</p>
-  <p><strong>It ends with the next block already built.</strong> That is how the book got finished: the focus file made the night before, waiting open beside the draft like a note from yesterday’s self. Sit down at the set time; the deciding is already done.</p>
-  <p><strong>It does not replace people.</strong> A therapist, a coach, a good friend. The tool works the stretch between conversations — and the log keeps the record, good or bad, plus where the next block starts: an honest baseline to bring back to them.</p>
-  <p><strong>Why a file?</strong> It works with the Wi-Fi off — which is where most focused work happens anyway. Unplug for a block and find out.</p>
+  <p><strong>It ends with the next block already built.</strong> The closing step is fast too: a 60-second exit captures what got done, how the block felt, and where tomorrow starts. That is how the book got finished: the focus file made the night before, waiting open beside the draft like a note from yesterday's self. Sit down at the set time; the deciding is already done.</p>
+  <p><strong>It does not replace people.</strong> A therapist, a coach, a good friend — the tool is not competition for any of them. Between conversations, it turns this week's intention into the next concrete block.</p>
+  <p><strong>Why a file?</strong> No account, no service, nothing that can be taken away. The log stays in your browser, and the whole thing works with the Wi-Fi off — which is where most focused work happens anyway. Unplug for an hour and find out.</p>
 </template>
 
 <template id="info-disclaimer">

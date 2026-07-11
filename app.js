@@ -102,6 +102,13 @@
       }
       if (ok && PROMPT_EVENT_NAMES[promptFile]) trackEvent(PROMPT_EVENT_NAMES[promptFile]);
       if (ok && PROMPT_MODE_NAMES[promptFile]) trackPlausible("copy_prompt", { mode: PROMPT_MODE_NAMES[promptFile] });
+      if (ok){
+        // Fire-and-forget: increments the public "NEXT BLOCKS STARTED" counter.
+        // Never awaited, never blocks the button, fails silently on any error.
+        try {
+          fetch("/api/copy-prompt-increment", { method: "POST" }).catch(function(){});
+        } catch (e){ /* never let this break the copy flow */ }
+      }
       btn.textContent = ok ? "Copied ✓" : originalText;
       if (statusEl){
         statusEl.textContent = statusMsg;
@@ -121,23 +128,41 @@
     });
   });
 
-  /* ---------- showcase panel 3: static check-in demo (no logging, no timers) ---------- */
-  var CHECKIN_DEMO_YES = '<p class="fm-plain">Good. Keep going.</p>';
+  /* ---------- showcase panel 3: static "knock" demo (no logging, no timers) ---------- */
+  var CHECKIN_DEMO_YES = '<p class="fm-plain">Good. Back to the scene.</p>';
   var CHECKIN_DEMO_REPLAY =
+    '<div class="knock-replay-callout">' +
     '<p class="fm-label">YOU SAID THIS MATTERED BECAUSE</p>' +
-    '<p class="fm-quote">"Stop turning the job search into background dread. I do not need the whole career figured out today. I need five real openings, one first application, and a place to start tomorrow."</p>' +
+    '<p class="fm-quote">"This book only gets real on the days I don\'t feel like it — and one drafted scene is the book actually happening."</p>' +
     '<p class="fm-label">WATCH FOR</p>' +
-    '<p class="fm-quote">"Opening thirty tabs, reading company reviews, or redesigning the resume instead of choosing."</p>' +
-    '<p class="fm-plain">Write down what you have so far before you open anything else.</p>';
+    '<p class="fm-quote">"Opening the outline file and reorganizing notes instead of drafting."</p>' +
+    '</div>';
 
   document.querySelectorAll(".checkin-demo-btn").forEach(function(btn){
     btn.addEventListener("click", function(){
       var group = btn.closest(".checkin-mock");
+      var choicesEl = group ? group.querySelector(".mock-choices") : null;
       var responseEl = group ? group.querySelector(".checkin-demo-response") : null;
       var hintEl = group ? group.querySelector(".checkin-demo-hint") : null;
+      var backEl = group ? group.querySelector(".checkin-demo-back") : null;
       if (!responseEl) return;
       responseEl.innerHTML = btn.getAttribute("data-answer") === "yes" ? CHECKIN_DEMO_YES : CHECKIN_DEMO_REPLAY;
       if (hintEl) hintEl.hidden = true;
+      if (choicesEl) choicesEl.hidden = true;
+      if (backEl) backEl.hidden = false;
+    });
+  });
+
+  document.querySelectorAll(".checkin-demo-back").forEach(function(backBtn){
+    backBtn.addEventListener("click", function(){
+      var group = backBtn.closest(".checkin-mock");
+      var choicesEl = group ? group.querySelector(".mock-choices") : null;
+      var responseEl = group ? group.querySelector(".checkin-demo-response") : null;
+      var hintEl = group ? group.querySelector(".checkin-demo-hint") : null;
+      if (responseEl) responseEl.innerHTML = "";
+      if (hintEl) hintEl.hidden = false;
+      if (choicesEl) choicesEl.hidden = false;
+      backBtn.hidden = true;
     });
   });
 
@@ -149,12 +174,12 @@
     });
   });
 
-  /* ---------- download_sample_file event on the showcase's sample download link.
-     The click listener only reports the click — it never interferes with the
-     browser's normal download behavior. ---------- */
+  /* ---------- download_sample_focus_file event on the showcase's sample download
+     link. The click listener only reports the click — it never interferes with
+     the browser's normal download behavior. ---------- */
   var downloadLink = document.querySelector(".showcase-download");
   if (downloadLink){
-    downloadLink.addEventListener("click", function(){ trackPlausible("download_sample_file"); });
+    downloadLink.addEventListener("click", function(){ trackPlausible("download_sample_focus_file"); });
   }
 
   /* ---------- info modal (Design / Disclaimer / Feedback) ---------- */
@@ -181,6 +206,38 @@
   infoModal.addEventListener("click", function(e){ if (e.target === infoModal) closeInfoModal(); });
   document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !infoModal.hidden) closeInfoModal(); });
 
+  /* ---------- mobile-only INFO dropdown (Design notes / Disclaimer / Feedback) ----------
+     The menu items reuse the same [data-info] links/handler above, so opening
+     the right modal and firing the right Plausible event already works
+     identically to desktop. This just handles the dropdown's own open/close. ---------- */
+  var infoMenuBtn = document.getElementById("info-menu-btn");
+  var infoMenuDropdown = document.getElementById("info-menu-dropdown");
+  if (infoMenuBtn && infoMenuDropdown){
+    var openInfoMenu = function(){
+      infoMenuDropdown.hidden = false;
+      infoMenuBtn.setAttribute("aria-expanded", "true");
+    };
+    var closeInfoMenu = function(){
+      infoMenuDropdown.hidden = true;
+      infoMenuBtn.setAttribute("aria-expanded", "false");
+    };
+    infoMenuBtn.addEventListener("click", function(e){
+      e.stopPropagation();
+      if (infoMenuDropdown.hidden) openInfoMenu(); else closeInfoMenu();
+    });
+    infoMenuDropdown.addEventListener("click", function(e){
+      if (e.target.closest("a")) closeInfoMenu();
+    });
+    document.addEventListener("click", function(e){
+      if (!infoMenuDropdown.hidden && !infoMenuDropdown.contains(e.target) && e.target !== infoMenuBtn){
+        closeInfoMenu();
+      }
+    });
+    document.addEventListener("keydown", function(e){
+      if (e.key === "Escape" && !infoMenuDropdown.hidden) closeInfoMenu();
+    });
+  }
+
   /* send_feedback event for the mailto link inside the Feedback modal (delegated,
      since that link is only added to the DOM when the modal's template is cloned) */
   infoContent.addEventListener("click", function(e){
@@ -190,6 +247,25 @@
       trackPlausible("feedback_click");
     }
   });
+
+  /* ---------- footer: public "NEXT BLOCKS STARTED" counter ----------
+     Sourced only from our own KV-backed counter (incremented once per
+     successful copy, above) via GET /api/next-blocks-started. No local
+     counting, no invented numbers: if the request fails or the shape is
+     unexpected, the counter simply stays hidden. ---------- */
+  var blocksCounterEl = document.getElementById("blocks-started-counter");
+  if (blocksCounterEl){
+    fetch("/api/next-blocks-started", { cache: "no-store" })
+      .then(function(r){ if (!r.ok) throw new Error("bad response"); return r.json(); })
+      .then(function(data){
+        if (data && typeof data.total === "number" && isFinite(data.total) && data.total >= 0){
+          var label = data.total === 1 ? "NEXT BLOCK STARTED" : "NEXT BLOCKS STARTED";
+          blocksCounterEl.textContent = data.total + " " + label;
+          blocksCounterEl.hidden = false;
+        }
+      })
+      .catch(function(){ /* leave hidden */ });
+  }
 
   /* ---------- footer: SEND FEEDBACK (mailto) ---------- */
   var feedbackLink = document.getElementById("feedback-link");

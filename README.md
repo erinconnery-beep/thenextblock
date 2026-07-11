@@ -127,7 +127,7 @@ The site identifier is embedded in the script URL itself (`pa-oqBnf5_V4SRV4lbttt
 **Custom events tracked:**
 - `copy_prompt` — a mode's Copy prompt button clicked, with one property: `mode` = `solo`, `coaching`, or `exploring` (never the prompt text itself)
 - `open_claude` — any "Open Claude ↗" link clicked
-- `download_sample_file` — the showcase's "Download sample file" link clicked (the download itself is untouched — the event just reports the click)
+- `download_sample_focus_file` — the showcase's "Download sample Focus File" link clicked (the download itself is untouched — the event just reports the click)
 - `share_click` — SHARE IT clicked
 - `feedback_click` — SEND FEEDBACK (footer) or the Feedback modal's email link clicked
 - `design_notes_click` — the "Design notes" nav link clicked
@@ -142,6 +142,24 @@ The site identifier is embedded in the script URL itself (`pa-oqBnf5_V4SRV4lbttt
 - **Nothing is ever tracked inside a generated offline focus file, the downloadable sample file, or a local browser log/CSV** — those run entirely on the visitor's own device, disconnected from this website, and this project has no way to see inside them even if it wanted to.
 
 **Analytics policy:** do not add Google Analytics. Do not add a new analytics tool's script unless a real site URL/account for it actually exists — a placeholder tracking script pointed at no real account is worse than no analytics at all.
+
+## K. Public counter ("NEXT BLOCKS STARTED")
+
+The footer shows a small public counter — `[number] NEXT BLOCKS STARTED` (or `1 NEXT BLOCK STARTED` for exactly one) — that aggregates successful Copy prompt clicks across all three modes (Solo, Coaching, Exploring). It only increments after a copy actually succeeds; page loads, Open Claude clicks, downloads, shares, feedback clicks, and failed copy attempts never touch it.
+
+**This is a small, self-contained counter — not a Plausible read.** An earlier version of this counter tried to read Plausible's aggregate `Copy prompt — Total` goal directly (which requires a paid Plausible Business plan), and was removed. This version instead uses its own persistent counter in Vercel KV (Upstash Redis), which has a usable free tier:
+
+- `api/copy-prompt-increment.js` — a serverless function called once per successful copy. It increments a single counter key by 1 and returns nothing meaningful. It's called fire-and-forget from `app.js`, so it can never block or break the Copy prompt button even if it fails.
+- `api/next-blocks-started.js` — a serverless function the footer fetches on page load. It reads the same counter key and returns `{ "total": <number> }`.
+
+**Required setup in Vercel (not in this repo):**
+1. In your Vercel project, go to **Storage** → add a **KV** database (or connect an Upstash Redis database) and link it to this project.
+2. Vercel automatically sets the `KV_REST_API_URL` and `KV_REST_API_TOKEN` environment variables for you — these are server-side only and are never referenced anywhere in `index.html`, `app.js`, or any other client-side file.
+3. Redeploy. Until this is set up, both endpoints return an error, the increment call silently no-ops, and the footer counter simply stays hidden — the rest of the site (including Copy prompt buttons) is completely unaffected.
+
+**Caching:** `api/next-blocks-started.js` sets `Cache-Control: public, s-maxage=30, stale-while-revalidate=60`, so the number stays fresh within about 30 seconds without hammering the KV store on every page view.
+
+**Privacy:** both endpoints touch exactly one integer counter. Neither reads, stores, nor forwards prompt text, mode names beyond the increment call itself, user-entered work, local logs/CSVs, or anything else about a visitor. Nothing is ever tracked inside a generated offline Focus File, the downloadable sample Focus File, or a local browser log — those stay entirely on the visitor's own device.
 
 ## Launch checklist
 
