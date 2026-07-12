@@ -166,41 +166,16 @@
     });
   });
 
-  /* ---------- showcase panel 3: Copy CSV (copies a sample cumulative log to clipboard) ----------
-     The five dates are computed fresh on each click, from the visitor's local calendar date
-     (never toISOString, which can shift the date across time zones). The five rows span the
-     previous seven days, unevenly spaced, to show cumulative logging rather than a single
-     example entry — a mix of finished, partial, and disrupted blocks. */
-  var LOG_CSV_HEADER =
-    'date,block,planned_start,actual_start,planned_finish,actual_finish,output,action_list_checks,check_in_responses,what_got_done,how_it_felt,what_got_in_the_way,next_block_start';
-
-  function sampleLogDate(daysAgo){
-    var d = new Date();
-    d.setDate(d.getDate() - daysAgo);
-    var yyyy = d.getFullYear();
-    var mm = String(d.getMonth() + 1).padStart(2, "0");
-    var dd = String(d.getDate()).padStart(2, "0");
-    return yyyy + "-" + mm + "-" + dd;
-  }
-
-  function buildSampleLogCsv(){
-    var rows = [
-      sampleLogDate(7) + ',"Draft 1,500 rough words for the opening of Chapter 9",09:00,09:03,10:30,10:27,"1,500 new words","4/4","Sort of → returned to the draft","Yes — finished the block as planned.","Rough, but real. The stall is gone.","Started reorganizing notes, then returned to the draft.","Revise the opening paragraph, then continue forward."',
-      sampleLogDate(5) + ',"Revise the Chapter 9 opening and draft the next 800 words",09:00,09:24,10:30,10:18,"420 new words; 2 paragraphs revised","2/4","No → reopened the Focus File","No — completed the revision but not the full drafting target.","Frustrating at first, then useful.","Email pulled me away before I started; I kept editing instead of drafting.","Begin with the next unresolved section and draft forward."',
-      sampleLogDate(4) + ',"Draft the next scene of Chapter 9",09:00,09:01,10:30,10:34,"1,120 new words","4/4","Yes","Yes — finished the block as planned.","Focused and steady.","Nothing significant.","Reread the final paragraph, then draft the scene turn."',
-      sampleLogDate(2) + ',"Draft the scene turn and closing beat of Chapter 9",09:00,10:12,10:30,11:02,"530 new words","2/4","Sort of → put the phone away and returned","No — started late and reached only the scene turn.","Scattered, but glad I returned.","Stayed on my phone after breakfast and lost the start window.","Open at the scene turn and carry it through the closing beat."',
-      sampleLogDate(1) + ',"Finish the Chapter 9 draft and write the next starting sentence",09:00,09:05,10:30,10:22,"860 new words","4/4","Sort of → returned to the draft","Yes — finished the block as planned.","Relieved. The chapter now exists.","I wanted to revise the opening, but kept moving forward.","Read the full chapter once and mark only structural problems."'
-    ];
-    return LOG_CSV_HEADER + "\n" + rows.join("\n");
-  }
+  /* ---------- showcase panel 3: Copy CSV (copies a sample log row to clipboard) ---------- */
+  var LOG_CSV_TEXT =
+    'date,block,planned_start,actual_start,end_time,actions_done,total_actions,output,check_in,where_momentum_broke,how_it_felt,next_start\n' +
+    'Jul 10,Draft 1,500 rough words of the Chapter 9 opening,9:00,9:03,10:30,4,4,"1,500 words","Sort of → returned to draft","Opened the outline file and reorganized notes, then returned to drafting.","Rough, but real. The stall is gone.","Fix the marked paragraph, then keep drafting forward."';
 
   document.querySelectorAll(".log-copy-csv-btn").forEach(function(btn){
     btn.addEventListener("click", function(){
-      var panelBody = btn.closest(".panel-body");
-      var fallbackEl = panelBody ? panelBody.querySelector(".log-copy-fallback") : null;
+      var fallbackEl = btn.parentElement ? btn.parentElement.querySelector(".log-copy-fallback") : null;
       var defaultLabel = btn.getAttribute("data-default-label") || btn.textContent;
       var copiedLabel = btn.getAttribute("data-copied-label") || "Copied";
-      var csvText = buildSampleLogCsv();
       var showCopied = function(){
         if (fallbackEl) fallbackEl.hidden = true;
         btn.textContent = copiedLabel;
@@ -211,11 +186,11 @@
         if (fallbackEl) fallbackEl.hidden = false;
       };
       if (navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(csvText).then(showCopied, showFailure);
+        navigator.clipboard.writeText(LOG_CSV_TEXT).then(showCopied, showFailure);
       } else {
         try {
           var ta = document.createElement("textarea");
-          ta.value = csvText;
+          ta.value = LOG_CSV_TEXT;
           ta.setAttribute("readonly", "");
           ta.style.position = "absolute";
           ta.style.left = "-9999px";
@@ -231,19 +206,18 @@
     });
   });
 
-  /* ---------- open_ai event on every post-copy AI link (Claude / ChatGPT / Gemini) ---------- */
-  document.querySelectorAll(".post-copy-link").forEach(function(link){
+  /* ---------- open_claude event on every "Open Claude" link ---------- */
+  document.querySelectorAll('a[href="https://claude.ai/new"]').forEach(function(link){
     link.addEventListener("click", function(){
-      var provider = link.getAttribute("data-provider") || "ai";
-      trackEvent("open_" + provider);
-      trackPlausible("open_ai", { provider: provider });
+      trackEvent("open_claude");
+      trackPlausible("open_claude");
     });
   });
 
   /* ---------- download_sample_focus_file event on the showcase's sample download
      link. The click listener only reports the click — it never interferes with
      the browser's normal download behavior. ---------- */
-  var downloadLink = document.querySelector("a.showcase-download[download]");
+  var downloadLink = document.querySelector(".showcase-download");
   if (downloadLink){
     downloadLink.addEventListener("click", function(){ trackPlausible("download_sample_focus_file"); });
   }

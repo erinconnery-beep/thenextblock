@@ -64,8 +64,8 @@
 
   <section class="hero wrap">
     <p class="hero-headline">The Next Block is a free AI prompt that refuses to let a goal stay vague.</p>
-    <p class="hero-subhead">It narrows the work to one block. Then the AI builds an offline focus file that keeps the task, the reason, and the next step in front of you while you work.</p>
-    <p class="hero-line mono">Choose a mode. Copy the prompt. Paste it into any AI.</p>
+    <p class="hero-subhead">It narrows the work to one block, then builds an offline focus file that keeps the work, the reason, and the next step in front of you while you do it.</p>
+    <p class="hero-line mono">Choose a mode. Copy the prompt. Paste it into Claude.</p>
   </section>
 
   <section id="paths" class="paths wrap">
@@ -80,14 +80,8 @@
         <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Solo.md">Copy prompt</button>
         <p class="copy-status mono" aria-live="polite" hidden></p>
         <div class="post-copy" hidden>
-          <p class="post-copy-helper mono">Now open an AI and paste it into a new chat.</p>
-          <div class="post-copy-links">
-            <a class="post-copy-link mono" data-provider="claude" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">Claude ↗</a>
-            <span class="post-copy-dot" aria-hidden="true">&middot;</span>
-            <a class="post-copy-link mono" data-provider="chatgpt" href="https://chat.openai.com/" target="_blank" rel="noopener noreferrer">ChatGPT ↗</a>
-            <span class="post-copy-dot" aria-hidden="true">&middot;</span>
-            <a class="post-copy-link mono" data-provider="gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer">Gemini ↗</a>
-          </div>
+          <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
+          <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
         </div>
       </article>
 
@@ -99,14 +93,8 @@
         <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Coaching.md">Copy prompt</button>
         <p class="copy-status mono" aria-live="polite" hidden></p>
         <div class="post-copy" hidden>
-          <p class="post-copy-helper mono">Now open an AI and paste it into a new chat.</p>
-          <div class="post-copy-links">
-            <a class="post-copy-link mono" data-provider="claude" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">Claude ↗</a>
-            <span class="post-copy-dot" aria-hidden="true">&middot;</span>
-            <a class="post-copy-link mono" data-provider="chatgpt" href="https://chat.openai.com/" target="_blank" rel="noopener noreferrer">ChatGPT ↗</a>
-            <span class="post-copy-dot" aria-hidden="true">&middot;</span>
-            <a class="post-copy-link mono" data-provider="gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer">Gemini ↗</a>
-          </div>
+          <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
+          <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
         </div>
       </article>
 
@@ -118,14 +106,8 @@
         <button type="button" class="btn btn-copy copy-prompt-btn" data-prompt-file="prompts/Explorer.md">Copy prompt</button>
         <p class="copy-status mono" aria-live="polite" hidden></p>
         <div class="post-copy" hidden>
-          <p class="post-copy-helper mono">Now open an AI and paste it into a new chat.</p>
-          <div class="post-copy-links">
-            <a class="post-copy-link mono" data-provider="claude" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">Claude ↗</a>
-            <span class="post-copy-dot" aria-hidden="true">&middot;</span>
-            <a class="post-copy-link mono" data-provider="chatgpt" href="https://chat.openai.com/" target="_blank" rel="noopener noreferrer">ChatGPT ↗</a>
-            <span class="post-copy-dot" aria-hidden="true">&middot;</span>
-            <a class="post-copy-link mono" data-provider="gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener noreferrer">Gemini ↗</a>
-          </div>
+          <p class="post-copy-helper mono">Now open Claude and paste it into a new chat.</p>
+          <a class="post-copy-link mono" href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Open Claude ↗</a>
         </div>
       </article>
 
@@ -143,18 +125,23 @@
         <div class="panel-body">
         <div class="transcript panel1-transcript">
           <p class="fm-label fm-label-strong">MAKING IT ACTIONABLE</p>
-          <p class="t-line panel-copy"><span class="t-label">User</span>"Work on my book."</p>
-          <p class="t-line panel-copy"><span class="t-label t-label-ai">AI</span>"Which scene are you drafting today?"</p>
-          <p class="t-line panel-copy"><span class="t-label t-label-ai">AI</span>"Where does the scene begin, and where does it end?"</p>
-          <p class="t-line panel-copy"><span class="t-label t-label-ai">AI</span>"What would count as finished by 10:30?"</p>
-          <p class="t-line"><span class="t-label t-label-ai">AI</span><span class="text-blue">"Block set: Draft Chapter 9 from the doorbell to the brother leaving—1,500 rough words by 10:30."</span></p>
+          <p class="t-line"><span class="t-label">User</span>"Work on my book."</p>
+          <p class="t-line"><span class="t-label t-label-ai">AI</span>"Which scene are you drafting today?"</p>
+          <p class="actionable-arrow" aria-hidden="true">&darr;</p>
+          <p class="t-line"><span class="t-label t-label-ai">AI</span>"Where does the scene begin, and where does it end?"</p>
+          <p class="actionable-arrow" aria-hidden="true">&darr;</p>
+          <p class="t-line"><span class="t-label t-label-ai">AI</span>"What would count as finished by 10:30?"</p>
+          <p class="actionable-arrow" aria-hidden="true">&darr;</p>
+          <p class="t-line"><span class="t-label t-label-ai">AI</span><span class="text-blue">"Locked: draft Chapter 9 from the knock at the door to the brother leaving—1,500 rough words by 10:30."</span></p>
           <hr class="transcript-hairline">
           <p class="fm-label fm-label-strong">NAMING THE STAKES</p>
-          <p class="t-line panel-copy">"What will pull you away—and how will you block it?"</p>
-          <p class="t-line panel-copy">"Why does this matter now?"</p>
-          <p class="t-line panel-copy">"How will finishing feel—really?"</p>
+          <p class="t-line">"What will pull you away—and how will you block it?"</p>
+          <p class="stakes-arrow" aria-hidden="true">&darr;</p>
+          <p class="t-line">"Why does this matter now?"</p>
+          <p class="stakes-arrow" aria-hidden="true">&darr;</p>
+          <p class="t-line">"How will finishing feel—really?"</p>
+          <p class="stakes-arrow" aria-hidden="true">&darr;</p>
           <p class="t-line text-blue">"Building your Focus File."</p>
-          <p class="panel-copy fm-bold">[The AI creates it as a single HTML file you download, open in your browser, and use offline.]</p>
         </div>
         <button type="button" class="btn showcase-download" data-info="interview">See full interview</button>
         </div>
@@ -166,15 +153,15 @@
         <div class="panel-body">
         <div class="file-mock">
           <p class="fm-label fm-label-strong">TASK</p>
-          <p class="fm-title panel-copy">Draft 1,500 rough words of the Chapter 9 opening</p>
+          <p class="fm-title">Draft 1,500 rough words of the Chapter 9 opening</p>
           <p class="fm-label fm-label-strong">ACTION LIST</p>
           <ul class="fm-checklist">
-            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title panel-copy">Read the last paragraph — then straight into new words</span></span></li>
-            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title panel-copy">Get the first 500 down — no revising yet</span></span></li>
-            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title panel-copy">Push to 1,500 — ugly allowed</span></span></li>
-            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title panel-copy">Write tomorrow's first sentence before stopping</span></span></li>
+            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title">Read the last page only</span></span></li>
+            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title">Draft 1,500 new words</span></span></li>
+            <li class="fm-check-row"><span class="fm-check-mark">☐</span><span><span class="fm-check-title">Write tomorrow's first sentence before stopping</span></span></li>
           </ul>
-          <p class="fm-btn text-blue">BEGIN BLOCK</p>
+          <p class="fm-instruction">Mark problems with [FIX] and keep drafting.</p>
+          <p class="fm-btn text-blue">Begin — 1,500 words drafted by 10:30</p>
         </div>
         <div class="checkin-mock knock-spacing">
           <p class="fm-label fm-label-strong">THE KNOCK</p>
@@ -184,7 +171,7 @@
             <button type="button" class="checkin-demo-btn" data-answer="sortof">Sort of</button>
             <button type="button" class="checkin-demo-btn" data-answer="no">No</button>
           </div>
-          <p class="checkin-demo-hint panel-copy">Tap 'Sort of' or 'No' and the file returns your own words to you.</p>
+          <p class="checkin-demo-hint mono">Tap 'Sort of' or 'No' and the file returns your own words to you.</p>
           <div class="checkin-demo-response" aria-live="polite"></div>
           <button type="button" class="checkin-demo-back mono" hidden>↺ back</button>
         </div>
@@ -194,28 +181,21 @@
 
       <article class="showcase-panel">
         <h3>Exit log</h3>
-        <p class="showcase-caption panel-intro">At the end, a 60-second Exit log records what got done, how the block felt, and where the next one will start.</p>
+        <p class="showcase-caption panel-intro">At the end, a 60-second check-out records what got done, how the block feels, and where the next one should begin.</p>
         <div class="panel-body">
         <div class="file-mock exit-mock">
-          <p class="fm-label fm-label-strong">AUTOMATICALLY RECORDED</p>
-          <div class="log-records-block">
-            <p class="fm-plain">Planned vs. actual start and finish</p>
-            <p class="fm-plain">Action list checks</p>
-            <p class="fm-plain">Check-in responses</p>
-          </div>
-          <p class="fm-label fm-label-strong">EXIT LOG PROMPTS</p>
+          <p class="fm-label fm-label-strong">HOW IT WENT</p>
           <div class="howitwent-list">
-            <p class="fm-plain">Did you finish the block as planned</p>
-            <p class="fm-plain">Record any output numbers, if applicable</p>
+            <p class="fm-plain">What got done</p>
             <p class="fm-plain">How it felt</p>
-            <p class="fm-plain">What, if anything, got in the way of focus</p>
-            <p class="fm-plain">Where the next block will start</p>
+            <p class="fm-plain">Where the next block starts</p>
           </div>
           <hr class="transcript-hairline">
+          <p class="fm-label fm-label-strong">WHAT THE LOG RECORDS</p>
           <div class="log-records-block">
-            <p class="fm-plain fm-bold">No score. No judgment. Each block adds one entry, so the log captures what happened and makes patterns visible.</p>
-            <p class="fm-plain">Share the accumulated log with a coach or therapist to spot patterns that disrupt focus or follow-through&mdash;or paste the latest entry into a new chat to build the next Focus File.</p>
-            <p class="fm-plain fm-bold">[Block by block, ritual becomes habit.]</p>
+            <p class="fm-plain">Recorded automatically: planned start, actual start and finish, and actions checked.</p>
+            <p class="fm-plain">Answered at the end: how it felt and where the next block begins.</p>
+            <p class="fm-plain">No score. No judgment. The log records what actually happened, block by block, so patterns become visible. After a week or two, send it to a coach or therapist&mdash;or paste it into a new chat&mdash;to see where drift happens and design the next block around it.</p>
           </div>
         </div>
         <button type="button" class="btn showcase-download log-copy-csv-btn" data-copied-label="Copied &check;" data-default-label="Copy sample log">Copy sample log</button>
@@ -256,7 +236,7 @@
   <h2 class="mono info-modal-label">PRIVACY</h2>
   <p>The Next Block is a free self-directed tool.</p>
   <p>Your Focus Files and logs live on your device, not with us. We do not have accounts, storage, or a dashboard where we can see what you write. Unless you choose to send something to us, we literally cannot read it.</p>
-  <p>The site copies a prompt. You paste it into your AI of choice. Anything you put into it is governed by that provider's own terms and privacy policy.</p>
+  <p>The site copies a prompt. You paste it into Claude. Anything you put into Claude is governed by Claude's terms and privacy policy.</p>
   <p>Be careful with private data, and thoughtful about where you share it.</p>
   <p>The Next Block is not medical or psychological advice. Use it at your own discretion.</p>
 </template>
