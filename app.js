@@ -32,14 +32,14 @@
   /* Maps each prompt file to its Vercel analytics event name (event name only —
      never the prompt's actual text). */
   var PROMPT_EVENT_NAMES = {
-    "prompts/Solo.md": "copy_solo_prompt",
+    "prompts/ReadyToWork.md": "copy_solo_prompt",
     "prompts/Coaching.md": "copy_coaching_loop_prompt",
     "prompts/Explorer.md": "copy_exploring_prompt"
   };
 
   /* Maps each prompt file to its Plausible "mode" property value. */
   var PROMPT_MODE_NAMES = {
-    "prompts/Solo.md": "solo",
+    "prompts/ReadyToWork.md": "solo",
     "prompts/Coaching.md": "coaching",
     "prompts/Explorer.md": "exploring"
   };
@@ -133,9 +133,9 @@
   var CHECKIN_DEMO_REPLAY =
     '<div class="knock-replay-callout">' +
     '<p class="fm-label">YOU SAID THIS MATTERED BECAUSE</p>' +
-    '<p class="fm-quote">"This book only gets real on the days I don\'t feel like it — and one drafted scene is the book actually happening."</p>' +
+    '<p class="fm-quote">"A book becomes real one finished scene at a time. I do not need to solve the whole thing today. I need to finish this one."</p>' +
     '<p class="fm-label">WATCH FOR</p>' +
-    '<p class="fm-quote">"Opening the outline file and reorganizing notes instead of drafting."</p>' +
+    '<p class="fm-quote">"When I want to stop, I will be tempted to polish, research, or reorganize. That is my signal to write the next rough sentence."</p>' +
     '</div>';
 
   document.querySelectorAll(".checkin-demo-btn").forEach(function(btn){
@@ -185,11 +185,11 @@
 
   function buildSampleLogCsv(){
     var rows = [
-      sampleLogDate(7) + ',"Draft 1,500 rough words for the opening of Chapter 9",09:00,09:03,10:30,10:27,"1,500 new words","4/4","Sort of → returned to the draft","Yes — finished the block as planned.","Rough, but real. The stall is gone.","Started reorganizing notes, then returned to the draft.","Revise the opening paragraph, then continue forward."',
-      sampleLogDate(5) + ',"Revise the Chapter 9 opening and draft the next 800 words",09:00,09:24,10:30,10:18,"420 new words; 2 paragraphs revised","2/4","No → reopened the Focus File","No — completed the revision but not the full drafting target.","Frustrating at first, then useful.","Email pulled me away before I started; I kept editing instead of drafting.","Begin with the next unresolved section and draft forward."',
-      sampleLogDate(4) + ',"Draft the next scene of Chapter 9",09:00,09:01,10:30,10:34,"1,120 new words","4/4","Yes","Yes — finished the block as planned.","Focused and steady.","Nothing significant.","Reread the final paragraph, then draft the scene turn."',
-      sampleLogDate(2) + ',"Draft the scene turn and closing beat of Chapter 9",09:00,10:12,10:30,11:02,"530 new words","2/4","Sort of → put the phone away and returned","No — started late and reached only the scene turn.","Scattered, but glad I returned.","Stayed on my phone after breakfast and lost the start window.","Open at the scene turn and carry it through the closing beat."',
-      sampleLogDate(1) + ',"Finish the Chapter 9 draft and write the next starting sentence",09:00,09:05,10:30,10:22,"860 new words","4/4","Sort of → returned to the draft","Yes — finished the block as planned.","Relieved. The chapter now exists.","I wanted to revise the opening, but kept moving forward.","Read the full chapter once and mark only structural problems."'
+      sampleLogDate(7) + ',"Draft Chapter 9 from the doorbell to the brother leaving—1,500 rough words by 10:30.",09:00,09:03,10:30,10:27,"1,500 new words","4/4","Sort of → returned to the draft","Yes — finished the block as planned.","Relieved. The scene exists.","Started reorganizing notes, then returned to the draft.","Draft the silence right after the door closes."',
+      sampleLogDate(5) + ',"Draft the silence right after the door closes—the first thing said once the brother is gone.",09:00,09:24,10:30,10:18,"420 new words; 2 paragraphs revised","2/4","No → reopened the Focus File","No — completed the reaction paragraph but not the full drafting target.","Frustrating at first, then useful.","Email pulled me away before I started; I kept editing instead of drafting.","Begin with the first line spoken after the door closes and draft forward."',
+      sampleLogDate(4) + ',"Draft the conversation that follows the brother\'s exit.",09:00,09:01,10:30,10:34,"1,120 new words","4/4","Yes","Yes — finished the block as planned.","Focused and steady.","Nothing significant.","Reread the conversation once, then draft what happens next."',
+      sampleLogDate(2) + ',"Draft what happens next after the conversation ends.",09:00,10:12,10:30,11:02,"530 new words","2/4","Sort of → put the phone away and returned","No — started late and only drafted half the scene.","Scattered, but glad I returned.","Stayed on my phone after breakfast and lost the start window.","Open where the scene stopped and carry it through to its end."',
+      sampleLogDate(1) + ',"Finish the scene after the brother\'s exit and write the next chapter\'s opening line.",09:00,09:05,10:30,10:22,"860 new words","4/4","Sort of → returned to the draft","Yes — finished the block as planned.","Relieved. The scene now exists in full.","I wanted to revise the earlier pages, but kept moving forward.","Read the new material once and mark only structural problems."'
     ];
     return LOG_CSV_HEADER + "\n" + rows.join("\n");
   }

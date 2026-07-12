@@ -5,216 +5,1022 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Next Block — Sample Focus File</title>
 <style>
-  :root{
-    --ink:#10141c;--muted:#536175;--line:#aebdd2;--paper:#f4f7fb;--box:#ffffff;--soft:#e8edf4;--blue:#1f5cff;--blue-soft:#dbe5ff;
+  :root {
+    --ink: #11151d;
+    --muted: #556176;
+    --line: #aebdd2;
+    --paper: #f3f6fa;
+    --panel: #ffffff;
+    --soft: #e9eef5;
+    --soft-2: #dfe7f3;
+    --blue: #245cff;
+    --blue-soft: #dfe7ff;
+    --danger: #a52d2d;
+    --shadow: 0 18px 48px rgba(17, 21, 29, 0.08);
   }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;line-height:1.5}
-  body:before{content:"";position:fixed;inset:0;z-index:-1;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:32px 32px;opacity:.55}
-  .sample-bar{background:#0f141c;color:#fff;text-align:center;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;letter-spacing:.06em;padding:10px 12px}
-  main{max-width:760px;margin:48px auto 80px;padding:0 20px}
-  .eyebrow{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--blue);letter-spacing:.14em;text-transform:uppercase;font-size:14px;margin:0 0 16px}
-  h1{font-size:34px;line-height:1.1;margin:0 0 8px;letter-spacing:-.03em}
-  .sub{color:var(--muted);font-size:17px;margin:0 0 28px}
-  hr{border:0;border-top:3px solid var(--ink);margin:0 0 28px}
-  section{background:var(--box);border:1px solid var(--line);padding:26px;margin:0 0 20px}
-  section.why{background:var(--blue-soft);border-color:#8fa6ee;border-left:5px solid var(--blue)}
-  section.first-step{background:#e8edf4}
-  h2{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-size:13px;margin:0 0 18px}
-  .big{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:22px;letter-spacing:.02em;margin:0}
-  .clock{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);font-size:14px;margin-top:10px}
-  input.time{font:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:22px;border:0;border-bottom:1px solid var(--line);background:transparent;padding:2px 0;width:7ch}
-  .craft{font-size:18px}
-  .craft p{margin:0 0 12px}
-  .jobs{display:grid;gap:0}
-  label.job{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:14px 0;border-bottom:1px dashed var(--line);cursor:pointer}
-  label.job:last-child{border-bottom:0}
-  input[type="checkbox"]{width:20px;height:20px;margin-top:3px;accent-color:var(--blue)}
-  .job-title{font-size:18px;font-weight:650}
-  .job-sub{color:var(--muted);font-size:14px;margin-top:3px}
-  .watch{font-size:18px;margin:0}.watch li{margin:0 0 6px}
-  .button-row{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 18px}
-  button,.button{appearance:none;border:1px solid var(--ink);background:var(--ink);color:#fff;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;letter-spacing:.03em;padding:14px 18px;cursor:pointer;text-decoration:none;display:inline-block}
-  button.secondary,.button.secondary{background:transparent;color:var(--blue);border-color:var(--blue)}
-  button:focus,.button:focus{outline:3px solid var(--blue-soft);outline-offset:2px}
-  .note{color:var(--muted);font-size:14px;margin:18px 4px 0}
-  .hidden{display:none!important}
-  .overlay{position:fixed;inset:0;background:rgba(16,20,28,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:10}
-  .modal{background:#fff;border:2px solid var(--ink);max-width:560px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(16,20,28,.25)}
-  .modal h3{font-size:26px;margin:0 0 12px}.modal p{margin:0 0 12px;font-size:17px}.modal .choices{display:flex;gap:10px;margin-top:18px}.modal button{background:transparent;color:var(--ink);border-color:var(--line)}
-  textarea,input.text{width:100%;border:1px solid var(--line);font:inherit;padding:12px;background:#fff;margin:6px 0 16px;min-height:74px}
-  .win{background:var(--ink);color:#fff;padding:20px;margin:0 0 20px;font-weight:700}
-  table{width:100%;border-collapse:collapse;font-size:13px;background:#fff}th,td{border:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}th{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
-  @media(max-width:640px){main{margin-top:28px}.modal .choices{flex-direction:column}h1{font-size:28px}section{padding:20px}}
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.55;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(174, 189, 210, 0.55) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(174, 189, 210, 0.55) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  button, input, textarea { font: inherit; }
+
+  button, a { -webkit-tap-highlight-color: transparent; }
+
+  .sample-bar {
+    background: var(--ink);
+    color: #fff;
+    padding: 11px 16px;
+    text-align: center;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  main {
+    width: min(820px, calc(100% - 32px));
+    margin: 46px auto 80px;
+  }
+
+  .hero {
+    background: rgba(255,255,255,0.96);
+    border: 1px solid var(--line);
+    padding: 30px;
+    box-shadow: var(--shadow);
+    margin-bottom: 18px;
+  }
+
+  .eyebrow,
+  h2,
+  .label,
+  .mini-label {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .eyebrow {
+    color: var(--blue);
+    font-size: 13px;
+    margin: 0 0 12px;
+  }
+
+  h1 {
+    font-size: clamp(31px, 5vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    margin: 0 0 12px;
+  }
+
+  .sub {
+    margin: 0;
+    max-width: 660px;
+    color: var(--muted);
+    font-size: 18px;
+  }
+
+
+  .card {
+    background: rgba(255,255,255,0.97);
+    border: 1px solid var(--line);
+    padding: 26px;
+    margin: 0 0 18px;
+  }
+
+  h2 {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 18px;
+  }
+
+  .time-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 16px;
+    align-items: end;
+  }
+
+  .field-label {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  input[type="time"] {
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid var(--ink);
+    background: transparent;
+    padding: 3px 0 6px;
+    color: var(--ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 25px;
+  }
+
+  .time-readout {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 23px;
+    line-height: 1.25;
+  }
+
+  .clockline {
+    margin: 18px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  #clockNow {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+
+  .craft-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .craft-block {
+    background: var(--soft);
+    border: 1px solid var(--line);
+    padding: 19px;
+  }
+
+  .craft-block.primary {
+    grid-column: 1 / -1;
+    background: var(--blue-soft);
+    border-left: 5px solid var(--blue);
+  }
+
+  .label {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .craft-block p {
+    margin: 0;
+    font-size: 17px;
+  }
+
+  .craft-block.primary p {
+    font-size: 19px;
+    font-weight: 700;
+  }
+
+  .quote { font-style: italic; }
+
+  .jobs {
+    display: grid;
+    gap: 0;
+  }
+
+  .job {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 13px;
+    padding: 15px 0;
+    border-bottom: 1px dashed var(--line);
+    cursor: pointer;
+  }
+
+  .job:last-child { border-bottom: 0; }
+
+  .job input {
+    width: 20px;
+    height: 20px;
+    margin: 4px 0 0;
+    accent-color: var(--blue);
+  }
+
+  .job-title {
+    display: block;
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  .job-sub {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 22px 0 10px;
+  }
+
+  button,
+  .button-link {
+    appearance: none;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: #fff;
+    padding: 14px 19px;
+    min-height: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+  }
+
+  button.secondary,
+  .button-link.secondary {
+    background: transparent;
+    color: var(--blue);
+    border-color: var(--blue);
+  }
+
+  button.ghost {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--line);
+  }
+
+  button.danger {
+    background: transparent;
+    color: var(--danger);
+    border-color: #d8aaaa;
+    min-height: auto;
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+
+  button:focus-visible,
+  .button-link:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid var(--blue-soft);
+    outline-offset: 3px;
+  }
+
+  button:disabled { opacity: 0.55; cursor: default; }
+
+  .begin-button {
+    width: 100%;
+    min-height: 62px;
+    background: transparent;
+    color: var(--blue);
+    border: 1px solid var(--blue);
+    font-size: 17px;
+  }
+
+  .utility-row {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 15px;
+  }
+
+  .text-link {
+    border: 0;
+    padding: 0;
+    min-height: auto;
+    background: transparent;
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    letter-spacing: 0.03em;
+  }
+
+  .privacy-note {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 16px 0 0;
+  }
+
+  .active-banner,
+  .win-banner {
+    padding: 18px 20px;
+    margin: 0 0 18px;
+    font-weight: 800;
+  }
+
+  .active-banner {
+    background: var(--blue-soft);
+    border-left: 5px solid var(--blue);
+  }
+
+  .win-banner {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .hidden { display: none !important; }
+
+  .exit-form {
+    display: grid;
+    gap: 17px;
+  }
+
+  .exit-form label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  textarea,
+  input.text-input {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    padding: 12px 13px;
+    min-height: 74px;
+    resize: vertical;
+  }
+
+  input.text-input { min-height: 48px; resize: none; }
+
+  .log-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+  }
+
+  table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+    background: #fff;
+    font-size: 13px;
+  }
+
+  th, td {
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th:last-child, td:last-child { border-right: 0; }
+  tr:last-child td { border-bottom: 0; }
+
+  th {
+    background: var(--soft);
+    color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .empty-log {
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 21, 29, 0.62);
+    z-index: 50;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+  }
+
+  .modal {
+    width: min(590px, 100%);
+    max-height: min(720px, calc(100vh - 40px));
+    overflow-y: auto;
+    background: var(--panel);
+    border: 2px solid var(--ink);
+    padding: 28px;
+    box-shadow: 0 28px 80px rgba(0,0,0,0.28);
+  }
+
+  .modal h3 {
+    margin: 0 0 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 16px;
+  }
+
+  .modal-question {
+    font-size: 27px;
+    margin: 0 0 18px;
+  }
+
+  .choices {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .choices button {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line);
+    min-width: 92px;
+  }
+
+  .replay {
+    background: var(--soft-2);
+    padding: 20px;
+    margin: 0 0 16px;
+  }
+
+  .replay .label { margin-top: 18px; }
+  .replay .label:first-child { margin-top: 0; }
+  .replay p { margin: 0; font-size: 18px; }
+
+  .modal-actions { margin-top: 18px; }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: #fff;
+    padding: 11px 16px;
+    z-index: 100;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+  }
+
+  @media (max-width: 700px) {
+    main { width: min(100% - 20px, 820px); margin-top: 24px; }
+    .hero, .card { padding: 21px; }
+    .time-grid, .craft-grid { grid-template-columns: 1fr; }
+    .craft-block.primary { grid-column: auto; }
+    .choices { flex-direction: column; }
+    .choices button { width: 100%; }
+    .modal { padding: 22px; }
+    .modal-question { font-size: 23px; }
+  }
 </style>
 </head>
 <body>
-<div class="sample-bar">SAMPLE FOCUS FILE — this is what your AI builds at the end of a Next Block interview</div>
+<div class="sample-bar">Sample Focus File — Ready to Work</div>
+
 <main>
-  <p class="eyebrow">The Next Block — Solo Mode</p>
-  <h1>Draft the Chapter 9 opening scene</h1>
-  <p class="sub">Get one honest draft of the opening scene on the page — reread one page, draft to the end, mark what's weak, and name tomorrow's first line.</p>
-  <hr>
+  <header class="hero">
+    <p class="eyebrow">The Next Block</p>
+    <h1>Draft the Chapter 9 opening</h1>
+    <p class="sub">From the doorbell to the brother leaving. Finish 1,500 rough words, then write the sentence that starts tomorrow.</p>
 
-  <section>
-    <h2>Time window</h2>
-    <p class="big"><input id="startTime" class="time" value="9:00"> — 10:30</p>
-    <p class="clock" id="clock">Clock loading.</p>
-  </section>
+  </header>
 
-  <section>
-    <h2>What counts as done</h2>
-    <p>The scene is drafted from start to end — ugly allowed. The weakest paragraph is marked, not fixed. Tomorrow's first line is written and waiting.</p>
-  </section>
-
-  <section class="why">
-    <h2>Why this matters today</h2>
-    <div class="craft">
-      <p><em>This book only gets real on the days I don't feel like it — and one drafted scene is the book actually happening.</em></p>
+  <section class="card" aria-labelledby="time-heading">
+    <h2 id="time-heading">Time and place</h2>
+    <div class="time-grid">
+      <div>
+        <label class="field-label" for="plannedStart">Editable start time</label>
+        <input id="plannedStart" type="time" value="09:00">
+      </div>
+      <div>
+        <span class="field-label">Planned finish</span>
+        <div class="time-readout">10:30</div>
+      </div>
+      <div>
+        <span class="field-label">Start place</span>
+        <div class="time-readout">My desk</div>
+      </div>
+    </div>
+    <div class="clockline">
+      <span id="clockNow">Local time loading</span>
     </div>
   </section>
 
-  <section>
-    <h2>Action list</h2>
+  <section class="card" aria-labelledby="actions-heading">
+    <h2 id="actions-heading">Action list</h2>
     <div class="jobs" id="jobs">
-      <label class="job"><input type="checkbox" data-title="Read the last paragraph"><span><span class="job-title">Read the last paragraph</span><span class="job-sub">Then straight into new words — no fixing.</span></span></label>
-      <label class="job"><input type="checkbox" data-title="Get the first 500 down"><span><span class="job-title">Get the first 500 down</span><span class="job-sub">No revising yet.</span></span></label>
-      <label class="job"><input type="checkbox" data-title="Push to 1,500 rough words"><span><span class="job-title">Push to 1,500 rough words</span><span class="job-sub">Ugly allowed. A finished bad draft beats a polished fragment.</span></span></label>
-      <label class="job"><input type="checkbox" data-title="Write tomorrow's first sentence"><span><span class="job-title">Write tomorrow's first sentence</span><span class="job-sub">The last thing you do — the next block's first.</span></span></label>
+      <label class="job">
+        <input type="checkbox" data-title="Read the last paragraph — then straight into new words">
+        <span>
+          <span class="job-title">Read the last paragraph — then straight into new words</span>
+        </span>
+      </label>
+      <label class="job">
+        <input type="checkbox" data-title="Get the first 500 down — no revising yet">
+        <span>
+          <span class="job-title">Get the first 500 down — no revising yet</span>
+        </span>
+      </label>
+      <label class="job">
+        <input type="checkbox" data-title="Push to 1,500 — ugly allowed">
+        <span>
+          <span class="job-title">Push to 1,500 — ugly allowed</span>
+        </span>
+      </label>
+      <label class="job">
+        <input type="checkbox" data-title="Write tomorrow's first sentence before stopping">
+        <span>
+          <span class="job-title">Write tomorrow’s first sentence before stopping</span>
+        </span>
+      </label>
+    </div>
+
+    <div id="beginArea">
+      <button id="beginBlock" class="begin-button" type="button">BEGIN BLOCK</button>
+    </div>
+
+    <div class="utility-row">
+      <button id="previewKnock" class="text-link" type="button">Preview the Knock</button>
+      <button id="openExit" class="text-link hidden" type="button">Open Exit log</button>
+    </div>
+    <p class="privacy-note">Everything in this file runs locally in your browser. Nothing is uploaded.</p>
+  </section>
+
+  <section class="card" aria-labelledby="block-heading">
+    <h2 id="block-heading">The block</h2>
+    <div class="craft-grid">
+      <div class="craft-block primary">
+        <div class="label">What counts as done</div>
+        <p>Chapter 9 runs from the doorbell to the brother leaving, reaches 1,500 rough words, and ends with tomorrow’s first sentence waiting.</p>
+      </div>
+      <div class="craft-block">
+        <div class="label">You said this mattered because</div>
+        <p class="quote">“A book becomes real one finished scene at a time. I do not need to solve the whole thing today. I need to finish this one.”</p>
+      </div>
+      <div class="craft-block">
+        <div class="label">How finishing will feel</div>
+        <p class="quote">“The scene will exist instead of living in my head. I can come back tomorrow with somewhere real to begin.”</p>
+      </div>
+      <div class="craft-block">
+        <div class="label">Watch for</div>
+        <p class="quote">“When I want to stop, I will be tempted to polish, research, or reorganize. That is my signal to write the next rough sentence.”</p>
+      </div>
+      <div class="craft-block">
+        <div class="label">Barrier</div>
+        <p>Internet off. Phone in the kitchen. The scene document is the only file open.</p>
+      </div>
     </div>
   </section>
 
-  <section>
-    <h2>Watch for</h2>
-    <ul class="watch"><li>Opening the outline file and reorganizing notes instead of drafting.</li></ul>
-  </section>
-
-  <section class="first-step">
-    <h2>First step</h2>
-    <p>Reread the last page, then open today's scene file and start typing — no outlining first.</p>
-  </section>
-
-  <div class="button-row" id="preStartButtons">
-    <button id="begin">BEGIN BLOCK</button>
-    <button class="secondary" id="preview">Preview check-in</button>
+  <div id="activeBanner" class="active-banner hidden" role="status">
+    Block started. The first Knock will arrive in roughly 28–34 minutes.
   </div>
-  <p class="note">This sample file runs entirely in your browser. No account. No service. Nothing on this page is sent anywhere.</p>
 
-  <section id="reflection" class="hidden">
-    <h2>Exit log</h2>
-    <label>What got done?</label>
-    <textarea id="doneText">Drafted the scene to the end. Marked the weakest paragraph instead of rewriting it four times.</textarea>
-    <label>How did it feel?</label>
-    <textarea id="feltText">Rough, but real. The stall is gone.</textarea>
-    <label>What is the next real move, and is it action or more research?</label>
-    <textarea id="nextMove">Tomorrow 9:00 — fix the marked paragraph, then keep going.</textarea>
-    <div class="button-row"><button id="saveLog">Save log row</button><button class="secondary" id="copyCsv">Copy CSV</button></div>
+  <div id="winBanner" class="win-banner hidden" role="status">
+    Finished: Chapter 9 runs from the doorbell to the brother leaving, reaches 1,500 rough words, and ends with tomorrow’s first sentence waiting.
+  </div>
+
+  <section id="exitLog" class="card hidden" aria-labelledby="exit-heading">
+    <h2 id="exit-heading">Exit log</h2>
+    <form id="exitForm" class="exit-form">
+      <div>
+        <label for="finishedPlanned">Did you finish the block as planned?</label>
+        <textarea id="finishedPlanned" required placeholder="Answer plainly."></textarea>
+      </div>
+      <div>
+        <label for="outputNumbers">Record any output numbers, if applicable.</label>
+        <input id="outputNumbers" class="text-input" type="text" placeholder="Example: 1,500 new words">
+      </div>
+      <div>
+        <label for="howFelt">How did it feel?</label>
+        <textarea id="howFelt" required></textarea>
+      </div>
+      <div>
+        <label for="gotInWay">What, if anything, got in the way of focus?</label>
+        <textarea id="gotInWay" required></textarea>
+      </div>
+      <div>
+        <label for="nextStart">Where will the next block start?</label>
+        <textarea id="nextStart" required placeholder="Name the exact next starting point."></textarea>
+      </div>
+      <div class="controls">
+        <button id="saveExit" type="submit">SAVE EXIT LOG</button>
+      </div>
+    </form>
   </section>
 
-  <div id="win" class="win hidden">Finished: Scene drafted to its end, weakest paragraph marked, tomorrow's first line written.</div>
-
-  <section>
-    <h2>CSV log</h2>
-    <div id="logTable"></div>
+  <section class="card" aria-labelledby="log-heading">
+    <h2 id="log-heading">Cumulative CSV log</h2>
+    <div class="log-actions">
+      <button id="copyCsv" class="secondary" type="button">COPY CSV</button>
+      <button id="downloadCsv" class="secondary" type="button">DOWNLOAD CSV</button>
+    </div>
+    <div id="logView"></div>
   </section>
 </main>
 
-<div id="overlay" class="overlay hidden" role="dialog" aria-modal="true">
+<div id="knockOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="knock-title">
   <div class="modal">
-    <h3 id="overlayTitle">Are you closing in on an answer?</h3>
-    <div id="overlayBody">
-      <p>Still with the scene?</p>
+    <h3 id="knock-title">The Knock</h3>
+    <p class="modal-question">Still with it?</p>
+
+    <div id="choiceArea" class="choices">
+      <button type="button" data-choice="Yes">Yes</button>
+      <button type="button" data-choice="Sort of">Sort of</button>
+      <button type="button" data-choice="No">No</button>
     </div>
-    <div class="choices" id="choices">
-      <button data-choice="yes">Yes</button><button data-choice="sortof">Sort of</button><button data-choice="no">No</button>
+
+    <div id="replayArea" class="hidden">
+      <div class="replay">
+        <div class="label">You said this mattered because</div>
+        <p class="quote">“A book becomes real one finished scene at a time. I do not need to solve the whole thing today. I need to finish this one.”</p>
+
+        <div class="label">Watch for</div>
+        <p class="quote">“When I want to stop, I will be tempted to polish, research, or reorganize. That is my signal to write the next rough sentence.”</p>
+      </div>
     </div>
-    <div class="button-row hidden" id="closeRow"><button id="closeOverlay">Back to the block</button></div>
+
+    <div class="modal-actions">
+      <button id="returnToBlock" class="secondary hidden" type="button">BACK TO THE BLOCK</button>
+    </div>
   </div>
 </div>
 
+<div id="toast" class="toast hidden" role="status"></div>
+
 <script>
-(function(){
-  const slug='sample_chapter9_opening_scene';
-  const key='next_block_log_'+slug+'_v1';
-  const why='This book only gets real on the days I don\'t feel like it — and one drafted scene is the book actually happening.';
-  const avoid='Opening the outline file and reorganizing notes instead of drafting.';
-  const overlay=document.getElementById('overlay');
-  const body=document.getElementById('overlayBody');
-  const choices=document.getElementById('choices');
-  const closeRow=document.getElementById('closeRow');
-  const reflection=document.getElementById('reflection');
-  const win=document.getElementById('win');
-  let timer=null, flashTimer=null, originalTitle=document.title;
+(function () {
+  'use strict';
 
-  function updateClock(){
-    const now=new Date();
-    document.getElementById('clock').textContent='Now: '+now.toLocaleTimeString([], {hour:'numeric', minute:'2-digit', second:'2-digit'});
-  }
-  setInterval(updateClock,1000); updateClock();
+  const BLOCK = 'Draft Chapter 9 from the doorbell to the brother leaving—1,500 rough words by 10:30.';
+  const PLANNED_FINISH = '10:30';
+  const STORAGE_KEY = 'next_block_log_sample_chapter9_doorbell_v1';
+  const CSV_HEADER = [
+    'date',
+    'block',
+    'planned_start',
+    'actual_start',
+    'planned_finish',
+    'actual_finish',
+    'output',
+    'action_list_checks',
+    'check_in_responses',
+    'what_got_done',
+    'how_it_felt',
+    'what_got_in_the_way',
+    'next_block_start'
+  ];
 
-  function titleFlash(on){
-    if(on){let flip=false; flashTimer=setInterval(()=>{document.title=flip?'CHECK-IN — The Next Block':originalTitle;flip=!flip},800)}
-    else{clearInterval(flashTimer);document.title=originalTitle}
+  const plannedStart = document.getElementById('plannedStart');
+  const beginBlock = document.getElementById('beginBlock');
+  const beginArea = document.getElementById('beginArea');
+  const previewKnock = document.getElementById('previewKnock');
+  const openExit = document.getElementById('openExit');
+  const activeBanner = document.getElementById('activeBanner');
+  const winBanner = document.getElementById('winBanner');
+  const exitLog = document.getElementById('exitLog');
+  const exitForm = document.getElementById('exitForm');
+  const saveExit = document.getElementById('saveExit');
+  const overlay = document.getElementById('knockOverlay');
+  const choiceArea = document.getElementById('choiceArea');
+  const replayArea = document.getElementById('replayArea');
+  const returnToBlock = document.getElementById('returnToBlock');
+  const logView = document.getElementById('logView');
+  const toast = document.getElementById('toast');
+
+  let actualStart = '';
+  let blockRunning = false;
+  let checkinTimer = null;
+  let titleTimer = null;
+  let audioContext = null;
+  let currentCheckinIsPreview = false;
+  let checkinResponses = [];
+  const originalTitle = document.title;
+
+  function pad(value) {
+    return String(value).padStart(2, '0');
   }
-  function showCheckin(preview=false){
-    document.getElementById('overlayTitle').textContent=preview?'Preview check-in':'Are you closing in on an answer?';
-    body.innerHTML='<p>Still with the scene?</p>';
-    choices.classList.remove('hidden'); closeRow.classList.add('hidden'); overlay.classList.remove('hidden');
-    if(!preview) titleFlash(true);
+
+  function localDate(date = new Date()) {
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
   }
-  function scheduleCheckin(){
-    const minutes=20 + Math.floor(Math.random()*6);
-    timer=setTimeout(()=>showCheckin(false), minutes*60*1000);
+
+  function localTime(date = new Date()) {
+    return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
   }
-  document.getElementById('begin').addEventListener('click',()=>{
-    document.getElementById('preStartButtons').classList.add('hidden');
-    scheduleCheckin();
+
+  function formatClock(date = new Date()) {
+    return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+  }
+
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clockNow').textContent = `Local time: ${formatClock(now)}`;
+  }
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.remove('hidden');
+    window.setTimeout(() => toast.classList.add('hidden'), 1800);
+  }
+
+  function beginTitleFlash() {
+    let toggle = false;
+    window.clearInterval(titleTimer);
+    titleTimer = window.setInterval(() => {
+      document.title = toggle ? 'THE KNOCK — The Next Block' : originalTitle;
+      toggle = !toggle;
+    }, 850);
+  }
+
+  function stopTitleFlash() {
+    window.clearInterval(titleTimer);
+    titleTimer = null;
+    document.title = originalTitle;
+  }
+
+  function primeAudio() {
+    try {
+      audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioContext.state === 'suspended') audioContext.resume();
+    } catch (error) {
+      audioContext = null;
+    }
+  }
+
+  function ping() {
+    if (!audioContext) return;
+    try {
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.value = 660;
+      gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.16, audioContext.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.22);
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 0.24);
+    } catch (error) {
+      // The title flash still makes the check-in noticeable.
+    }
+  }
+
+  function randomCheckinDelay() {
+    const minutes = 28 + Math.floor(Math.random() * 7);
+    return minutes * 60 * 1000;
+  }
+
+  function scheduleNextCheckin() {
+    window.clearTimeout(checkinTimer);
+    if (!blockRunning) return;
+    checkinTimer = window.setTimeout(() => openKnock(false), randomCheckinDelay());
+  }
+
+  function openKnock(preview) {
+    currentCheckinIsPreview = preview;
+    choiceArea.classList.remove('hidden');
+    replayArea.classList.add('hidden');
+    returnToBlock.classList.add('hidden');
+    overlay.classList.remove('hidden');
+
+    if (!preview) {
+      beginTitleFlash();
+      ping();
+    }
+  }
+
+  function closeKnock() {
+    overlay.classList.add('hidden');
+    stopTitleFlash();
+    if (blockRunning && !currentCheckinIsPreview) scheduleNextCheckin();
+  }
+
+  function getRows() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveRows(rows) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(rows));
+    renderLog();
+  }
+
+  function getActionChecks() {
+    const all = Array.from(document.querySelectorAll('#jobs input[type="checkbox"]'));
+    const checked = all.filter((item) => item.checked);
+    return `${checked.length}/${all.length}`;
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
+  function csvEscape(value) {
+    return `"${String(value ?? '').replaceAll('"', '""').replace(/\r?\n/g, ' ')}"`;
+  }
+
+  function csvText() {
+    const rows = getRows();
+    return [
+      CSV_HEADER.join(','),
+      ...rows.map((row) => CSV_HEADER.map((field) => csvEscape(row[field])).join(','))
+    ].join('\n');
+  }
+
+  function renderLog() {
+    const rows = getRows();
+    if (!rows.length) {
+      logView.innerHTML = '<p class="empty-log">No entries yet. Complete the Exit log to add the first row.</p>';
+      return;
+    }
+
+    const tableRows = rows.map((row, index) => `
+      <tr>
+        <td>${escapeHtml(row.date)}</td>
+        <td>${escapeHtml(row.planned_start)} → ${escapeHtml(row.actual_start)}</td>
+        <td>${escapeHtml(row.output || '—')}</td>
+        <td>${escapeHtml(row.action_list_checks)}</td>
+        <td>${escapeHtml(row.what_got_done)}</td>
+        <td>${escapeHtml(row.next_block_start)}</td>
+        <td><button class="danger" type="button" data-delete-row="${index}">Delete</button></td>
+      </tr>
+    `).join('');
+
+    logView.innerHTML = `
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Start</th>
+              <th>Output</th>
+              <th>Checks</th>
+              <th>Finished as planned?</th>
+              <th>Next start</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function openExitLog() {
+    blockRunning = false;
+    window.clearTimeout(checkinTimer);
+    stopTitleFlash();
+    exitLog.classList.remove('hidden');
+    exitLog.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  beginBlock.addEventListener('click', () => {
+    primeAudio();
+    actualStart = localTime();
+    blockRunning = true;
+    checkinResponses = [];
+    beginArea.classList.add('hidden');
+    openExit.classList.remove('hidden');
+    activeBanner.classList.remove('hidden');
+    scheduleNextCheckin();
+    updateClock();
   });
-  document.getElementById('preview').addEventListener('click',()=>showCheckin(true));
-  choices.addEventListener('click',(e)=>{
-    if(!e.target.matches('button')) return;
-    const c=e.target.dataset.choice;
-    choices.classList.add('hidden'); closeRow.classList.remove('hidden'); titleFlash(false);
-    if(c==='yes') body.innerHTML='<p>Good. Keep going.</p>';
-    else body.innerHTML='<p><strong>You said this mattered because:</strong><br>'+why+'</p><p><strong>Watch for:</strong><br>'+avoid+'</p><p>Write down what you have so far before you open anything else.</p>';
-  });
-  document.getElementById('closeOverlay').addEventListener('click',()=>overlay.classList.add('hidden'));
-  document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){overlay.classList.add('hidden');titleFlash(false)}});
 
-  function getCheckedJobs(){
-    return Array.from(document.querySelectorAll('#jobs input[type=checkbox]')).filter(x=>x.checked).map(x=>x.dataset.title);
-  }
-  function csvEscape(s){return '"'+String(s).replaceAll('"','""').replace(/\n/g,' ')+'"'}
-  function rows(){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return[]}}
-  function saveRows(r){localStorage.setItem(key, JSON.stringify(r)); renderLog()}
-  function renderLog(){
-    const r=rows();
-    if(!r.length){document.getElementById('logTable').innerHTML='<p class="note">No rows yet.</p>';return}
-    let html='<table><thead><tr><th>Date</th><th>Jobs done</th><th>What got done</th><th>Next move</th><th></th></tr></thead><tbody>';
-    r.forEach((row,i)=>{html+='<tr><td>'+row.date+'</td><td>'+row.jobs_done+'</td><td>'+row.what_got_done+'</td><td>'+row.next_move+'</td><td><button class="secondary" data-del="'+i+'">Delete</button></td></tr>'});
-    html+='</tbody></table>'; document.getElementById('logTable').innerHTML=html;
-  }
-  document.getElementById('logTable').addEventListener('click',(e)=>{if(e.target.dataset.del!==undefined){const r=rows();r.splice(Number(e.target.dataset.del),1);saveRows(r)}});
-  document.getElementById('saveLog').addEventListener('click',()=>{
-    const checked=getCheckedJobs();
-    const total=document.querySelectorAll('#jobs input[type=checkbox]').length;
-    const row={
-      date:new Date().toISOString(),
-      title:'Draft the Chapter 9 opening scene',
-      start_time:document.getElementById('startTime').value,
-      jobs_done:checked.length+'/'+total+' — '+checked.join('; '),
-      what_got_done:document.getElementById('doneText').value,
-      how_it_felt:document.getElementById('feltText').value,
-      next_move:document.getElementById('nextMove').value
+  previewKnock.addEventListener('click', () => openKnock(true));
+  openExit.addEventListener('click', openExitLog);
+
+  choiceArea.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-choice]');
+    if (!button) return;
+
+    const choice = button.dataset.choice;
+    if (!currentCheckinIsPreview) {
+      checkinResponses.push(choice === 'Yes' ? 'Yes' : `${choice} → returned to the block`);
+    }
+
+    choiceArea.classList.add('hidden');
+    returnToBlock.classList.remove('hidden');
+    stopTitleFlash();
+
+    if (choice === 'Yes') {
+      replayArea.innerHTML = '<p><strong>Good. Keep writing forward.</strong></p>';
+      replayArea.classList.remove('hidden');
+    } else {
+      replayArea.innerHTML = `
+        <div class="replay">
+          <div class="label">You said this mattered because</div>
+          <p class="quote">“A book becomes real one finished scene at a time. I do not need to solve the whole thing today. I need to finish this one.”</p>
+
+          <div class="label">Watch for</div>
+          <p class="quote">“When I want to stop, I will be tempted to polish, research, or reorganize. That is my signal to write the next rough sentence.”</p>
+        </div>
+      `;
+      replayArea.classList.remove('hidden');
+    }
+  });
+
+  returnToBlock.addEventListener('click', closeKnock);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !overlay.classList.contains('hidden')) closeKnock();
+  });
+
+  exitForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const actualFinish = localTime();
+    const row = {
+      date: localDate(),
+      block: BLOCK,
+      planned_start: plannedStart.value,
+      actual_start: actualStart || 'Not recorded',
+      planned_finish: PLANNED_FINISH,
+      actual_finish: actualFinish,
+      output: document.getElementById('outputNumbers').value.trim(),
+      action_list_checks: getActionChecks(),
+      check_in_responses: checkinResponses.length ? checkinResponses.join(' · ') : 'No check-ins recorded',
+      what_got_done: document.getElementById('finishedPlanned').value.trim(),
+      how_it_felt: document.getElementById('howFelt').value.trim(),
+      what_got_in_the_way: document.getElementById('gotInWay').value.trim(),
+      next_block_start: document.getElementById('nextStart').value.trim()
     };
-    const r=rows(); r.push(row); saveRows(r); win.classList.remove('hidden');
+
+    const rows = getRows();
+    rows.push(row);
+    saveRows(rows);
+    winBanner.classList.remove('hidden');
+    saveExit.disabled = true;
+    saveExit.textContent = 'SAVED TO LOG';
+    showToast('Exit log saved');
+    winBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
-  document.getElementById('copyCsv').addEventListener('click',async()=>{
-    const header=['date','title','start_time','jobs_done','what_got_done','how_it_felt','next_move'];
-    const csv=[header.join(',')].concat(rows().map(row=>header.map(h=>csvEscape(row[h]||'')).join(','))).join('\n');
-    try{await navigator.clipboard.writeText(csv); alert('CSV copied')}catch(e){prompt('Copy CSV', csv)}
+
+  logView.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-delete-row]');
+    if (!button) return;
+    const index = Number(button.dataset.deleteRow);
+    const rows = getRows();
+    rows.splice(index, 1);
+    saveRows(rows);
   });
-  setTimeout(()=>{reflection.classList.remove('hidden')}, 1000); // visible in sample so users can inspect the full loop
+
+  document.getElementById('copyCsv').addEventListener('click', async () => {
+    const text = csvText();
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast('CSV copied');
+    } catch (error) {
+      window.prompt('Copy the CSV:', text);
+    }
+  });
+
+  document.getElementById('downloadCsv').addEventListener('click', () => {
+    const blob = new Blob([csvText()], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'next-block-chapter-9-log.csv';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  plannedStart.addEventListener('change', updateClock);
+  window.setInterval(updateClock, 1000);
+  updateClock();
   renderLog();
 })();
 </script>

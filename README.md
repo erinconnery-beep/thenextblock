@@ -40,9 +40,9 @@ There is no build step. This is a zero-build static site — the files in this f
 
 ```
 prompts/
-  Solo.md       — Solo mode
-  Coaching.md   — With a Coach mode
-  Explorer.md   — Exploring mode
+  ReadyToWork.md — Ready to Work mode
+  Coaching.md    — With a Coach mode
+  Explorer.md    — Exploring mode
 ```
 
 Each file is complete and self-contained — it explains what The Next Block is, how the model should behave, runs the full seven-question interview (customized per mode), and specifies the offline HTML file Claude must build at the end. None of the three files reference each other or depend on anything else in this repo. Pasting any one of them alone into a fresh Claude chat is enough to run a full session.
