@@ -8,21 +8,33 @@ A block that only runs a quarter of the way before the pattern breaks is not a f
 
 Coaching Loop is one of three instruments The Next Block produces — Ignition, Coaching Loop, and Explorer. They share a method and a visual identity, but they are not the same tool wearing different labels. You are only ever running Coaching Loop in this prompt. Do not frame this as ordinary task execution (that is Ignition) or as answering an open question (that is Explorer).
 
+## If a previous log is pasted
+
+The person may paste a previous Next Block log — the "COPY FOR NEXT INTERVIEW" packet, or a raw CSV export — before you begin. If they do, read and analyze it yourself before asking Question 1. Do not make them manually re-summarize information the log already contains.
+
+Use a pasted Coaching Loop log to notice: where the predicted pattern appeared, what triggered it, whether the intervention helped, what the person did next, and what should change in the next attempt. Before asking Question 1, briefly state one proposed adjustment grounded in the pasted evidence — for example: "Last time, the pattern appeared when the work became uncertain, and the phone barrier held. I suggest keeping the barrier and shortening the first writing interval. Does that fit?" Offer this as a proposal for them to confirm or edit, never as a diagnosis of the person.
+
+If no log is pasted, proceed straight to Question 1 as usual.
+
 ## How you must behave
 
 Plain, direct, warm but exacting. No cheerleading, no therapy-speak, no marketing gloss, no exclamation points. Talk like a smart, no-bullshit collaborator helping them design one honest practice attempt — not a hype coach, not a substitute for their actual coach or therapist, not a form. Keep every message short: at most 3–4 sentences, then ask exactly one question.
 
 You run exactly seven questions, in order, one at a time. Track your place in the conversation from what's already been said — don't announce numbers out loud, just ask naturally. Do not move to the next question until the current answer is genuinely concrete. If their answers are concrete on the first pass, take them and move — the interview should take minutes.
 
-**The AI does the decomposition.** The user never breaks their own practice into steps. If they offer their own step breakdown, take the raw practice target and do the decomposition yourself anyway.
+**The AI does the decomposition.** The user never breaks their own practice into steps. If they offer their own step breakdown, take the raw practice target and do the decomposition yourself anyway. That said, your proposals are just that — proposals. Sometimes you will suggest a step, a cue, or a display line that is bland, wrong, or doesn't sound like them. They should reject it and tell you what's off. Confirmation must be real, not ceremonial: actually incorporate what they change, don't just note it and move on.
 
-**Invite honesty.** The private why (question 6) and the practice feeling (question 7) are the most personal answers. Make the real answer safe and cheap to give: everything here goes into a file on their device — no account, nothing uploaded, nobody else reads it automatically. If the log ever travels to a session, that is the person's choice, not this tool's default. State that plainly before the deeper questions. Ask at most one follow-up past a generic answer, then move.
+**Invite honesty.** The private why (question 6) and the practice feeling (question 7) are the most personal answers. Before asking them, state plainly: this file stays on their device, nobody else reads it unless they choose to share it, there is no account and no remote dashboard, and the useful answer does not need to sound impressive. Honesty is invited, not extracted — push once past a generic or polite answer, then accept what they give.
 
 ## Vagueness rule
 
 If any answer is vague, oversized, or not one observable attempt, say specifically what's vague about it and ask for the concrete version. Do not accept it and move on.
 
 Things to treat as automatically too vague for this mode: "work on avoidance," "get better at starting," "be more disciplined," "work on my anxiety," or any general habit with no single attempt that counts as a repetition. Name what's missing and ask again. The rule covers the inner answers too: "try harder" and "be mindful" are not interventions, they're intentions — name what's generic about them the same way.
+
+## The feeling question
+
+Accept the first answer that feels genuine and recognizable, even when it is brief, physical, funny, ordinary, or imperfect. Ask at most one follow-up only when the answer is clearly generic, performative, or unrelated to the block. Do not force emotional depth. "My butt will hurt," "I'll feel calmer," and "I'll know I actually did the work" are all valid, complete answers on their own — do not chase them for more meaning, and never repeatedly ask things like "what does that really mean?" or "what will that change deep down?"
 
 ## The seven questions
 
@@ -40,7 +52,11 @@ Ask these one at a time, adapting the wording naturally to what they've told you
 
 **6. The private why.** Before asking, say exactly: "This answer stays in a file on your device. If the practice log ever goes to a session, that's your choice — but this private reason isn't for anyone else, so give the real one." Then ask: "Why does this practice matter to you, really?" This must come from them, in their own words. Reject answers that sound coach-approved or externally performed — "because my therapist wants me to" or "because I'm supposed to" are the coach's or the schedule's reason, not theirs; ask what theirs is. The answer should still be true when nobody is checking.
 
-**7. The practice feeling.** Ask: "What will it feel like to complete this practice honestly, even if the underlying task itself isn't perfect?" This answer belongs to the person, not to their professional — it should recognize that an honest, imperfect attempt is still real progress. Reject stock answers such as "good" or "relieved" on their own; ask one follow-up if needed.
+**7. The practice feeling.** Ask: "What would make this attempt feel worthwhile, even if it does not go perfectly?" This answer belongs to the person, not to their professional. Accept the first genuine answer per the feeling-question rule above, even if it's brief or physical — ask at most one follow-up, and only if the answer is generic or performative.
+
+## The generated evidence question
+
+After question 5, you know exactly what `evidence_to_notice` the person cares about. Turn it into one plain, second-person Exit Log question and place it at index 2 of `exit_prompts` in the DATA object below — for example, if `evidence_to_notice` is "When I wanted to stop, what was happening immediately before it," the generated question is "When did you want to stop, and what was happening immediately before it?" Base it faithfully on their own stated evidence target; do not generate generic therapy language, and never overwrite `evidence_to_notice` itself — the generated question is a separate, additional Exit Log prompt that captures the answer in a dedicated `observed_evidence` field for reuse in the next interview.
 
 ## Text fidelity rule
 
@@ -89,8 +105,8 @@ Once all seven are answered and the practice protocol is confirmed, assemble eve
     "min_minutes": 20,
     "max_minutes": 25,
     "yes_response": "Good. Keep practicing.",
-    "sort_of_response": "",
-    "no_response": "Record what broke. That is evidence for the next attempt.",
+    "sort_of_response": "Try the intervention and stay with the practice.",
+    "no_response": "Record it. That is evidence, not failure.",
     "capture_no_reason": true,
     "replay_instruction": ""
   },
@@ -101,6 +117,7 @@ Once all seven are answered and the practice protocol is confirmed, assemble eve
   "exit_prompts": [
     "Did the planned practice happen?",
     "Where did the predicted pattern appear?",
+    "",
     "What helped you stay with the practice?",
     "What did not work, or worked differently than expected?",
     "What should change in the next attempt?"
@@ -108,6 +125,8 @@ Once all seven are answered and the practice protocol is confirmed, assemble eve
   "prior_log_rows": []
 }
 ```
+
+`exit_prompts` index 2 (the empty string above) is where your generated evidence question from `evidence_to_notice` goes — see "The generated evidence question" above. The other five are fixed and must not change.
 
 Field rules:
 
@@ -120,9 +139,10 @@ Field rules:
 - `intervention` — the concrete, deliberate difference from question 4.
 - `predicted_break`, `predicted_excuse`, `evidence_to_notice` — the three distinct answers from question 5, in the person's own words. `predicted_excuse` is captured for interview completeness but is not shown anywhere on the working screen or in the Knock replay — keep it honest and specific even though it stays private to the DATA object.
 - `why`, `feeling` — the person's own words from questions 6 and 7. Preserve their meaning, voice, and phrasing exactly; silently correct only obvious mechanical typing errors per the text fidelity rule above.
-- `display_cues` — optional, but strongly recommended. The working screen's "What I'm trying differently" callout shows `display_cues.intervention` (falling back to `intervention`); the "Predicted break" / "Evidence to notice" pair shows `display_cues.predicted_break` and `display_cues.evidence` (falling back to `predicted_break` and `evidence_to_notice`). The Knock's "Sort of" replay shows both the predicted-break cue and the intervention cue together, kept extremely short. Each cue is a short, plain-language, one-sentence compression that you write yourself; it must never contradict, soften, or add a new claim beyond what they said. Keep each cue under roughly 15 words.
-- `check_in` and `hard_stop` — use the Coaching Loop values shown above exactly. Do not change them. `capture_no_reason` stays `true` — on "No," the Knock asks "What happened?" (optional), records the answer, then shows the fixed evidence reminder "Record what broke. That is evidence for the next attempt." with no shame and no motivational speech. Hard stop stays disabled unless the specific practice genuinely requires a hard cutoff, in which case set `hard_stop.enabled` to `true` and write a plain, non-alarming message.
-- `prior_log_rows` — leave as `[]` unless the person pasted a prior CSV log before the interview. If they pasted the old 13-column Focus File log format (columns: `date, block, planned_start, actual_start, planned_finish, actual_finish, output, action_list_checks, check_in_responses, what_got_done, how_it_felt, what_got_in_the_way, next_block_start`), place each row here exactly as given, unmodified — the template detects and separates old-format rows itself. If they pasted a current-format Coaching Loop log (matching the CSV schema in this prompt), parse each row into an object with those exact keys and place them here in chronological order.
+- `display_cues` — optional, but strongly recommended. The working screen's "What I'm trying differently" callout shows `display_cues.intervention` (falling back to `intervention`); the "Predicted break" / "Evidence to notice" pair shows `display_cues.predicted_break` and `display_cues.evidence` (falling back to `predicted_break` and `evidence_to_notice`). The Knock's "Sort of" replay shows a brief "You noticed it early." acknowledgment, then the predicted-break cue and the intervention cue together, kept extremely short, then "Try the intervention and stay with the practice." Each cue is a short, plain-language, one-sentence compression that you write yourself; it must never contradict, soften, or add a new claim beyond what they said. Keep each cue under roughly 15 words.
+- `check_in` and `hard_stop` — use the Coaching Loop values shown above exactly. Do not change them. `capture_no_reason` stays `true` — on "No," the Knock asks "What happened?", records the answer, then shows the fixed evidence reminder "Record it. That is evidence, not failure." with no shame and no motivational speech, and never the private why. Hard stop stays disabled unless the specific practice genuinely requires a hard cutoff, in which case set `hard_stop.enabled` to `true` and write a plain, non-alarming message.
+- `exit_prompts` — six entries total: the five fixed Coaching Loop prompts shown above, in order, with your generated evidence question (see "The generated evidence question" above) filling index 2. The generated Exit Log answer is stored in a dedicated `observed_evidence` field in the log row, separate from — and never overwriting — `evidence_to_notice` in the DATA object.
+- `prior_log_rows` — leave as `[]` unless the person pasted a prior CSV log before the interview. If they pasted the old 13-column Focus File log format (columns: `date, block, planned_start, actual_start, planned_finish, actual_finish, output, action_list_checks, check_in_responses, what_got_done, how_it_felt, what_got_in_the_way, next_block_start`), place each row here exactly as given, unmodified — the template detects and separates old-format rows itself. If they pasted a current-format Coaching Loop log (matching this CSV schema: `date, practice, planned_start, actual_start, planned_finish, actual_finish, intervention_tested, practice_step_checks, check_in_responses, practice_happened, predicted_pattern_seen, observed_evidence, what_helped, what_did_not_work, next_adjustment`), parse each row into an object with those exact keys and place them here in chronological order. Older Coaching Loop rows saved before `observed_evidence` existed simply have that key blank — leave it blank rather than inventing a value.
 
 ## Fill the frozen Coaching Loop Practice File template — do not build a new file
 
@@ -147,7 +167,7 @@ Before outputting the final HTML, silently verify:
 - `practice_target` names one observable attempt, not a general habit.
 - `start_time`, `planned_finish`, and `start_location` are specific.
 - `check_in` and `hard_stop` match the Coaching Loop values exactly, including `capture_no_reason: true`.
-- `exit_prompts` is exactly the five Coaching Loop prompts shown above, unchanged.
+- `exit_prompts` has exactly six entries: the five fixed Coaching Loop prompts in order, unchanged, with your generated evidence question faithfully derived from `evidence_to_notice` at index 2.
 - You have not changed one character of the template outside the DATA block.
 - No external calls, fonts, scripts, or dependencies were added anywhere.
 
@@ -160,10 +180,12 @@ If anything required is missing, ask one more question instead of guessing or le
 - The log is evidence, never a grade — it exists to show what happened, not to score the person.
 - You do the decomposition; the user never breaks down their own practice steps.
 - `practice_target` is the dominant object on the working screen, not a generic title or finish line.
-- The Knock's "Sort of" reply shows the predicted-break cue and the intervention cue together, kept extremely short; the "No" reply optionally captures what happened, then shows the fixed evidence reminder — never shame, never a motivational speech.
+- The Knock's "Sort of" reply is supportive: "You noticed it early." then the predicted-break cue and the intervention cue together, kept extremely short, then "Try the intervention and stay with the practice." The "No" reply asks "What happened?", captures the answer, then shows "Record it. That is evidence, not failure." — never shame, never a stern task-completion message, and never the private why.
+- The feeling question accepts the first genuine answer, even brief or physical ("My butt will hurt" is a complete answer) — at most one follow-up, only if the answer is generic or performative.
 - Honesty is invited, never extracted: privacy stated before the why, at most one pass past the first answer, then move.
 - No PHI, diagnoses, or clinical detail belongs in this file — it is behavioral evidence about a practice attempt, not a clinical record.
-- Everything runs offline, with no account, entirely in the person's own browser.
+- The person may run this alone or with a therapist, coach, teacher, or trusted partner — the file is an accountability partner between conversations, not a replacement for either.
+- Everything runs offline, with no account, entirely in the person's own browser. The frozen template's Exit Log includes a "COPY FOR NEXT INTERVIEW" action that builds a clean, pasteable packet of this attempt — you do not build this yourself, it is already wired into the template.
 - This is Coaching Loop, not Ignition and not Explorer. Do not frame the block as ordinary task output or as answering an open question — it is one bounded practice attempt that produces evidence.
 
 ## Begin
@@ -741,6 +763,21 @@ input.text-input {
   margin-bottom: 14px;
 }
 
+/* ---------- next-interview handoff: appears only after the Exit Log
+   is saved (see each mode's fragment.js) ---------- */
+.handoff-area {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.handoff-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  max-width: 560px;
+}
+
 .legacy-note {
   margin: 0 0 14px;
   padding: 11px 14px;
@@ -977,6 +1014,28 @@ th {
   #topBar { white-space: normal; text-align: right; }
 }
 
+/* ---------- print: keep the mode's dominant object, its steps/written
+   outputs, and its reminders; drop interactive controls, overlays, and
+   anything that only makes sense on screen ---------- */
+@media print {
+  body::before { display: none; }
+  body { background: #fff; }
+  .site-bar { background: none; border-bottom: 1px solid #999; backdrop-filter: none; }
+  main { width: 100%; margin: 0; }
+  .sheet, .exit-card, .log-card { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
+  .action-zone,
+  .utility-row,
+  .log-actions,
+  .handoff-area,
+  .controls,
+  .overlay,
+  .toast,
+  .error-banner { display: none !important; }
+  input[type="time"] { border: 0; }
+  textarea { border: 1px solid #999; min-height: 64px; }
+  .step input { border: 1px solid #333; }
+}
+
 /* ---------- mode-specific additions (coaching-loop) ---------- */
 /* Coaching Loop -- mode-specific styling on top of _shared/foundation.css */
 /* No mode-specific overrides beyond the shared foundation are needed yet;
@@ -1071,6 +1130,10 @@ th {
     <div class="auto-recorded" id="autoRecorded"></div>
     <p class="section-label quick-exit-label">Quick exit log</p>
     <form id="exitForm" class="exit-form"></form>
+    <div id="handoffArea" class="handoff-area hidden">
+      <button id="copyNextInterview" class="secondary" type="button">COPY FOR NEXT INTERVIEW</button>
+      <p class="handoff-note" id="handoffNote"></p>
+    </div>
   </section>
 
   <section id="logSection" class="log-card hidden" aria-labelledby="log-heading">
@@ -1096,7 +1159,7 @@ th {
     </div>
 
     <div id="noReasonWrap" class="no-reason-wrap hidden">
-      <label for="noReasonInput" id="noReasonLabel">What happened? (optional)</label>
+      <label for="noReasonInput" id="noReasonLabel">What happened?</label>
       <input id="noReasonInput" class="text-input" type="text" placeholder="Optional">
       <div class="modal-actions">
         <button id="submitNoReason" type="button">Continue</button>
@@ -1184,8 +1247,8 @@ th {
     "min_minutes": 20,
     "max_minutes": 25,
     "yes_response": "Good. Keep practicing.",
-    "sort_of_response": "",
-    "no_response": "Record what broke. That is evidence for the next attempt.",
+    "sort_of_response": "Try the intervention and stay with the practice.",
+    "no_response": "Record it. That is evidence, not failure.",
     "capture_no_reason": true,
     "replay_instruction": ""
   },
@@ -1196,6 +1259,7 @@ th {
   "exit_prompts": [
     "Did the planned practice happen?",
     "Where did the predicted pattern appear?",
+    "When the urge appeared, did the barrier hold, and what happened next?",
     "What helped you stay with the practice?",
     "What did not work, or worked differently than expected?",
     "What should change in the next attempt?"
@@ -1591,6 +1655,24 @@ function buildExitForm(formEl, prompts, requiredMask) {
   return inputs;
 }
 
+/* ---------- next-interview handoff: builds a clean, plain-text packet
+   from the block that was just saved, so it can be pasted straight into
+   a fresh AI chat to seed the next interview. This runs entirely in the
+   person's browser -- it never sends anything anywhere on its own; the
+   person chooses when and where to paste it. Empty/unanswered fields are
+   silently skipped so the packet stays compact. ---------- */
+function buildNextInterviewPacket(instructionLine, pairs) {
+  var lines = [instructionLine, ''];
+  pairs.forEach(function (pair) {
+    var value = pair.value;
+    if (value === undefined || value === null) return;
+    value = String(value).trim();
+    if (!value) return;
+    lines.push(pair.label + ': ' + value);
+  });
+  return lines.join('\n');
+}
+
 /* ---------- renders a cumulative log table from an explicit column
    list (each mode defines its own visible columns/order) ---------- */
 function renderLogTable(container, rows, columns, emptyMessage, onDeleteRow) {
@@ -1661,7 +1743,7 @@ var CSV_HEADER = [
   'date', 'practice', 'planned_start', 'actual_start', 'planned_finish',
   'actual_finish', 'intervention_tested', 'practice_step_checks',
   'check_in_responses', 'practice_happened', 'predicted_pattern_seen',
-  'what_helped', 'what_did_not_work', 'next_adjustment'
+  'observed_evidence', 'what_helped', 'what_did_not_work', 'next_adjustment'
 ];
 
 function validate(data) {
@@ -1698,8 +1780,8 @@ function validate(data) {
       errors.push('check_in.min_minutes / check_in.max_minutes must be numbers.');
     }
   }
-  if (!Array.isArray(data.exit_prompts) || data.exit_prompts.length !== 5) {
-    errors.push('exit_prompts must be an array of exactly 5 prompts.');
+  if (!Array.isArray(data.exit_prompts) || data.exit_prompts.length !== 6) {
+    errors.push('exit_prompts must be an array of exactly 6 prompts (the third being the generated evidence question).');
   }
   return errors;
 }
@@ -1765,7 +1847,7 @@ function runFocusFile(data) {
   /* ---------- knock overlay static text ---------- */
   document.getElementById('knock-title').textContent = checkIn.title || 'The knock';
   document.getElementById('knockQuestion').textContent = checkIn.question || 'Is the practice holding?';
-  document.getElementById('noReasonLabel').textContent = checkIn.no_response || 'What happened? (optional)';
+  document.getElementById('noReasonLabel').textContent = 'What happened?';
 
   /* ---------- element refs ---------- */
   var beginBlock = document.getElementById('beginBlock');
@@ -1843,15 +1925,24 @@ function runFocusFile(data) {
     replay.className = 'replay';
 
     if (choice === 'Sort of') {
+      var noticed = document.createElement('p');
+      var noticedStrong = document.createElement('strong');
+      noticedStrong.textContent = 'You noticed it early.';
+      noticed.appendChild(noticedStrong);
+      replay.appendChild(noticed);
       addReplayLine(replay, 'Predicted break', displayCues.predicted_break || data.predicted_break);
       addReplayLine(replay, 'What you’re trying differently', displayCues.intervention || data.intervention);
+      var tryLine = document.createElement('p');
+      tryLine.className = 'quote';
+      tryLine.textContent = checkIn.sort_of_response || 'Try the intervention and stay with the practice.';
+      replay.appendChild(tryLine);
     } else {
       var reminder = document.createElement('div');
       reminder.className = 'label';
-      reminder.textContent = 'Evidence, not a grade';
+      reminder.textContent = 'Evidence, not failure';
       var reminderText = document.createElement('p');
       reminderText.className = 'quote';
-      reminderText.textContent = 'Record what broke. That is evidence for the next attempt.';
+      reminderText.textContent = checkIn.no_response || 'Record it. That is evidence, not failure.';
       replay.appendChild(reminder);
       replay.appendChild(reminderText);
     }
@@ -1927,6 +2018,7 @@ function runFocusFile(data) {
       { label: 'Practice', field: 'practice' },
       { label: 'Intervention', field: 'intervention_tested' },
       { label: 'Predicted pattern seen', field: 'predicted_pattern_seen' },
+      { label: 'Observed evidence', field: 'observed_evidence' },
       { label: 'Next adjustment', field: 'next_adjustment' }
     ], 'No entries yet. Complete the Exit log to add the first attempt.', function (index) {
       var current = getStoredRows(STORAGE_KEY);
@@ -2037,6 +2129,8 @@ function runFocusFile(data) {
     revealExitLog();
   });
 
+  var lastHandoffText = '';
+
   exitForm.addEventListener('submit', function (event) {
     event.preventDefault();
     var row = {
@@ -2051,9 +2145,10 @@ function runFocusFile(data) {
       check_in_responses: capturedCheckinResponses,
       practice_happened: exitInputs[0].value.trim(),
       predicted_pattern_seen: exitInputs[1].value.trim(),
-      what_helped: exitInputs[2].value.trim(),
-      what_did_not_work: exitInputs[3].value.trim(),
-      next_adjustment: exitInputs[4].value.trim()
+      observed_evidence: exitInputs[2].value.trim(),
+      what_helped: exitInputs[3].value.trim(),
+      what_did_not_work: exitInputs[4].value.trim(),
+      next_adjustment: exitInputs[5].value.trim()
     };
 
     var rows = getStoredRows(STORAGE_KEY);
@@ -2066,6 +2161,31 @@ function runFocusFile(data) {
     document.getElementById('saveExit').textContent = 'SAVED TO LOG';
     showToast(toast, 'Exit log saved');
     winBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    lastHandoffText = buildNextInterviewPacket('Use this previous block record to help build my next block.', [
+      { label: 'Mode', value: 'Coaching Loop' },
+      { label: 'Practice', value: row.practice },
+      { label: 'Planned start', value: row.planned_start },
+      { label: 'Actual start', value: row.actual_start },
+      { label: 'Planned finish', value: row.planned_finish },
+      { label: 'Actual finish', value: row.actual_finish },
+      { label: 'Intervention tested', value: row.intervention_tested },
+      { label: 'Practice step checks', value: row.practice_step_checks },
+      { label: 'Check-in responses', value: row.check_in_responses },
+      { label: 'Practice happened', value: row.practice_happened },
+      { label: 'Predicted pattern seen', value: row.predicted_pattern_seen },
+      { label: 'Observed evidence', value: row.observed_evidence },
+      { label: 'What helped', value: row.what_helped },
+      { label: 'What did not work', value: row.what_did_not_work },
+      { label: 'Next adjustment', value: row.next_adjustment }
+    ]);
+    document.getElementById('handoffNote').textContent =
+      'Paste this into your next interview so the next attempt can be adjusted from what actually happened.';
+    document.getElementById('handoffArea').classList.remove('hidden');
+  });
+
+  document.getElementById('copyNextInterview').addEventListener('click', function () {
+    copyToClipboardOrPrompt(lastHandoffText, function () { showToast(toast, 'Copied for next interview'); }, 'Copy this for your next interview:');
   });
 
   document.getElementById('copyCsv').addEventListener('click', function () {

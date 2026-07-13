@@ -199,10 +199,15 @@ function runFocusFile(data) {
       replay.appendChild(sortLabel);
       replay.appendChild(sortText);
     } else {
+      var stop = document.createElement('p');
+      var stopStrong = document.createElement('strong');
+      stopStrong.textContent = 'Stop gathering.';
+      stop.appendChild(stopStrong);
+      replay.appendChild(stop);
       addReplayLine(replay, 'The question', displayCues.question || data.answerable_question);
       var instruction = document.createElement('p');
       instruction.className = 'quote';
-      instruction.textContent = 'Write the best answer the research already supports.';
+      instruction.textContent = checkIn.no_response || 'Write the best answer you have now, even if it is incomplete.';
       replay.appendChild(instruction);
     }
 
@@ -362,6 +367,8 @@ function runFocusFile(data) {
     revealExitLog();
   });
 
+  var lastHandoffText = '';
+
   exitForm.addEventListener('submit', function (event) {
     event.preventDefault();
     var row = {
@@ -391,6 +398,31 @@ function runFocusFile(data) {
     document.getElementById('saveExit').textContent = 'SAVED TO LOG';
     showToast(toast, 'Exit log saved');
     winBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    lastHandoffText = buildNextInterviewPacket('Use this previous block record to help build my next block.', [
+      { label: 'Mode', value: 'Explorer' },
+      { label: 'Inquiry', value: data.title },
+      { label: 'Question', value: row.question },
+      { label: 'Blocked move', value: row.blocked_move },
+      { label: 'Planned start', value: row.planned_start },
+      { label: 'Actual start', value: row.actual_start },
+      { label: 'Planned finish', value: row.planned_finish },
+      { label: 'Actual finish', value: row.actual_finish },
+      { label: 'Written output checks', value: row.written_output_checks },
+      { label: 'Check-in responses', value: row.check_in_responses },
+      { label: 'Answer reached', value: row.answer_reached },
+      { label: 'Evidence that mattered', value: row.evidence_that_mattered },
+      { label: 'Remaining unknown', value: row.remaining_unknown },
+      { label: 'Research avoidance', value: row.research_avoidance },
+      { label: 'Next move', value: row.next_move }
+    ]);
+    document.getElementById('handoffNote').textContent =
+      'Paste this into your next interview so the next block can begin from the working hypothesis and remaining unknowns.';
+    document.getElementById('handoffArea').classList.remove('hidden');
+  });
+
+  document.getElementById('copyNextInterview').addEventListener('click', function () {
+    copyToClipboardOrPrompt(lastHandoffText, function () { showToast(toast, 'Copied for next interview'); }, 'Copy this for your next interview:');
   });
 
   document.getElementById('copyCsv').addEventListener('click', function () {

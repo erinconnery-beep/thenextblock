@@ -196,8 +196,22 @@ function runFocusFile(data) {
     replay.className = 'replay';
 
     if (choice === 'Sort of') {
+      var caught = document.createElement('p');
+      var caughtStrong = document.createElement('strong');
+      caughtStrong.textContent = 'You caught it.';
+      caught.appendChild(caughtStrong);
+      replay.appendChild(caught);
       addReplayLine(replay, 'Watch for', displayCues.avoidance || data.avoidance_move);
+      var closeLine = document.createElement('p');
+      closeLine.className = 'quote';
+      closeLine.textContent = checkIn.sort_of_response || 'Close it and return to the next step.';
+      replay.appendChild(closeLine);
     } else {
+      var stop = document.createElement('p');
+      var stopStrong = document.createElement('strong');
+      stopStrong.textContent = checkIn.no_response || 'Stop. Return to the block now.';
+      stop.appendChild(stopStrong);
+      replay.appendChild(stop);
       addReplayLine(replay, 'Why you’re back', displayCues.why || data.why);
     }
 
@@ -383,6 +397,8 @@ function runFocusFile(data) {
     revealExitLog();
   });
 
+  var lastHandoffText = '';
+
   exitForm.addEventListener('submit', function (event) {
     event.preventDefault();
     var row = {
@@ -412,6 +428,30 @@ function runFocusFile(data) {
     document.getElementById('saveExit').textContent = 'SAVED TO LOG';
     showToast(toast, 'Exit log saved');
     winBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    lastHandoffText = buildNextInterviewPacket('Use this previous block record to help build my next block.', [
+      { label: 'Mode', value: 'Ignition' },
+      { label: 'Block', value: row.block },
+      { label: 'Planned start', value: row.planned_start },
+      { label: 'Actual start', value: row.actual_start },
+      { label: 'Planned finish', value: row.planned_finish },
+      { label: 'Actual finish', value: row.actual_finish },
+      { label: 'Output target', value: row.output_target },
+      { label: 'Action list checks', value: row.action_list_checks },
+      { label: 'Check-in responses', value: row.check_in_responses },
+      { label: 'Finished as planned', value: row.finished_as_planned },
+      { label: 'Output produced', value: row.output_produced },
+      { label: 'How it felt', value: row.how_it_felt },
+      { label: 'What pulled me away', value: row.what_pulled_me_away },
+      { label: 'Next block start', value: row.next_block_start }
+    ]);
+    document.getElementById('handoffNote').textContent =
+      'Paste this into your next interview so the next block can start where this one actually ended.';
+    document.getElementById('handoffArea').classList.remove('hidden');
+  });
+
+  document.getElementById('copyNextInterview').addEventListener('click', function () {
+    copyToClipboardOrPrompt(lastHandoffText, function () { showToast(toast, 'Copied for next interview'); }, 'Copy this for your next interview:');
   });
 
   document.getElementById('copyCsv').addEventListener('click', function () {

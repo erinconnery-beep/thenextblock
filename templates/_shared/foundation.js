@@ -381,6 +381,24 @@ function buildExitForm(formEl, prompts, requiredMask) {
   return inputs;
 }
 
+/* ---------- next-interview handoff: builds a clean, plain-text packet
+   from the block that was just saved, so it can be pasted straight into
+   a fresh AI chat to seed the next interview. This runs entirely in the
+   person's browser -- it never sends anything anywhere on its own; the
+   person chooses when and where to paste it. Empty/unanswered fields are
+   silently skipped so the packet stays compact. ---------- */
+function buildNextInterviewPacket(instructionLine, pairs) {
+  var lines = [instructionLine, ''];
+  pairs.forEach(function (pair) {
+    var value = pair.value;
+    if (value === undefined || value === null) return;
+    value = String(value).trim();
+    if (!value) return;
+    lines.push(pair.label + ': ' + value);
+  });
+  return lines.join('\n');
+}
+
 /* ---------- renders a cumulative log table from an explicit column
    list (each mode defines its own visible columns/order) ---------- */
 function renderLogTable(container, rows, columns, emptyMessage, onDeleteRow) {

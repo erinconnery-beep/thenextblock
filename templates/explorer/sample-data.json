@@ -47,7 +47,7 @@
     "max_minutes": 25,
     "yes_response": "Good. Keep going.",
     "sort_of_response": "Write down what you have before you open anything else.",
-    "no_response": "Write the best answer the research already supports.",
+    "no_response": "Write the best answer you have now, even if it is incomplete.",
     "capture_no_reason": false,
     "replay_instruction": ""
   },

@@ -68,10 +68,12 @@ const MODES = [
       "exit_prompts", "prior_log_rows"
     ],
     listField: "practice_protocol",
-    expectedCsvHeader: "date,practice,planned_start,actual_start,planned_finish,actual_finish,intervention_tested,practice_step_checks,check_in_responses,practice_happened,predicted_pattern_seen,what_helped,what_did_not_work,next_adjustment",
+    expectedCsvHeader: "date,practice,planned_start,actual_start,planned_finish,actual_finish,intervention_tested,practice_step_checks,check_in_responses,practice_happened,predicted_pattern_seen,observed_evidence,what_helped,what_did_not_work,next_adjustment",
+    expectedExitPromptsCount: 6,
     expectedExitPrompts: [
       "Did the planned practice happen?",
       "Where did the predicted pattern appear?",
+      "When the urge appeared, did the barrier hold, and what happened next?",
       "What helped you stay with the practice?",
       "What did not work, or worked differently than expected?",
       "What should change in the next attempt?"
@@ -197,13 +199,14 @@ function checkDataSchema(data, mode, label) {
     fail(`${label}: hard_stop is missing or not an object.`);
   }
 
-  if (Array.isArray(data.exit_prompts) && data.exit_prompts.length === 5) {
-    pass(`${label}: exit_prompts has exactly 5 entries.`);
+  const expectedCount = mode.expectedExitPromptsCount || 5;
+  if (Array.isArray(data.exit_prompts) && data.exit_prompts.length === expectedCount) {
+    pass(`${label}: exit_prompts has exactly ${expectedCount} entries.`);
     const mismatches = mode.expectedExitPrompts.filter((p, i) => data.exit_prompts[i] !== p);
     if (mismatches.length === 0) pass(`${label}: exit_prompts match the ${mode.label} spec exactly.`);
     else fail(`${label}: exit_prompts do not match the ${mode.label} spec. Got: ${JSON.stringify(data.exit_prompts)}`);
   } else {
-    fail(`${label}: exit_prompts must be an array of exactly 5 entries.`);
+    fail(`${label}: exit_prompts must be an array of exactly ${expectedCount} entries.`);
   }
 
   const list = data[mode.listField];

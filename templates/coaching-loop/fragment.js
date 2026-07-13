@@ -8,7 +8,7 @@ var CSV_HEADER = [
   'date', 'practice', 'planned_start', 'actual_start', 'planned_finish',
   'actual_finish', 'intervention_tested', 'practice_step_checks',
   'check_in_responses', 'practice_happened', 'predicted_pattern_seen',
-  'what_helped', 'what_did_not_work', 'next_adjustment'
+  'observed_evidence', 'what_helped', 'what_did_not_work', 'next_adjustment'
 ];
 
 function validate(data) {
@@ -45,8 +45,8 @@ function validate(data) {
       errors.push('check_in.min_minutes / check_in.max_minutes must be numbers.');
     }
   }
-  if (!Array.isArray(data.exit_prompts) || data.exit_prompts.length !== 5) {
-    errors.push('exit_prompts must be an array of exactly 5 prompts.');
+  if (!Array.isArray(data.exit_prompts) || data.exit_prompts.length !== 6) {
+    errors.push('exit_prompts must be an array of exactly 6 prompts (the third being the generated evidence question).');
   }
   return errors;
 }
@@ -112,7 +112,7 @@ function runFocusFile(data) {
   /* ---------- knock overlay static text ---------- */
   document.getElementById('knock-title').textContent = checkIn.title || 'The knock';
   document.getElementById('knockQuestion').textContent = checkIn.question || 'Is the practice holding?';
-  document.getElementById('noReasonLabel').textContent = checkIn.no_response || 'What happened? (optional)';
+  document.getElementById('noReasonLabel').textContent = 'What happened?';
 
   /* ---------- element refs ---------- */
   var beginBlock = document.getElementById('beginBlock');
@@ -190,15 +190,24 @@ function runFocusFile(data) {
     replay.className = 'replay';
 
     if (choice === 'Sort of') {
+      var noticed = document.createElement('p');
+      var noticedStrong = document.createElement('strong');
+      noticedStrong.textContent = 'You noticed it early.';
+      noticed.appendChild(noticedStrong);
+      replay.appendChild(noticed);
       addReplayLine(replay, 'Predicted break', displayCues.predicted_break || data.predicted_break);
       addReplayLine(replay, 'What you’re trying differently', displayCues.intervention || data.intervention);
+      var tryLine = document.createElement('p');
+      tryLine.className = 'quote';
+      tryLine.textContent = checkIn.sort_of_response || 'Try the intervention and stay with the practice.';
+      replay.appendChild(tryLine);
     } else {
       var reminder = document.createElement('div');
       reminder.className = 'label';
-      reminder.textContent = 'Evidence, not a grade';
+      reminder.textContent = 'Evidence, not failure';
       var reminderText = document.createElement('p');
       reminderText.className = 'quote';
-      reminderText.textContent = 'Record what broke. That is evidence for the next attempt.';
+      reminderText.textContent = checkIn.no_response || 'Record it. That is evidence, not failure.';
       replay.appendChild(reminder);
       replay.appendChild(reminderText);
     }
@@ -274,6 +283,7 @@ function runFocusFile(data) {
       { label: 'Practice', field: 'practice' },
       { label: 'Intervention', field: 'intervention_tested' },
       { label: 'Predicted pattern seen', field: 'predicted_pattern_seen' },
+      { label: 'Observed evidence', field: 'observed_evidence' },
       { label: 'Next adjustment', field: 'next_adjustment' }
     ], 'No entries yet. Complete the Exit log to add the first attempt.', function (index) {
       var current = getStoredRows(STORAGE_KEY);
@@ -384,6 +394,8 @@ function runFocusFile(data) {
     revealExitLog();
   });
 
+  var lastHandoffText = '';
+
   exitForm.addEventListener('submit', function (event) {
     event.preventDefault();
     var row = {
@@ -398,9 +410,10 @@ function runFocusFile(data) {
       check_in_responses: capturedCheckinResponses,
       practice_happened: exitInputs[0].value.trim(),
       predicted_pattern_seen: exitInputs[1].value.trim(),
-      what_helped: exitInputs[2].value.trim(),
-      what_did_not_work: exitInputs[3].value.trim(),
-      next_adjustment: exitInputs[4].value.trim()
+      observed_evidence: exitInputs[2].value.trim(),
+      what_helped: exitInputs[3].value.trim(),
+      what_did_not_work: exitInputs[4].value.trim(),
+      next_adjustment: exitInputs[5].value.trim()
     };
 
     var rows = getStoredRows(STORAGE_KEY);
@@ -413,6 +426,31 @@ function runFocusFile(data) {
     document.getElementById('saveExit').textContent = 'SAVED TO LOG';
     showToast(toast, 'Exit log saved');
     winBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    lastHandoffText = buildNextInterviewPacket('Use this previous block record to help build my next block.', [
+      { label: 'Mode', value: 'Coaching Loop' },
+      { label: 'Practice', value: row.practice },
+      { label: 'Planned start', value: row.planned_start },
+      { label: 'Actual start', value: row.actual_start },
+      { label: 'Planned finish', value: row.planned_finish },
+      { label: 'Actual finish', value: row.actual_finish },
+      { label: 'Intervention tested', value: row.intervention_tested },
+      { label: 'Practice step checks', value: row.practice_step_checks },
+      { label: 'Check-in responses', value: row.check_in_responses },
+      { label: 'Practice happened', value: row.practice_happened },
+      { label: 'Predicted pattern seen', value: row.predicted_pattern_seen },
+      { label: 'Observed evidence', value: row.observed_evidence },
+      { label: 'What helped', value: row.what_helped },
+      { label: 'What did not work', value: row.what_did_not_work },
+      { label: 'Next adjustment', value: row.next_adjustment }
+    ]);
+    document.getElementById('handoffNote').textContent =
+      'Paste this into your next interview so the next attempt can be adjusted from what actually happened.';
+    document.getElementById('handoffArea').classList.remove('hidden');
+  });
+
+  document.getElementById('copyNextInterview').addEventListener('click', function () {
+    copyToClipboardOrPrompt(lastHandoffText, function () { showToast(toast, 'Copied for next interview'); }, 'Copy this for your next interview:');
   });
 
   document.getElementById('copyCsv').addEventListener('click', function () {

@@ -560,6 +560,21 @@ input.text-input {
   margin-bottom: 14px;
 }
 
+/* ---------- next-interview handoff: appears only after the Exit Log
+   is saved (see each mode's fragment.js) ---------- */
+.handoff-area {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.handoff-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  max-width: 560px;
+}
+
 .legacy-note {
   margin: 0 0 14px;
   padding: 11px 14px;
@@ -796,6 +811,28 @@ th {
   #topBar { white-space: normal; text-align: right; }
 }
 
+/* ---------- print: keep the mode's dominant object, its steps/written
+   outputs, and its reminders; drop interactive controls, overlays, and
+   anything that only makes sense on screen ---------- */
+@media print {
+  body::before { display: none; }
+  body { background: #fff; }
+  .site-bar { background: none; border-bottom: 1px solid #999; backdrop-filter: none; }
+  main { width: 100%; margin: 0; }
+  .sheet, .exit-card, .log-card { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
+  .action-zone,
+  .utility-row,
+  .log-actions,
+  .handoff-area,
+  .controls,
+  .overlay,
+  .toast,
+  .error-banner { display: none !important; }
+  input[type="time"] { border: 0; }
+  textarea { border: 1px solid #999; min-height: 64px; }
+  .step input { border: 1px solid #333; }
+}
+
 /* ---------- mode-specific additions (ignition) ---------- */
 /* Ignition -- mode-specific styling on top of _shared/foundation.css */
 
@@ -895,6 +932,10 @@ th {
     <div class="auto-recorded" id="autoRecorded"></div>
     <p class="section-label quick-exit-label">Quick exit log</p>
     <form id="exitForm" class="exit-form"></form>
+    <div id="handoffArea" class="handoff-area hidden">
+      <button id="copyNextInterview" class="secondary" type="button">COPY FOR NEXT INTERVIEW</button>
+      <p class="handoff-note" id="handoffNote"></p>
+    </div>
   </section>
 
   <section id="logSection" class="log-card hidden" aria-labelledby="log-heading">
@@ -999,8 +1040,8 @@ th {
     "min_minutes": 28,
     "max_minutes": 34,
     "yes_response": "Good. Back to the work.",
-    "sort_of_response": "Return to the block.",
-    "no_response": "Name what pulled you off, then return to the next job.",
+    "sort_of_response": "Close it and return to the next step.",
+    "no_response": "Stop. Return to the block now.",
     "capture_no_reason": false,
     "replay_instruction": ""
   },
@@ -1406,6 +1447,24 @@ function buildExitForm(formEl, prompts, requiredMask) {
   return inputs;
 }
 
+/* ---------- next-interview handoff: builds a clean, plain-text packet
+   from the block that was just saved, so it can be pasted straight into
+   a fresh AI chat to seed the next interview. This runs entirely in the
+   person's browser -- it never sends anything anywhere on its own; the
+   person chooses when and where to paste it. Empty/unanswered fields are
+   silently skipped so the packet stays compact. ---------- */
+function buildNextInterviewPacket(instructionLine, pairs) {
+  var lines = [instructionLine, ''];
+  pairs.forEach(function (pair) {
+    var value = pair.value;
+    if (value === undefined || value === null) return;
+    value = String(value).trim();
+    if (!value) return;
+    lines.push(pair.label + ': ' + value);
+  });
+  return lines.join('\n');
+}
+
 /* ---------- renders a cumulative log table from an explicit column
    list (each mode defines its own visible columns/order) ---------- */
 function renderLogTable(container, rows, columns, emptyMessage, onDeleteRow) {
@@ -1664,8 +1723,22 @@ function runFocusFile(data) {
     replay.className = 'replay';
 
     if (choice === 'Sort of') {
+      var caught = document.createElement('p');
+      var caughtStrong = document.createElement('strong');
+      caughtStrong.textContent = 'You caught it.';
+      caught.appendChild(caughtStrong);
+      replay.appendChild(caught);
       addReplayLine(replay, 'Watch for', displayCues.avoidance || data.avoidance_move);
+      var closeLine = document.createElement('p');
+      closeLine.className = 'quote';
+      closeLine.textContent = checkIn.sort_of_response || 'Close it and return to the next step.';
+      replay.appendChild(closeLine);
     } else {
+      var stop = document.createElement('p');
+      var stopStrong = document.createElement('strong');
+      stopStrong.textContent = checkIn.no_response || 'Stop. Return to the block now.';
+      stop.appendChild(stopStrong);
+      replay.appendChild(stop);
       addReplayLine(replay, 'Why you’re back', displayCues.why || data.why);
     }
 
@@ -1851,6 +1924,8 @@ function runFocusFile(data) {
     revealExitLog();
   });
 
+  var lastHandoffText = '';
+
   exitForm.addEventListener('submit', function (event) {
     event.preventDefault();
     var row = {
@@ -1880,6 +1955,30 @@ function runFocusFile(data) {
     document.getElementById('saveExit').textContent = 'SAVED TO LOG';
     showToast(toast, 'Exit log saved');
     winBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    lastHandoffText = buildNextInterviewPacket('Use this previous block record to help build my next block.', [
+      { label: 'Mode', value: 'Ignition' },
+      { label: 'Block', value: row.block },
+      { label: 'Planned start', value: row.planned_start },
+      { label: 'Actual start', value: row.actual_start },
+      { label: 'Planned finish', value: row.planned_finish },
+      { label: 'Actual finish', value: row.actual_finish },
+      { label: 'Output target', value: row.output_target },
+      { label: 'Action list checks', value: row.action_list_checks },
+      { label: 'Check-in responses', value: row.check_in_responses },
+      { label: 'Finished as planned', value: row.finished_as_planned },
+      { label: 'Output produced', value: row.output_produced },
+      { label: 'How it felt', value: row.how_it_felt },
+      { label: 'What pulled me away', value: row.what_pulled_me_away },
+      { label: 'Next block start', value: row.next_block_start }
+    ]);
+    document.getElementById('handoffNote').textContent =
+      'Paste this into your next interview so the next block can start where this one actually ended.';
+    document.getElementById('handoffArea').classList.remove('hidden');
+  });
+
+  document.getElementById('copyNextInterview').addEventListener('click', function () {
+    copyToClipboardOrPrompt(lastHandoffText, function () { showToast(toast, 'Copied for next interview'); }, 'Copy this for your next interview:');
   });
 
   document.getElementById('copyCsv').addEventListener('click', function () {

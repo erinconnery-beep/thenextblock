@@ -560,6 +560,21 @@ input.text-input {
   margin-bottom: 14px;
 }
 
+/* ---------- next-interview handoff: appears only after the Exit Log
+   is saved (see each mode's fragment.js) ---------- */
+.handoff-area {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.handoff-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  max-width: 560px;
+}
+
 .legacy-note {
   margin: 0 0 14px;
   padding: 11px 14px;
@@ -796,6 +811,28 @@ th {
   #topBar { white-space: normal; text-align: right; }
 }
 
+/* ---------- print: keep the mode's dominant object, its steps/written
+   outputs, and its reminders; drop interactive controls, overlays, and
+   anything that only makes sense on screen ---------- */
+@media print {
+  body::before { display: none; }
+  body { background: #fff; }
+  .site-bar { background: none; border-bottom: 1px solid #999; backdrop-filter: none; }
+  main { width: 100%; margin: 0; }
+  .sheet, .exit-card, .log-card { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
+  .action-zone,
+  .utility-row,
+  .log-actions,
+  .handoff-area,
+  .controls,
+  .overlay,
+  .toast,
+  .error-banner { display: none !important; }
+  input[type="time"] { border: 0; }
+  textarea { border: 1px solid #999; min-height: 64px; }
+  .step input { border: 1px solid #333; }
+}
+
 /* ---------- mode-specific additions (coaching-loop) ---------- */
 /* Coaching Loop -- mode-specific styling on top of _shared/foundation.css */
 /* No mode-specific overrides beyond the shared foundation are needed yet;
@@ -890,6 +927,10 @@ th {
     <div class="auto-recorded" id="autoRecorded"></div>
     <p class="section-label quick-exit-label">Quick exit log</p>
     <form id="exitForm" class="exit-form"></form>
+    <div id="handoffArea" class="handoff-area hidden">
+      <button id="copyNextInterview" class="secondary" type="button">COPY FOR NEXT INTERVIEW</button>
+      <p class="handoff-note" id="handoffNote"></p>
+    </div>
   </section>
 
   <section id="logSection" class="log-card hidden" aria-labelledby="log-heading">
@@ -915,7 +956,7 @@ th {
     </div>
 
     <div id="noReasonWrap" class="no-reason-wrap hidden">
-      <label for="noReasonInput" id="noReasonLabel">What happened? (optional)</label>
+      <label for="noReasonInput" id="noReasonLabel">What happened?</label>
       <input id="noReasonInput" class="text-input" type="text" placeholder="Optional">
       <div class="modal-actions">
         <button id="submitNoReason" type="button">Continue</button>
@@ -1003,8 +1044,8 @@ th {
     "min_minutes": 20,
     "max_minutes": 25,
     "yes_response": "Good. Keep practicing.",
-    "sort_of_response": "",
-    "no_response": "Record what broke. That is evidence for the next attempt.",
+    "sort_of_response": "Try the intervention and stay with the practice.",
+    "no_response": "Record it. That is evidence, not failure.",
     "capture_no_reason": true,
     "replay_instruction": ""
   },
@@ -1015,6 +1056,7 @@ th {
   "exit_prompts": [
     "Did the planned practice happen?",
     "Where did the predicted pattern appear?",
+    "When the urge appeared, did the barrier hold, and what happened next?",
     "What helped you stay with the practice?",
     "What did not work, or worked differently than expected?",
     "What should change in the next attempt?"
@@ -1410,6 +1452,24 @@ function buildExitForm(formEl, prompts, requiredMask) {
   return inputs;
 }
 
+/* ---------- next-interview handoff: builds a clean, plain-text packet
+   from the block that was just saved, so it can be pasted straight into
+   a fresh AI chat to seed the next interview. This runs entirely in the
+   person's browser -- it never sends anything anywhere on its own; the
+   person chooses when and where to paste it. Empty/unanswered fields are
+   silently skipped so the packet stays compact. ---------- */
+function buildNextInterviewPacket(instructionLine, pairs) {
+  var lines = [instructionLine, ''];
+  pairs.forEach(function (pair) {
+    var value = pair.value;
+    if (value === undefined || value === null) return;
+    value = String(value).trim();
+    if (!value) return;
+    lines.push(pair.label + ': ' + value);
+  });
+  return lines.join('\n');
+}
+
 /* ---------- renders a cumulative log table from an explicit column
    list (each mode defines its own visible columns/order) ---------- */
 function renderLogTable(container, rows, columns, emptyMessage, onDeleteRow) {
@@ -1480,7 +1540,7 @@ var CSV_HEADER = [
   'date', 'practice', 'planned_start', 'actual_start', 'planned_finish',
   'actual_finish', 'intervention_tested', 'practice_step_checks',
   'check_in_responses', 'practice_happened', 'predicted_pattern_seen',
-  'what_helped', 'what_did_not_work', 'next_adjustment'
+  'observed_evidence', 'what_helped', 'what_did_not_work', 'next_adjustment'
 ];
 
 function validate(data) {
@@ -1517,8 +1577,8 @@ function validate(data) {
       errors.push('check_in.min_minutes / check_in.max_minutes must be numbers.');
     }
   }
-  if (!Array.isArray(data.exit_prompts) || data.exit_prompts.length !== 5) {
-    errors.push('exit_prompts must be an array of exactly 5 prompts.');
+  if (!Array.isArray(data.exit_prompts) || data.exit_prompts.length !== 6) {
+    errors.push('exit_prompts must be an array of exactly 6 prompts (the third being the generated evidence question).');
   }
   return errors;
 }
@@ -1584,7 +1644,7 @@ function runFocusFile(data) {
   /* ---------- knock overlay static text ---------- */
   document.getElementById('knock-title').textContent = checkIn.title || 'The knock';
   document.getElementById('knockQuestion').textContent = checkIn.question || 'Is the practice holding?';
-  document.getElementById('noReasonLabel').textContent = checkIn.no_response || 'What happened? (optional)';
+  document.getElementById('noReasonLabel').textContent = 'What happened?';
 
   /* ---------- element refs ---------- */
   var beginBlock = document.getElementById('beginBlock');
@@ -1662,15 +1722,24 @@ function runFocusFile(data) {
     replay.className = 'replay';
 
     if (choice === 'Sort of') {
+      var noticed = document.createElement('p');
+      var noticedStrong = document.createElement('strong');
+      noticedStrong.textContent = 'You noticed it early.';
+      noticed.appendChild(noticedStrong);
+      replay.appendChild(noticed);
       addReplayLine(replay, 'Predicted break', displayCues.predicted_break || data.predicted_break);
       addReplayLine(replay, 'What you’re trying differently', displayCues.intervention || data.intervention);
+      var tryLine = document.createElement('p');
+      tryLine.className = 'quote';
+      tryLine.textContent = checkIn.sort_of_response || 'Try the intervention and stay with the practice.';
+      replay.appendChild(tryLine);
     } else {
       var reminder = document.createElement('div');
       reminder.className = 'label';
-      reminder.textContent = 'Evidence, not a grade';
+      reminder.textContent = 'Evidence, not failure';
       var reminderText = document.createElement('p');
       reminderText.className = 'quote';
-      reminderText.textContent = 'Record what broke. That is evidence for the next attempt.';
+      reminderText.textContent = checkIn.no_response || 'Record it. That is evidence, not failure.';
       replay.appendChild(reminder);
       replay.appendChild(reminderText);
     }
@@ -1746,6 +1815,7 @@ function runFocusFile(data) {
       { label: 'Practice', field: 'practice' },
       { label: 'Intervention', field: 'intervention_tested' },
       { label: 'Predicted pattern seen', field: 'predicted_pattern_seen' },
+      { label: 'Observed evidence', field: 'observed_evidence' },
       { label: 'Next adjustment', field: 'next_adjustment' }
     ], 'No entries yet. Complete the Exit log to add the first attempt.', function (index) {
       var current = getStoredRows(STORAGE_KEY);
@@ -1856,6 +1926,8 @@ function runFocusFile(data) {
     revealExitLog();
   });
 
+  var lastHandoffText = '';
+
   exitForm.addEventListener('submit', function (event) {
     event.preventDefault();
     var row = {
@@ -1870,9 +1942,10 @@ function runFocusFile(data) {
       check_in_responses: capturedCheckinResponses,
       practice_happened: exitInputs[0].value.trim(),
       predicted_pattern_seen: exitInputs[1].value.trim(),
-      what_helped: exitInputs[2].value.trim(),
-      what_did_not_work: exitInputs[3].value.trim(),
-      next_adjustment: exitInputs[4].value.trim()
+      observed_evidence: exitInputs[2].value.trim(),
+      what_helped: exitInputs[3].value.trim(),
+      what_did_not_work: exitInputs[4].value.trim(),
+      next_adjustment: exitInputs[5].value.trim()
     };
 
     var rows = getStoredRows(STORAGE_KEY);
@@ -1885,6 +1958,31 @@ function runFocusFile(data) {
     document.getElementById('saveExit').textContent = 'SAVED TO LOG';
     showToast(toast, 'Exit log saved');
     winBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    lastHandoffText = buildNextInterviewPacket('Use this previous block record to help build my next block.', [
+      { label: 'Mode', value: 'Coaching Loop' },
+      { label: 'Practice', value: row.practice },
+      { label: 'Planned start', value: row.planned_start },
+      { label: 'Actual start', value: row.actual_start },
+      { label: 'Planned finish', value: row.planned_finish },
+      { label: 'Actual finish', value: row.actual_finish },
+      { label: 'Intervention tested', value: row.intervention_tested },
+      { label: 'Practice step checks', value: row.practice_step_checks },
+      { label: 'Check-in responses', value: row.check_in_responses },
+      { label: 'Practice happened', value: row.practice_happened },
+      { label: 'Predicted pattern seen', value: row.predicted_pattern_seen },
+      { label: 'Observed evidence', value: row.observed_evidence },
+      { label: 'What helped', value: row.what_helped },
+      { label: 'What did not work', value: row.what_did_not_work },
+      { label: 'Next adjustment', value: row.next_adjustment }
+    ]);
+    document.getElementById('handoffNote').textContent =
+      'Paste this into your next interview so the next attempt can be adjusted from what actually happened.';
+    document.getElementById('handoffArea').classList.remove('hidden');
+  });
+
+  document.getElementById('copyNextInterview').addEventListener('click', function () {
+    copyToClipboardOrPrompt(lastHandoffText, function () { showToast(toast, 'Copied for next interview'); }, 'Copy this for your next interview:');
   });
 
   document.getElementById('copyCsv').addEventListener('click', function () {

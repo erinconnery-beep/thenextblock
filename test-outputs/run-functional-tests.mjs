@@ -163,10 +163,81 @@ async function testRealNoReasonCapture(label, path) {
   await new Promise((r) => setTimeout(r, 10));
   const noReasonWrap = doc.getElementById('noReasonWrap');
   check('real "No" reveals the optional reason field (capture_no_reason: true)', noReasonWrap && !noReasonWrap.classList.contains('hidden'));
+  check('the reason field asks "What happened?"', doc.getElementById('noReasonLabel').textContent.trim() === 'What happened?');
   doc.getElementById('noReasonInput').value = 'Opened the old notes when the scene got hard';
   doc.getElementById('submitNoReason').dispatchEvent(new window.Event('click', { bubbles: true }));
   await new Promise((r) => setTimeout(r, 10));
-  check('after submitting the reason, the fixed evidence reminder shows', doc.getElementById('replayArea').textContent.includes('evidence'));
+  check('after submitting the reason, the fixed evidence reminder shows', doc.getElementById('replayArea').textContent.includes('Record it. That is evidence, not failure.'));
+  window.close();
+}
+
+async function testKnockWording(label, path, expectations) {
+  console.log('\n=== ' + label + ' (Knock Sort of / No differentiation) ===');
+  const dom = await loadFile(path);
+  const { window } = dom;
+  const doc = window.document;
+
+  doc.getElementById('previewKnock').dispatchEvent(new window.Event('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 10));
+  doc.querySelector('#choiceArea button[data-choice="Sort of"]').dispatchEvent(new window.Event('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 10));
+  check('"Sort of" reply is supportive: contains "' + expectations.sortOf + '"', doc.getElementById('replayArea').textContent.includes(expectations.sortOf));
+  doc.getElementById('returnToBlock').dispatchEvent(new window.Event('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 10));
+
+  doc.getElementById('previewKnock').dispatchEvent(new window.Event('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 10));
+  doc.querySelector('#choiceArea button[data-choice="No"]').dispatchEvent(new window.Event('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 10));
+  check('"No" reply is firmer: contains "' + expectations.no + '"', doc.getElementById('replayArea').textContent.includes(expectations.no));
+  window.close();
+}
+
+async function testCoachingEvidenceQuestion(label, path) {
+  console.log('\n=== ' + label + ' (generated evidence question) ===');
+  const dom = await loadFile(path);
+  const { window } = dom;
+  const doc = window.document;
+  const textareas = doc.querySelectorAll('#exitForm textarea');
+  check('Coaching Loop Exit Log has 6 questions (5 fixed + 1 generated evidence question)', textareas.length === 6);
+  const labels = Array.from(doc.querySelectorAll('#exitForm label')).map((l) => l.textContent);
+  check('the generated evidence question (derived from evidence_to_notice) appears in the Exit Log', labels.some((t) => /barrier hold/i.test(t)));
+  window.close();
+}
+
+async function testHandoffPacket(label, path, expectedSnippets) {
+  console.log('\n=== ' + label + ' (COPY FOR NEXT INTERVIEW) ===');
+  const dom = await loadFile(path);
+  const { window } = dom;
+  const doc = window.document;
+
+  const handoffArea = doc.getElementById('handoffArea');
+  check('handoff area is hidden before the Exit Log is saved', handoffArea && handoffArea.classList.contains('hidden'));
+
+  doc.getElementById('beginBlock').dispatchEvent(new window.Event('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 10));
+  doc.getElementById('finishBlock').dispatchEvent(new window.Event('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 10));
+
+  const textareas = doc.querySelectorAll('#exitForm textarea');
+  textareas.forEach((t, i) => { t.value = 'Answer ' + (i + 1); });
+  doc.getElementById('exitForm').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  await new Promise((r) => setTimeout(r, 10));
+
+  check('handoff area is revealed only after saving the Exit Log', !handoffArea.classList.contains('hidden'));
+  check('handoff note explains how the next interview should use it', doc.getElementById('handoffNote').textContent.length > 15);
+
+  let capturedText = null;
+  window.prompt = function (label, text) { capturedText = text; return text; };
+  doc.getElementById('copyNextInterview').dispatchEvent(new window.Event('click', { bubbles: true }));
+  await new Promise((r) => setTimeout(r, 10));
+
+  check('copied packet is captured', capturedText !== null);
+  check('copied packet begins with the required handoff instruction', !!capturedText && capturedText.indexOf('Use this previous block record to help build my next block.') === 0);
+  check('copied packet contains no HTML markup', !!capturedText && capturedText.indexOf('<') === -1 && capturedText.indexOf('</') === -1);
+  expectedSnippets.forEach((snippet) => {
+    check('copied packet contains "' + snippet + '"', !!capturedText && capturedText.indexOf(snippet) !== -1);
+  });
   window.close();
 }
 
@@ -219,6 +290,16 @@ await testInvalidData('Coaching Loop', BASE + '/coaching-loop-test-practice.html
 await testInvalidData('Explorer', BASE + '/explorer-test-city-scouting.html');
 
 await testHardStop('Explorer', BASE + '/explorer-test-city-scouting.html');
+
+await testKnockWording('Ignition', BASE + '/ignition-test-caves.html', { sortOf: 'You caught it.', no: 'Stop. Return to the block now.' });
+await testKnockWording('Coaching Loop', BASE + '/coaching-loop-test-practice.html', { sortOf: 'You noticed it early.', no: 'Record it. That is evidence, not failure.' });
+await testKnockWording('Explorer', BASE + '/explorer-test-city-scouting.html', { sortOf: 'Write down what you have before you open anything else.', no: 'Stop gathering.' });
+
+await testCoachingEvidenceQuestion('Coaching Loop', BASE + '/coaching-loop-test-practice.html');
+
+await testHandoffPacket('Ignition', BASE + '/ignition-test-caves.html', ['Mode: Ignition', 'Next block start: Answer 5']);
+await testHandoffPacket('Coaching Loop', BASE + '/coaching-loop-test-practice.html', ['Mode: Coaching Loop', 'Observed evidence: Answer 3']);
+await testHandoffPacket('Explorer', BASE + '/explorer-test-city-scouting.html', ['Mode: Explorer', 'Next move: Answer 5']);
 
 console.log('\n--- SUMMARY ---');
 console.log((totalChecks - totalFailures) + '/' + totalChecks + ' checks passed.');

@@ -40,8 +40,8 @@
     "min_minutes": 28,
     "max_minutes": 34,
     "yes_response": "Good. Back to the work.",
-    "sort_of_response": "Return to the block.",
-    "no_response": "Name what pulled you off, then return to the next job.",
+    "sort_of_response": "Close it and return to the next step.",
+    "no_response": "Stop. Return to the block now.",
     "capture_no_reason": false,
     "replay_instruction": ""
   },

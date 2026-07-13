@@ -553,6 +553,21 @@ input.text-input {
   margin-bottom: 14px;
 }
 
+/* ---------- next-interview handoff: appears only after the Exit Log
+   is saved (see each mode's fragment.js) ---------- */
+.handoff-area {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.handoff-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  max-width: 560px;
+}
+
 .legacy-note {
   margin: 0 0 14px;
   padding: 11px 14px;
@@ -787,4 +802,26 @@ th {
   .site-bar { flex-wrap: wrap; min-height: auto; padding: 10px 13px; row-gap: 6px; }
   .brand { font-size: 11px; }
   #topBar { white-space: normal; text-align: right; }
+}
+
+/* ---------- print: keep the mode's dominant object, its steps/written
+   outputs, and its reminders; drop interactive controls, overlays, and
+   anything that only makes sense on screen ---------- */
+@media print {
+  body::before { display: none; }
+  body { background: #fff; }
+  .site-bar { background: none; border-bottom: 1px solid #999; backdrop-filter: none; }
+  main { width: 100%; margin: 0; }
+  .sheet, .exit-card, .log-card { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
+  .action-zone,
+  .utility-row,
+  .log-actions,
+  .handoff-area,
+  .controls,
+  .overlay,
+  .toast,
+  .error-banner { display: none !important; }
+  input[type="time"] { border: 0; }
+  textarea { border: 1px solid #999; min-height: 64px; }
+  .step input { border: 1px solid #333; }
 }
