@@ -2,7 +2,7 @@
 /* =========================================================
    scripts/build-prompts.mjs
 
-   Regenerates the three copy-paste prompt files (prompts/ReadyToWork.md,
+   Regenerates the three copy-paste prompt files (prompts/Ignition.md,
    prompts/Coaching.md, prompts/Explorer.md) from:
 
      1. Their source body text in prompts/_sources/*.body.md
@@ -13,8 +13,8 @@
         and that mode's actual downloadable template)
 
    Unlike the retired single-Golden-Template system, each mode now embeds
-   its OWN template, not a shared one — Ready to Work embeds the Ready to
-   Work template, Coaching Loop embeds the Coaching Loop template, and
+   its OWN template, not a shared one — Ignition embeds the Ignition
+   template, Coaching Loop embeds the Coaching Loop template, and
    Explorer embeds the Explorer template. Changes to one mode's fragment
    files never leak into another mode's generated prompt.
 
@@ -36,10 +36,10 @@ const ROOT = path.join(__dirname, "..");
 
 const TARGETS = [
   {
-    source: "prompts/_sources/ready-to-work.body.md",
-    out: "prompts/ReadyToWork.md",
-    template: "templates/ready-to-work-focus-file-template.html",
-    marker: "{{READY_TO_WORK_TEMPLATE}}"
+    source: "prompts/_sources/ignition.body.md",
+    out: "prompts/Ignition.md",
+    template: "templates/ignition-focus-file-template.html",
+    marker: "{{IGNITION_TEMPLATE}}"
   },
   {
     source: "prompts/_sources/coaching-loop.body.md",

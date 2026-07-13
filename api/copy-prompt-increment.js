@@ -3,9 +3,10 @@
    Vercel serverless function (Node.js). Server-side only.
 
    Atomically increments the single "copy_prompt_total" counter in Vercel KV
-   by 1. Called by app.js exactly once per SUCCESSFUL clipboard copy (Solo,
-   Coaching, or Exploring) — never on page load, never on a failed copy,
-   never on any other click (Open Claude, download, share, feedback, nav).
+   by 1. Called by app.js exactly once per SUCCESSFUL clipboard copy (Ignition,
+   Coaching Loop, or Explorer) — never on page load, never on a
+   failed copy, never on any other click (Open Claude, download, share,
+   feedback, nav).
 
    This endpoint intentionally accepts no body and returns no meaningful
    payload beyond a bare success flag — it never reads or stores prompt

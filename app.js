@@ -32,16 +32,16 @@
   /* Maps each prompt file to its Vercel analytics event name (event name only —
      never the prompt's actual text). */
   var PROMPT_EVENT_NAMES = {
-    "prompts/ReadyToWork.md": "copy_solo_prompt",
+    "prompts/Ignition.md": "copy_ignition_prompt",
     "prompts/Coaching.md": "copy_coaching_loop_prompt",
-    "prompts/Explorer.md": "copy_exploring_prompt"
+    "prompts/Explorer.md": "copy_explorer_prompt"
   };
 
   /* Maps each prompt file to its Plausible "mode" property value. */
   var PROMPT_MODE_NAMES = {
-    "prompts/ReadyToWork.md": "solo",
+    "prompts/Ignition.md": "ignition",
     "prompts/Coaching.md": "coaching",
-    "prompts/Explorer.md": "exploring"
+    "prompts/Explorer.md": "explorer"
   };
 
   /* ---------- clipboard helper (with a manual-copy fallback) ---------- */

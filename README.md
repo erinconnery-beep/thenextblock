@@ -6,7 +6,7 @@ This is the **static, copy-paste version** of The Next Block (Version 1). There 
 
 The AI interview does **not** run on this website. The site's only job is to let someone:
 
-1. Pick a mode (Solo / With a Coach / Exploring).
+1. Pick a mode (Ignition / Coaching Loop / Explorer).
 2. Click that card's button, which copies the real, complete interview prompt to their clipboard.
 3. Click "Open Claude," which opens claude.ai in a new tab.
 4. Paste the prompt into a new Claude chat.
@@ -40,9 +40,9 @@ There is no build step. This is a zero-build static site — the files in this f
 
 ```
 prompts/
-  ReadyToWork.md — Ready to Work mode
-  Coaching.md    — With a Coach mode
-  Explorer.md    — Exploring mode
+  Ignition.md    — Ignition mode
+  Coaching.md    — Coaching Loop mode
+  Explorer.md    — Explorer mode
 ```
 
 Each file is complete and self-contained — it explains what The Next Block is, how the model should behave, runs the full seven-question interview (customized per mode), and specifies the offline HTML file Claude must build at the end. None of the three files reference each other or depend on anything else in this repo. Pasting any one of them alone into a fresh Claude chat is enough to run a full session.
@@ -57,7 +57,7 @@ Each file is complete and self-contained — it explains what The Next Block is,
 
 ## F. How to edit icons
 
-The three mode icons (Solo, With a Coach, Exploring) are inline custom SVGs written directly in `index.html`, inside each card's `.title-row`, next to the black mode title. Their sizing and alignment (fixed icon box, shared SVG viewBox, color) are controlled by the `.title-row`, `.icon-box`, and `.path-symbol` rules in `styles.css`. There are no icon library dependencies or image files to manage — every icon is hand-drawn SVG paths in the markup.
+The three mode icons (Ignition, Coaching Loop, Explorer) are inline custom SVGs written directly in `index.html`, inside each card's `.title-row`, next to the black mode title. Their sizing and alignment (fixed icon box, shared SVG viewBox, color) are controlled by the `.title-row`, `.icon-box`, and `.path-symbol` rules in `styles.css`. There are no icon library dependencies or image files to manage — every icon is hand-drawn SVG paths in the markup.
 
 ## G. How to deploy to Vercel
 
@@ -103,7 +103,7 @@ That second script is served automatically by Vercel once Web Analytics is turne
 **Where to view it:** Vercel dashboard → your project → **Analytics** in the sidebar. Visits, page views, referrers, and device/browser breakdowns are on the free Hobby plan. **Custom events require a Pro or Enterprise plan to view in the dashboard** — the code fires them regardless, but they'll only show up if your Vercel plan includes the Custom Events feature.
 
 **Custom events tracked (name only, no extra data):**
-- `copy_solo_prompt` / `copy_coaching_loop_prompt` / `copy_exploring_prompt` — a mode's Copy prompt button clicked
+- `copy_ignition_prompt` / `copy_coaching_loop_prompt` / `copy_explorer_prompt` — a mode's Copy prompt button clicked
 - `open_claude` — any "Open Claude ↗" link clicked
 - `send_feedback` — SEND FEEDBACK (footer) or the Feedback modal's email link clicked
 - `share_site` — SHARE IT clicked
@@ -145,7 +145,7 @@ The site identifier is embedded in the script URL itself (`pa-oqBnf5_V4SRV4lbttt
 
 ## K. Public counter ("NEXT BLOCKS STARTED")
 
-The footer shows a small public counter — `[number] NEXT BLOCKS STARTED` (or `1 NEXT BLOCK STARTED` for exactly one) — that aggregates successful Copy prompt clicks across all three modes (Solo, Coaching, Exploring). It only increments after a copy actually succeeds; page loads, Open Claude clicks, downloads, shares, feedback clicks, and failed copy attempts never touch it.
+The footer shows a small public counter — `[number] NEXT BLOCKS STARTED` (or `1 NEXT BLOCK STARTED` for exactly one) — that aggregates successful Copy prompt clicks across all three modes (Ignition, Coaching Loop, Explorer). It only increments after a copy actually succeeds; page loads, Open Claude clicks, downloads, shares, feedback clicks, and failed copy attempts never touch it.
 
 **This is a small, self-contained counter — not a Plausible read.** An earlier version of this counter tried to read Plausible's aggregate `Copy prompt — Total` goal directly (which requires a paid Plausible Business plan), and was removed. This version instead uses its own persistent counter in Vercel KV (Upstash Redis), which has a usable free tier:
 
@@ -168,9 +168,9 @@ Go through this before sharing the link with anyone:
 - [ ] Homepage loads
 - [ ] Mobile layout works
 - [ ] Logo and icons look right
-- [ ] Copy Solo Prompt works
-- [ ] Copy Coach Prompt works
-- [ ] Copy Exploring Prompt works
+- [ ] Copy Ignition Prompt works
+- [ ] Copy Coaching Loop Prompt works
+- [ ] Copy Explorer Prompt works
 - [ ] Open Claude link works
 - [ ] Design nav link works
 - [ ] Disclaimer nav link works
@@ -187,9 +187,9 @@ Go through this before sharing the link with anyone:
 
 With the site served locally (not opened via `file://`):
 
-- Click **Copy Solo Prompt**, paste into a plain text editor, confirm it's Solo-Sprint-specific language and the button briefly reads "Prompt copied."
-- Click **Copy Coach Prompt**, confirm it contains therapist/coach/accountability-partner language and the professional-scope note.
-- Click **Copy Exploring Prompt**, confirm it contains open-ended-decision/research language (job search, moving, strategy).
+- Click **Copy Ignition Prompt**, paste into a plain text editor, confirm it's execution/action-list-specific language and the button briefly reads "Prompt copied."
+- Click **Copy Coaching Loop Prompt**, confirm it contains therapist/coach/accountability-partner language and the professional-scope note.
+- Click **Copy Explorer Prompt**, confirm it contains open-ended-decision/research language (job search, moving, strategy).
 - Confirm all three are genuinely different documents, not the same text three times.
 - Paste one full prompt into a fresh Claude chat and confirm Claude greets briefly, asks Question 1, and pushes back on a deliberately vague first answer (e.g. "work on my stuff").
 

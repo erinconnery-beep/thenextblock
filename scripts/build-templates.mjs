@@ -14,7 +14,7 @@
 
    Output (one standalone, fully offline HTML file per mode):
 
-     templates/ready-to-work-focus-file-template.html
+     templates/ignition-focus-file-template.html
      templates/coaching-loop-focus-file-template.html
      templates/explorer-focus-file-template.html
 
@@ -40,10 +40,10 @@ const SHARED_JS = path.join(ROOT, "templates", "_shared", "foundation.js");
 
 const MODES = [
   {
-    key: "ready-to-work",
-    dir: path.join(ROOT, "templates", "ready-to-work"),
-    out: path.join(ROOT, "templates", "ready-to-work-focus-file-template.html"),
-    docTitle: "The Next Block — Ready to Work — Focus File"
+    key: "ignition",
+    dir: path.join(ROOT, "templates", "ignition"),
+    out: path.join(ROOT, "templates", "ignition-focus-file-template.html"),
+    docTitle: "The Next Block — Ignition — Focus File"
   },
   {
     key: "coaching-loop",

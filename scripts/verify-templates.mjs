@@ -2,7 +2,7 @@
 /* =========================================================
    scripts/verify-templates.mjs
 
-   Sanity-checks the three frozen mode templates (Ready to Work,
+   Sanity-checks the three frozen mode templates (Ignition,
    Coaching Loop, Explorer) and the three copy-paste prompts that embed
    them. This replaces scripts/verify-golden-template.mjs, which checked
    a single shared template — that assumption is retired. Each mode now
@@ -31,11 +31,11 @@ const ROOT = path.join(__dirname, "..");
 
 const MODES = [
   {
-    key: "ready_to_work",
-    label: "Ready to Work",
-    template: path.join(ROOT, "templates", "ready-to-work-focus-file-template.html"),
-    prompt: path.join(ROOT, "prompts", "ReadyToWork.md"),
-    fillInstruction: "Fill the frozen Ready to Work Focus File template",
+    key: "ignition",
+    label: "Ignition",
+    template: path.join(ROOT, "templates", "ignition-focus-file-template.html"),
+    prompt: path.join(ROOT, "prompts", "Ignition.md"),
+    fillInstruction: "Fill the frozen Ignition Focus File template",
     requiredTopKeys: [
       "schema_version", "mode", "mode_label", "instrument_label", "title", "subtitle",
       "start_time", "start_location", "planned_finish", "output_target", "finish_line",

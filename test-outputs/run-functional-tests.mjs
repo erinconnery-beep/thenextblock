@@ -208,13 +208,13 @@ async function testHardStop(label, path) {
 
 const BASE = '/sessions/dazzling-eloquent-wright/mnt/outputs/NextBlock/test-outputs';
 
-await testMode('Ready to Work (Caves test case)', BASE + '/ready-to-work-test-caves.html', { capturesNoReason: false });
+await testMode('Ignition (Caves test case)', BASE + '/ignition-test-caves.html', { capturesNoReason: false });
 await testMode('Coaching Loop (practice test case)', BASE + '/coaching-loop-test-practice.html', { capturesNoReason: true });
 await testMode('Explorer (city-scouting test case)', BASE + '/explorer-test-city-scouting.html', { capturesNoReason: false });
 
 await testRealNoReasonCapture('Coaching Loop', BASE + '/coaching-loop-test-practice.html');
 
-await testInvalidData('Ready to Work', BASE + '/ready-to-work-test-caves.html');
+await testInvalidData('Ignition', BASE + '/ignition-test-caves.html');
 await testInvalidData('Coaching Loop', BASE + '/coaching-loop-test-practice.html');
 await testInvalidData('Explorer', BASE + '/explorer-test-city-scouting.html');
 
