@@ -1,0 +1,69 @@
+{
+  "schema_version": "2.0",
+  "mode": "coaching_loop",
+  "mode_label": "Coaching Loop",
+  "instrument_label": "Practice File",
+  "title": "Morning writing practice",
+  "subtitle": "Practice: begin without reorganizing notes",
+  "start_time": "09:00",
+  "start_location": "My desk",
+  "planned_finish": "09:30",
+  "practice_target": "Begin writing at 09:00 without reorganizing notes",
+  "practice_protocol": [
+    {
+      "title": "Lock the phone and router away",
+      "subtext": "Before sitting down, not after the urge appears."
+    },
+    {
+      "title": "Open the document at 09:00",
+      "subtext": "The document, not the notes folder."
+    },
+    {
+      "title": "Write for 20 minutes",
+      "subtext": "Keep writing even if the scene gets uncertain."
+    },
+    {
+      "title": "Mark when the urge to reorganize appears",
+      "subtext": "Note the moment. Don't act on it yet."
+    },
+    {
+      "title": "Continue or stop, and record what happened",
+      "subtext": "Either outcome is useful evidence."
+    }
+  ],
+  "intervention": "Phone and router locked away before sitting down.",
+  "predicted_break": "When the scene becomes uncertain, opening old notes will feel necessary.",
+  "predicted_excuse": "I'll tell myself I just need to check one detail.",
+  "evidence_to_notice": "When the urge appears, whether the barrier holds, and what happens next.",
+  "why": "I want proof that I can stay with uncertainty instead of dodging it into busywork — that matters whether or not this scene ends up any good.",
+  "feeling": "Calm, even without a finished scene. The practice happened honestly.",
+  "display_cues": {
+    "practice_target": "Begin at 09:00 without reorganizing notes.",
+    "intervention": "Phone and router locked away first.",
+    "predicted_break": "Uncertainty will pull you toward old notes.",
+    "evidence": "Did the barrier hold when the urge appeared?"
+  },
+  "check_in": {
+    "title": "The knock",
+    "question": "Is the practice holding?",
+    "min_minutes": 20,
+    "max_minutes": 25,
+    "yes_response": "Good. Keep practicing.",
+    "sort_of_response": "",
+    "no_response": "Record what broke. That is evidence for the next attempt.",
+    "capture_no_reason": true,
+    "replay_instruction": ""
+  },
+  "hard_stop": {
+    "enabled": false,
+    "message": ""
+  },
+  "exit_prompts": [
+    "Did the planned practice happen?",
+    "Where did the predicted pattern appear?",
+    "What helped you stay with the practice?",
+    "What did not work, or worked differently than expected?",
+    "What should change in the next attempt?"
+  ],
+  "prior_log_rows": []
+}

@@ -1,0 +1,21 @@
+/* Explorer -- mode-specific styling on top of _shared/foundation.css.
+   The Explorer instrument's dominant object is the answerable question, so
+   its H1 is bumped larger than the shared default and given a touch more
+   breathing room. The single research-avoidance cue near the action zone
+   deliberately stays one column (not the two-column .pair used by the
+   other two modes) so the three instruments read as genuinely different
+   shapes, not one relabeled layout. */
+
+.question-heading {
+  max-width: 780px;
+  font-size: clamp(32px, 5.6vw, 46px);
+  line-height: 1.06;
+}
+
+.single-cue {
+  max-width: 560px;
+}
+
+@media (max-width: 720px) {
+  .question-heading { font-size: clamp(26px, 6.5vw, 34px); }
+}
