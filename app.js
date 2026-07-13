@@ -133,9 +133,9 @@
   var CHECKIN_DEMO_REPLAY =
     '<div class="knock-replay-callout">' +
     '<p class="fm-label">YOU SAID THIS MATTERED BECAUSE</p>' +
-    '<p class="fm-quote">"A book becomes real one finished scene at a time. I do not need to solve the whole thing today. I need to finish this one."</p>' +
+    '<p class="fm-quote">[Your honest, heart-first reason for wanting this done—in your own voice.]</p>' +
     '<p class="fm-label">WATCH FOR</p>' +
-    '<p class="fm-quote">"When I want to stop, I will be tempted to polish, research, or reorganize. That is my signal to write the next rough sentence."</p>' +
+    '<p class="fm-quote">[The exact excuse, detour, or dodge you know you’ll use to escape the work.]</p>' +
     '</div>';
 
   document.querySelectorAll(".checkin-demo-btn").forEach(function(btn){
