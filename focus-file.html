@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Focus File</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAArklEQVR42mNgGAUDDBgJKdDPcvlPiQUXp+1hJMsBlFpMrEOY6GE5PjOZ6GE5PrOZBjoRMtHL97jsGPAQYCFX47mJmzDEjPL9KIsCSizHJ05VBxCyhFRHMFHTcnIcwURty0lVP7jKgVEHDGoHkFrIEKueiRaGkuJYkqOAkOGkhhRZaQCXJeTUBWRXRuRYRjAECDUgadE2HHzZkJahgM1sJnLa8tRslg94x2QUDDgAAOQMQCUsrPaIAAAAAElFTkSuQmCC">
 <style>
   :root {
     --paper:      #fdfbf6;
@@ -125,7 +126,7 @@
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--ink-faint);
+    color: #756f60;
     text-align: right;
     padding-top: 3px;
     white-space: nowrap;
@@ -207,6 +208,34 @@
     font-style: italic;
   }
 
+  /* ---------- Sealed strip (internet-off reminder) ---------- */
+  .sealed-strip {
+    display: none;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--hair);
+    background: var(--pine-tint);
+  }
+  .sealed-strip.on { display: block; }
+  .sealed-inner {
+    font-family: -apple-system, system-ui, sans-serif;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .sealed-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pine-soft);
+    white-space: nowrap;
+  }
+  .sealed-plan {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
   /* ---------- Why ---------- */
   .why {
     padding: 22px 28px;
@@ -252,6 +281,15 @@
     align-items: flex-start;
     cursor: pointer;
     user-select: none;
+    position: relative;
+  }
+  .job-check {
+    position: absolute;
+    left: 0; top: 1px;
+    opacity: 0;
+    width: 22px; height: 22px;
+    margin: 0;
+    cursor: pointer;
   }
   .job .box {
     width: 22px; height: 22px;
@@ -262,6 +300,10 @@
     margin-top: 1px;
     position: relative;
     transition: background 0.15s, border-color 0.15s;
+  }
+  .job-check:focus-visible + .box {
+    outline: 2px solid var(--pine);
+    outline-offset: 2px;
   }
   .job.done .box {
     background: var(--pine);
@@ -433,7 +475,7 @@
   .next-knock {
     font-family: -apple-system, system-ui, sans-serif;
     font-size: 11px;
-    color: var(--ink-faint);
+    color: #756f60;
     letter-spacing: 0.02em;
     padding: 8px 4px;
   }
@@ -442,14 +484,16 @@
     display: inline-block;
     font-family: -apple-system, system-ui, sans-serif;
     font-size: 12px;
-    color: var(--ink-faint);
+    color: #756f60;
+    background: none;
+    border: none;
     text-decoration: underline;
     text-underline-offset: 2px;
     cursor: pointer;
     transition: color 0.15s;
     padding: 10px 8px;   /* larger tap target — comfortable to press */
   }
-  .preview-link:hover { color: var(--ink-mut); }
+  .preview-link:hover { color: var(--ink-soft); }
 
   /* ---------- Block-end ---------- */
   .blockend {
@@ -526,6 +570,7 @@
     margin-bottom: 24px;
   }
   .exit-q {
+    display: block;
     font-family: -apple-system, system-ui, sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -605,7 +650,7 @@
   }
   .btn-done:hover { background: #276039; }
 
-  .end-link { color: var(--clay); }
+  .end-link { color: #8f4a24; }
   .end-link:hover { color: #8f4a24; }
 
   /* completed screen */
@@ -645,7 +690,7 @@
   .buildnext-hint {
     font-family: -apple-system, system-ui, sans-serif;
     font-size: 12px;
-    color: var(--ink-faint);
+    color: #756f60;
     line-height: 1.5;
     max-width: 38ch;
     margin: 12px auto 0;
@@ -753,7 +798,15 @@
       <div class="lane-inner">
         <span class="lane-label">Open:</span>
         <span id="laneChips"></span>
-        <span class="lane-rest">— rest blocked</span>
+        <span class="lane-rest">— nothing else</span>
+      </div>
+    </div>
+
+    <!-- SEALED reminder: how they're keeping the internet off -->
+    <div class="sealed-strip" id="sealedStrip">
+      <div class="sealed-inner">
+        <span class="sealed-label">Internet off</span>
+        <span class="sealed-plan" id="sealedPlan"></span>
       </div>
     </div>
 
@@ -799,8 +852,8 @@
 
       <div class="preview-row">
         <span class="next-knock" id="nextKnock"></span>
-        <span class="preview-link" id="previewLink">Preview the knock</span>
-        <span class="preview-link end-link" id="endLink">End session</span>
+        <button type="button" class="preview-link" id="previewLink">Preview the knock</button>
+        <button type="button" class="preview-link end-link" id="endLink" style="display:none;">End session</button>
       </div>
     </div>
 
@@ -813,30 +866,30 @@
         <button class="btn-finish" id="finishBtn">Finish here</button>
         <button class="btn-more" id="moreBtn">One more block →</button>
       </div>
-      <p class="be-note">One more block adds ~30 min. Extending? Bump your Freedom session too.</p>
+      <p class="be-note">One more block adds ~30 min. If you scheduled a blocker, extend it too.</p>
     </div>
 
     <!-- EXIT -->
     <div class="exit" id="exit">
-      <div class="eyebrow exit-eyebrow">Block complete</div>
+      <div class="eyebrow exit-eyebrow" id="exitEyebrow">Block complete</div>
       <div class="exit-title">A few quick things — this becomes your log.</div>
 
-      <div class="exit-q">Did you finish the block as planned?</div>
+      <label class="exit-q" for="finishInput">Did you finish the block as planned?</label>
       <textarea class="exit-input" id="finishInput" rows="2" placeholder="e.g. mostly — got through the hard scene but not the ending"></textarea>
 
-      <div class="exit-q" id="outputQ" style="display:none;">Output — did you hit the number?</div>
+      <label class="exit-q" id="outputQ" for="outputInput" style="display:none;">Output — did you hit the number?</label>
       <input class="exit-input" id="outputInput" style="display:none;" placeholder="" />
 
-      <div class="exit-q">What, if anything, got in the way of focus?</div>
+      <label class="exit-q" for="inTheWayInput">What, if anything, got in the way of focus?</label>
       <textarea class="exit-input" id="inTheWayInput" rows="2" placeholder="e.g. kept wanting to check email; slow start"></textarea>
 
-      <div class="exit-q">Where will the next block start?</div>
+      <label class="exit-q" for="nextInput">Where will the next block start?</label>
       <textarea class="exit-input" id="nextInput" rows="2" placeholder="e.g. edit what I just wrote, out loud"></textarea>
 
       <p class="exit-forward">This saves to your log. Next, you can build your following block straight from it — carrying today's task and what got in the way.</p>
 
       <div class="exit-foot">
-        <span class="exit-log" id="exitLog">Saved to your log</span>
+        <span class="exit-log" id="exitLog">Automatic data ready</span>
         <button class="btn-done" id="doneBtn">Save entry</button>
       </div>
     </div>
@@ -848,7 +901,7 @@
       <div class="sub" id="allDoneSub">Block by block, ritual becomes habit.</div>
 
       <button class="btn-buildnext" id="buildNextBtn">Build next block from this →</button>
-      <div class="buildnext-hint" id="buildNextHint">Copies a ready-to-paste setup that carries this session forward. Drop it into a new chat.</div>
+      <div class="buildnext-hint" id="buildNextHint">Copies everything the next chat needs — this session, the questions, and the template. Just paste it into a new chat.</div>
 
       <div class="log-actions">
         <button class="btn-log" id="viewLogBtn">View log</button>
@@ -871,6 +924,7 @@ const CONFIG = {
   scope: "9:00 – 12:00",
   mode: "sealed",                 // "sealed" | "lane"
   laneSites: [],                  // e.g. ["LinkedIn","Gmail","the 3 company sites"]
+  sealedPlan: "phone in the other room",  // sealed mode only: how they're keeping the internet off ("" to hide)
   whyLabel: "Watch for",          // "Watch for" (a trap) or "Remember" (a rallying cry)
   why: "Re-reading and tweaking notes will feel like work. It's the detour. New words only — forward.",
   finishFeel: "1,500 words that didn't exist this morning. The story's further than it was — tomorrow you shape them instead of dreading the blank page.",
@@ -887,6 +941,7 @@ const TESTS = {
   writing: {
     task: "1,500 new words on the story",
     scope: "9:00 – 12:00", mode: "sealed", laneSites: [],
+    sealedPlan: "phone in the other room",
     whyLabel: "Watch for",
     why: "Re-reading and tweaking notes will feel like work. It's the detour. New words only — forward.",
     finishFeel: "1,500 words that didn't exist this morning. The story's further than it was — tomorrow you shape them instead of dreading the blank page.",
@@ -1025,6 +1080,12 @@ if (cfg.mode === "lane" && cfg.laneSites.length) {
   });
 }
 
+// sealed mode: show how they're keeping the internet off (if they gave a plan)
+if (cfg.mode === "sealed" && cfg.sealedPlan) {
+  $("sealedPlan").textContent = cfg.sealedPlan;
+  $("sealedStrip").classList.add("on");
+}
+
 /* jobs — three shapes, with a live counter */
 function pad2(n) { return String(n).padStart(2, "0"); }
 function updateCounter() {
@@ -1038,13 +1099,25 @@ if (cfg.jobsShape !== "none" && cfg.jobs.length) {
   $("jobsSection").classList.remove("hidden");
   $("jobsEyebrow").textContent = (cfg.jobsShape === "milestones") ? "Milestones" : "The jobs";
   const list = $("jobList");
-  cfg.jobs.forEach(label => {
-    const row = document.createElement("div");
+  cfg.jobs.forEach((label, i) => {
+    const row = document.createElement("label");
     row.className = "job";
-    row.innerHTML = '<span class="box"></span><span class="label"></span>';
-    row.querySelector(".label").textContent = label;
-    row.addEventListener("click", () => {
-      row.classList.toggle("done");
+    row.setAttribute("for", "job-" + i);
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.className = "job-check";
+    cb.id = "job-" + i;
+    const box = document.createElement("span");
+    box.className = "box";
+    box.setAttribute("aria-hidden", "true");
+    const text = document.createElement("span");
+    text.className = "label";
+    text.textContent = label;
+    row.appendChild(cb);
+    row.appendChild(box);
+    row.appendChild(text);
+    cb.addEventListener("change", () => {
+      row.classList.toggle("done", cb.checked);
       updateCounter();
     });
     list.appendChild(row);
@@ -1118,6 +1191,7 @@ function updateElapsed() {
 $("beginBtn").addEventListener("click", () => {
   startTime = Date.now();
   $("beginBtn").style.display = "none";
+  $("endLink").style.display = "";      // End session becomes available once begun
   $("checkin").classList.add("on");     // check-in is now always visible
   $("timerWrap").classList.add("on");
   $("progressWrap").classList.add("on");
@@ -1215,16 +1289,15 @@ $("moreBtn").addEventListener("click", () => {
 });
 $("finishBtn").addEventListener("click", () => {
   $("blockend").classList.remove("on");
-  showExit();
+  showExit(false);   // finished normally
 });
 
 /* ---- End session (leave early) ---- */
 $("endLink").addEventListener("click", () => {
-  // if they haven't begun, just no-op gracefully
   logRow("end-session-early");
   $("blockend").classList.remove("on");
   $("action").style.display = "none";
-  showExit();
+  showExit(true);    // ended early
 });
 
 /* ---- Planned-time helpers ---- */
@@ -1238,10 +1311,12 @@ function nowHHMM() {
 }
 
 /* ---- Exit ---- */
-function showExit() {
+function showExit(endedEarly) {
   clearInterval(elapsedTimer);
   clearTimeout(knockTimer);
   clearTimeout(blockEndTimer);
+  // "Block ended" if they stopped early, "Block complete" if the block ran its course
+  $("exitEyebrow").textContent = endedEarly ? "Block ended" : "Block complete";
   // if the goal was a count (milestones), ask output specifically
   const isCount = cfg.jobsShape === "milestones" || /\d/.test(cfg.doneWhenShort || "");
   if (isCount) {
@@ -1251,8 +1326,11 @@ function showExit() {
   }
   const jobsTotal = document.querySelectorAll(".job").length;
   const jobsDone = document.querySelectorAll(".job.done").length;
-  $("exitLog").textContent = "Saved to your log · " + knockCount + " check-ins" +
-    (jobsTotal ? ", " + jobsDone + "/" + jobsTotal + " done" : "");
+  // Nothing is saved yet — describe what's ready, with singular/plural handling
+  const checkWord = knockCount === 1 ? "check-in" : "check-ins";
+  let msg = "Automatic data ready · " + knockCount + " " + checkWord;
+  if (jobsTotal) msg += " · " + jobsDone + "/" + jobsTotal + " milestones complete";
+  $("exitLog").textContent = msg;
   $("exit").classList.add("on");
 }
 
@@ -1413,15 +1491,15 @@ $("copyAllBtn").addEventListener("click", (e) => {
 const INTERVIEW_PROMPT = [
 "You run a short setup for a focus tool called Focus File, then output a finished focus file. Ask ONE question at a time, wait for the answer, keep it warm and fast. After the last question, output the file. No extra questions.",
 "",
-"Q1 — MODE. Ask what kind of work this is: Offline (writing, studying, creative, application) -> sealed (block everything). Needs internet (job search, research, brainstorm, strategy) -> lane (ask which sites the work needs; block everything else).",
+"Q1 — MODE. Ask what kind of work this is: Offline (writing, studying, creative, application) -> sealed, then ask how they'll turn the internet off (phone in another room, airplane mode, unplug router, lockbox, Freedom session) and set sealedPlan to their short answer. Needs internet (job search, research, brainstorm, strategy) -> lane (ask which sites the work needs; they block the rest with their usual blocker; leave sealedPlan empty).",
 "Q2 — WORK + TIME. Ask what they're working on and their window. Get the task and block length in minutes.",
 "Q3 — SHAPE THE GOAL. The header (task) is the OUTCOME — the one true thing that exists when done; jobs, if any, are the STEPS. The header must never just restate the checklist. jobsShape: \"none\" (atomic), \"milestones\" (a large count, split it), or \"checklist\" (3-5 genuinely different actions — never invent steps; propose and let them edit). Check the jobs fill the block; if short, grow the list or shrink the block.",
 "Q4 — THE TRAP (optional). Ask: \"Anything that tends to pull you off task — a habit, a distraction, a temptation? I'll remind you of it. (Or skip.)\" If named, set why to it phrased as the trap to avoid; if skipped, why is \"\".",
-"Q5 — THE REWARD. Ask: \"What will finishing this feel like? I'll show you this if you drift.\" Set finishFeel to their answer.",
+"Q5 — THE REASON. Ask: \"What does finishing this block get you closer to? Keep it simple and true (e.g. the draft finally moves, one less thing I'm dreading, I can rest tonight).\" Set finishFeel to their answer.",
 "",
-"Then reply briefly, and output the focus file (the frozen HTML template you have), changing ONLY the CONFIG object to match: task, scope, mode, laneSites, whyLabel, why, finishFeel, jobsShape, jobs, blockMinutes, doneWhenShort. Every value from the interview. Output the complete file in one code block, then stop.",
+"Then reply briefly, and output the focus file, changing ONLY the CONFIG object to match: task, scope, mode, laneSites, sealedPlan, whyLabel, why, finishFeel, jobsShape, jobs, blockMinutes, doneWhenShort. Every value from the interview. Output the complete file in one code block, then stop.",
 "",
-"NOTE: You'll need the focus-file HTML template. If you don't have it in this chat, ask the person to paste it before you output the file."
+"The frozen focus-file template is included at the very bottom of this message, after the line === FOCUS FILE TEMPLATE ===. Use it exactly as-is, changing only the CONFIG object. You already have everything you need — do not ask the person to paste anything."
 ].join("\n");
 
 function buildNextPayload(e) {
@@ -1442,6 +1520,10 @@ function buildNextPayload(e) {
   ctx.push("=== END LAST SESSION ===");
   ctx.push("");
   ctx.push(INTERVIEW_PROMPT);
+  ctx.push("");
+  ctx.push("=== FOCUS FILE TEMPLATE ===");
+  // include this file's own full source so the next chat can produce the file with no extra steps
+  ctx.push("<!DOCTYPE html>\n" + document.documentElement.outerHTML);
   return ctx.join("\n");
 }
 

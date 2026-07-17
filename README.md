@@ -61,6 +61,7 @@ When asked about a framework or build command, choose **"Other"** or leave it bl
 Because the prompt and the focus file are embedded in `index.html`, changes flow like this:
 
 - **To change the focus file** (the page a session produces): edit `focus-file.html`, minify it, re-embed it into `focus-file-prompt.md`, then re-embed `focus-file-prompt.md` into `index.html`.
+  - Note: `focus-file.html` keeps a `TESTS` object (dev-only, drives `?test=` preview URLs). The **shipped** minified template strips `TESTS` and simplifies the config line to `urlCfg || CONFIG`, to keep produced files smaller/faster. Produced files load config from the interview (`#cfg=` or the `CONFIG` object), never from `TESTS`.
 - **To change the interview questions**: edit the instructions section at the top of `focus-file-prompt.md`, then re-embed into `index.html`.
 - **To change the website itself** (headline, layout, modals): edit `index.html` directly.
 
