@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus File</title>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  :root{
+    --paper:#fdfbf6; --paper-warm:#f3ede1; --paper-line:#e4d9c5; --hair:#f0e8da;
+    --ink:#26241e; --ink-soft:#5c5647; --ink-mut:#8a8474; --ink-faint:#a39c8c;
+    --pine:#2f6a44; --pine-soft:#3d7a52; --pine-tint:#eef4ea; --clay:#b5642f;
+    --serif: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+    --sans: -apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: "SF Mono", ui-monospace, Menlo, monospace;
+  }
+  body { font-family:var(--serif); color:var(--ink); background:var(--paper);
+    line-height:1.5; min-height:100vh; display:flex; flex-direction:column; }
+
+  /* HEADER NAV */
+  header { display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px; border-bottom:1px solid var(--hair); flex-wrap:wrap; gap:12px; }
+  .nav-left { display:flex; align-items:center; gap:28px; flex-wrap:wrap; }
+  .logo { font-family:var(--serif); font-size:16px; font-weight:600; color:var(--pine); }
+  .nav-links { display:flex; gap:20px; }
+  .nav-links button { background:none; border:none; cursor:pointer; font-family:var(--sans);
+    font-size:14px; color:var(--ink-soft); padding:4px 2px; transition:color .15s; }
+  .nav-links button:hover { color:var(--ink); }
+  .freetag { font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--pine); background:var(--pine-tint); padding:6px 12px; border-radius:6px; }
+
+  .wrap { max-width:640px; margin:0 auto; padding:72px 32px 48px; flex:1;
+    display:flex; flex-direction:column; width:100%; }
+
+  h1 { font-size:44px; font-weight:400; line-height:1.12; letter-spacing:-.015em; margin-bottom:22px; max-width:15ch; }
+  .pitch { font-size:18px; color:var(--ink-soft); line-height:1.6; max-width:46ch; margin-bottom:40px; }
+  .pitch b { color:var(--ink); font-weight:600; }
+
+  .promptbox { background:var(--paper-warm); border:1px solid var(--paper-line);
+    border-radius:14px; overflow:hidden; }
+  .pb-head { display:flex; justify-content:space-between; align-items:center;
+    padding:14px 18px; border-bottom:1px solid var(--paper-line); }
+  .pb-label { font-family:var(--mono); font-size:11px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-mut); }
+  .copy { display:inline-flex; align-items:center; gap:8px; background:var(--pine); color:#fff;
+    padding:10px 20px; border-radius:30px; font-family:var(--sans); font-weight:600;
+    font-size:13px; border:none; cursor:pointer; transition:background .15s; }
+  .copy:hover { background:#276039; }
+  .pb-body { position:relative; max-height:210px; overflow:hidden; }
+  .pb-code { font-family:var(--mono); font-size:13px; line-height:1.7; color:var(--ink-soft);
+    white-space:pre-wrap; padding:20px 18px; }
+  .fade { position:absolute; left:0; right:0; bottom:0; height:70px;
+    background:linear-gradient(transparent, var(--paper-warm)); pointer-events:none; }
+
+  .aftercopy { max-height:0; opacity:0; overflow:hidden;
+    transition:max-height .35s ease, opacity .35s ease, margin .35s ease; text-align:center; }
+  .aftercopy.on { max-height:120px; opacity:1; margin-top:22px; }
+  .ac-line { font-family:var(--sans); font-size:14px; color:var(--ink-soft); margin-bottom:8px; }
+  .ac-links { font-family:var(--sans); font-size:14px; }
+  .ac-links a { color:var(--pine); text-decoration:underline; text-underline-offset:2px; font-weight:600; }
+  .ac-links a:hover { color:#276039; }
+  .ac-links .dot { color:var(--ink-faint); margin:0 8px; }
+
+  .steps { display:flex; gap:24px; margin:32px 0 0; }
+  .step { flex:1; }
+  .step .n { font-family:var(--mono); font-size:13px; color:var(--pine); font-weight:600; margin-bottom:8px; }
+  .step h3 { font-family:var(--sans); font-size:14.5px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .step p { font-family:var(--sans); font-size:13px; color:var(--ink-mut); line-height:1.5; }
+
+  .foot { font-family:var(--sans); font-size:13px; color:var(--ink-faint);
+    margin-top:auto; padding-top:44px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .foot .tag { font-family:var(--serif); font-style:italic; font-size:15px; color:var(--ink-mut); }
+  .foot-copy { display:inline-flex; align-items:center; gap:8px; background:none; border:1.5px solid var(--paper-line);
+    color:var(--ink-soft); padding:9px 18px; border-radius:30px; font-family:var(--sans); font-weight:600;
+    font-size:13px; cursor:pointer; transition:border-color .15s, color .15s; }
+  .foot-copy:hover { border-color:var(--pine); color:var(--pine); }
+
+  /* MODAL */
+  .modal-bg { position:fixed; inset:0; background:rgba(30,32,27,.55); display:none;
+    align-items:center; justify-content:center; padding:24px; z-index:100; }
+  .modal-bg.on { display:flex; }
+  .modal { background:var(--paper); border-radius:16px; max-width:600px; width:100%;
+    max-height:82vh; overflow-y:auto; padding:36px 40px; position:relative; }
+  .modal h2 { font-family:var(--mono); font-size:12px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--pine); margin-bottom:22px; }
+  .modal p { font-family:var(--sans); font-size:15px; color:var(--ink-soft); line-height:1.6; margin-bottom:16px; }
+  .modal p b { color:var(--ink); font-weight:600; }
+  .modal a { color:var(--pine); text-decoration:underline; }
+  .modal-close { position:absolute; top:20px; right:22px; background:none; border:none; cursor:pointer;
+    font-size:22px; color:var(--ink-mut); line-height:1; }
+  .modal-close:hover { color:var(--ink); }
+
+  @media (max-width:600px){
+    header { padding:14px 20px; }
+    .nav-left { gap:16px; }
+    .wrap { padding:40px 22px 32px; }
+    h1 { font-size:32px; }
+    .steps { flex-direction:column; gap:18px; }
+    .modal { padding:28px 24px; }
+  }
+</style></head>
+<body>
+
+  <header>
+    <div class="nav-left">
+      <span class="logo">Focus File</span>
+      <nav class="nav-links">
+        <button data-modal="design">Design notes</button>
+        <button data-modal="privacy">Privacy</button>
+        <button data-modal="feedback">Feedback</button>
+      </nav>
+    </div>
+    <span class="freetag">Free — no account</span>
+  </header>
+
+  <div class="wrap">
+
+    <h1>Decide once. Then just begin.</h1>
+    <p class="pitch">Answer a few quick questions and get a single page that holds one block of work — <b>then close the internet and go.</b> It runs fully offline and knocks every half hour to ask if you're still on task.</p>
+
+    <div class="promptbox">
+      <div class="pb-head">
+        <span class="pb-label">The prompt · paste into any AI</span>
+        <button class="copy" id="copyBtn">⧉&nbsp;&nbsp;Copy</button>
+      </div>
+      <div class="pb-body">
+        <div class="pb-code">Run a short setup, then output a finished focus file. Ask ONE question at a time, keep it warm and fast.
+
+Q1 — MODE. Offline work → block everything. Needs internet → allow only the sites the work needs.
+Q2 — WORK + TIME. The task and the block window.
+Q3 — SHAPE THE GOAL. The header is the outcome; the jobs are the steps. Never restate the checklist.
+Q4 — THE TRAP (optional). &quot;Anything that tends to pull you off task? I&#x27;ll remind you. (Or skip.)&quot;
+Q5 — THE REWARD. &quot;What will finishing this feel like? I&#x27;ll show you this if you drift.&quot;
+
+Then output the focus file, changing only the config to match…</div>
+        <div class="fade"></div>
+      </div>
+    </div>
+
+    <div class="aftercopy" id="afterCopy">
+      <p class="ac-line">Now open an AI and paste it into a new chat.</p>
+      <p class="ac-links">
+        <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude ↗</a>
+        <span class="dot">·</span>
+        <a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT ↗</a>
+        <span class="dot">·</span>
+        <a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini ↗</a>
+      </p>
+    </div>
+
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h3>2-minute interview</h3><p>It refuses vagueness, narrows the work to one finishable block, and gets honest about what will pull you away, why it matters, and how finishing will feel.</p></div>
+      <div class="step"><div class="n">02</div><h3>The Focus File</h3><p>The doing happens here. A small offline dashboard holds the actions and start time, then checks in if you drift.</p></div>
+      <div class="step"><div class="n">03</div><h3>Exit log</h3><p>At the end, a 60-second Exit log records what got done, how the block felt, and where the next one will start. Shareable with a coach or therapist.</p></div>
+    </div>
+
+    <div class="foot">
+      <span class="tag">Block by block, ritual becomes habit.</span>
+      <button class="foot-copy" id="footCopyBtn">Copy prompt ↑</button>
+    </div>
+
+  </div>
+
+  <!-- MODALS -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal" id="modalBox">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script type="text/plain" id="fullPrompt"># Focus File — the setup prompt
+
+Paste this whole message into any AI assistant (Claude, ChatGPT, Gemini, etc.). Answer a few quick questions and it gives you a focus file: save it as an `.html` file and open it whenever you sit down to work. It runs offline — no internet needed once saved.
+
+---
+
+INSTRUCTIONS FOR THE AI:
+
+Run a short setup, then output a finished focus file. Ask ONE question at a time, wait for the answer, keep it warm and fast. After the last question, reply with one rule and output the file. No extra questions.
+
+Q1 — MODE. Ask what kind of work this is:
+- Offline (writing, studying, creative, application, own idea) -> sealed: block everything.
+- Needs internet (job search, research, brainstorm, new project, strategy) -> lane: ask "which sites does the work actually need?", record them; block everything else.
+
+Q2 — WORK + TIME. Ask what they're working on and their window (e.g. "writing, 9-12"). Get the task and block length in minutes.
+
+Q3 — SHAPE THE GOAL. The header (task) is the OUTCOME — the one true thing that exists when done. Jobs, if any, are the STEPS. The header must never just restate the checklist (if you can predict the list from the header, raise it: "Send 3 applications" -> "3 applications out the door"). Then pick jobsShape:
+- "none": atomic, nothing to break down without faking it (write 1,500 words, meditate). Header stands alone.
+- "milestones": atomic but large (1,500 words -> 500/1,000/1,500), only if worth splitting.
+- "checklist": 3-5 genuinely DIFFERENT actions. Test: different actions, or one action sliced into stages? Sliced ("open doc -> write scene -> keep going" = all writing) is NOT a checklist. Never invent steps. Propose the list, let them edit.
+Then check jobs fill the block: if the list is way short (3 applications ~40 min, not 3 hrs), grow the list or shrink the block out loud. No dead time.
+
+Q4 — THE TRAP (optional). Ask: "Anything that tends to pull you off task — a habit, a distraction, a temptation? I'll remind you of it. (Or skip.)"
+If they name something, set `why` to it phrased as the trap to avoid (the thing that feels like progress but isn't), and `whyLabel` to "Watch for" (or "Remember" for a rallying cry). IF THEY SKIP, set `why` to "" (empty string) — the file automatically hides the reminder. Do not invent a trap.
+
+Q5 — THE REWARD. Ask: "What will finishing this feel like? I'll show you this if you drift."
+Set `finishFeel` to their answer. This returns at the check-in only on "sort of"/"no".
+
+THEN, in this order:
+1. Reply briefly (a sentence), and state the rule: "When you get the pull to look something up, park it and keep going — deal with it after."
+2. Produce the complete file (from <!DOCTYPE html> to </html>), changing ONLY the CONFIG object to match the interview. Change nothing else — no HTML, CSS, or JS, and leave the TESTS block as-is. Every value from the interview, never invented (if they skipped the trap, why is "").
+   - If you can create/attach a downloadable file, do that and name it `focus.html`.
+   - Otherwise, output it in ONE code block.
+3. AFTER the file, give clear save-and-use instructions. Lead with a bold heading and keep it short:
+
+   **↓ Download your focus file and use it offline**
+   - If there's a downloadable file above: save it, then double-click to open it in your browser.
+   - If it's a code block: copy all of it, paste into a plain text file, and save as **`focus.html`** (must end in `.html`).
+   - Then: **turn off your internet and click Begin session.** It runs fully offline — that's the point.
+   - Keep the file. Reopen it any time to start a new block.
+
+Then stop.
+
+FOCUS FILE (change only CONFIG):
+
+```html
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta content="width=device-width,initial-scale=1.0" name=viewport><title>Focus File</title><style>:root{--paper:#fdfbf6;--paper-warm:#f3ede1;--paper-line:#e4d9c5;--hair:#f0e8da;--ink:#26241e;--ink-body:#2c2a24;--ink-soft:#5c5647;--ink-mut:#8a8474;--ink-faint:#a39c8c;--ink-ghost:#b3ab98;--pine:#2f6a44;--pine-soft:#3d7a52;--pine-tint:#eef4ea;--pine-chip:#dbe9df;--pine-chip-ink:#1f4a30;--amber:#c08a3e;--amber-warm:#faf4e8;--knock-bg:#2a2620;--knock-amber:#e0a86b;--clay:#b5642f}*{box-sizing:border-box;margin:0;padding:0}html,body{color:var(--ink-body);-webkit-font-smoothing:antialiased;background:#ece5d6;font-family:Georgia,Iowan Old Style,Palatino Linotype,Palatino,serif;line-height:1.5}body{justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 18px 80px;display:flex}.sans{font-family:-apple-system,system-ui,Segoe UI,Roboto,sans-serif}.card{background:var(--paper);border:1px solid var(--paper-line);border-radius:16px;width:100%;max-width:540px;position:relative;overflow:hidden}.flash{background:var(--knock-amber);opacity:0;pointer-events:none;z-index:20;border-radius:16px;position:absolute;inset:0}.flash.on{animation:.9s ease-out knock-flash}@keyframes knock-flash{0%{opacity:0}12%{opacity:.28}30%{opacity:.05}45%{opacity:.28}to{opacity:0}}@media (prefers-reduced-motion:reduce){.flash.on{animation:.6s ease-out knock-flash-soft}@keyframes knock-flash-soft{0%{opacity:0}40%{opacity:.18}to{opacity:0}}}.eyebrow{letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mut);font-family:-apple-system,system-ui,sans-serif;font-size:10px;font-weight:600}.masthead{border-bottom:1px solid var(--hair);background:var(--paper);align-items:baseline;padding:15px 28px 13px;display:flex}.mast-name{letter-spacing:.01em;color:var(--pine);font-family:Georgia,Iowan Old Style,serif;font-size:15px;font-weight:600}.header{background:var(--paper-warm);border-bottom:1px solid var(--paper-line);padding:26px 28px 22px}.header-top{justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px;display:flex}.scope{letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-align:right;white-space:nowrap;padding-top:3px;font-family:-apple-system,system-ui,sans-serif;font-size:10px;font-weight:600}.task-title{color:var(--ink);letter-spacing:-.015em;font-size:33px;line-height:1.04}.timer-wrap{display:none}.timer-wrap.on{display:block}.elapsed{text-align:right;font-family:-apple-system,system-ui,sans-serif}.elapsed .big{color:var(--pine);letter-spacing:-.01em;font-size:20px;font-weight:600;line-height:1}.elapsed .unit{color:var(--ink-mut);font-size:12px;font-weight:600}.progress-track{background:var(--paper-line);border-radius:3px;height:5px;margin-top:14px;overflow:hidden}.progress-fill{background:var(--pine);border-radius:3px;width:0%;height:100%;transition:width .6s}.lane{border-bottom:1px solid var(--hair);background:var(--pine-tint);padding:14px 28px;display:none}.lane.on{display:block}.lane-inner{flex-wrap:wrap;align-items:center;gap:9px;font-family:-apple-system,system-ui,sans-serif;display:flex}.lane-label{letter-spacing:.12em;text-transform:uppercase;color:var(--pine-soft);font-size:10px;font-weight:600}.lane-chip{background:var(--pine-chip);color:var(--pine-chip-ink);border-radius:20px;padding:4px 11px;font-size:12px;font-weight:600}.lane-rest{color:var(--ink-faint);font-size:12px;font-style:italic}.why{border-bottom:1px solid var(--hair);padding:22px 28px}.why-label{color:var(--clay);margin-bottom:8px}.why p{color:var(--ink-soft);font-size:17px;font-style:italic;line-height:1.5}.jobs{border-bottom:1px solid var(--hair);padding:24px 28px}.jobs.hidden{display:none}.jobs-head{justify-content:space-between;align-items:baseline;margin-bottom:16px;display:flex}.jobs-eyebrow{margin-bottom:0}.counter{letter-spacing:.1em;color:var(--pine);font-family:-apple-system,system-ui,sans-serif;font-size:12px;font-weight:700;transition:color .2s}.counter.complete{color:var(--pine)}.job-list{flex-direction:column;gap:15px;display:flex}.job{cursor:pointer;user-select:none;align-items:flex-start;gap:13px;display:flex}.job .box{border:1.5px solid var(--ink-ghost);border-radius:5px;flex-shrink:0;width:22px;height:22px;margin-top:1px;transition:background .15s,border-color .15s;position:relative}.job.done .box{background:var(--pine);border-color:var(--pine)}.job.done .box:after{content:"";border:solid var(--paper);border-width:0 2px 2px 0;width:6px;height:11px;position:absolute;top:3px;left:6px;transform:rotate(42deg)}.job .label{color:var(--ink-body);font-family:-apple-system,system-ui,sans-serif;font-size:15.5px;line-height:1.4;transition:color .15s}.job.done .label{color:var(--ink-faint);text-decoration:line-through;text-decoration-color:var(--paper-line)}.action{text-align:center;background:var(--paper-warm);padding:26px 28px}.btn-begin{background:var(--pine);color:var(--paper);cursor:pointer;border:none;border-radius:40px;align-items:center;gap:12px;padding:16px 16px 16px 30px;font-family:-apple-system,system-ui,sans-serif;font-size:16px;font-weight:600;transition:transform .1s,background .15s;display:inline-flex}.btn-begin:hover{background:#276039}.btn-begin:active{transform:scale(.97)}.btn-begin .arr{background:var(--paper);width:36px;height:36px;color:var(--pine);border-radius:50%;justify-content:center;align-items:center;font-size:17px;display:flex}.checkin{display:none}.checkin.on{display:block}.checkin-head{justify-content:center;align-items:center;gap:9px;margin-bottom:16px;display:flex}.checkin-dot{background:var(--ink-ghost);border-radius:50%;width:8px;height:8px;transition:background .3s}.checkin-label{letter-spacing:.02em;color:var(--ink-mut);font-family:-apple-system,system-ui,sans-serif;font-size:13px;font-weight:600;transition:color .3s}.checkin.asking .checkin-dot{background:var(--clay);animation:1.6s ease-in-out infinite pulse-ask}.checkin.asking .checkin-label{color:var(--clay)}@keyframes pulse-ask{0%,to{opacity:.4;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}@media (prefers-reduced-motion:reduce){.checkin.asking .checkin-dot{opacity:1;animation:none}}.knock-reason{color:var(--ink-soft);border-left:2px solid var(--paper-line);text-align:left;max-width:40ch;margin:0 auto 18px;padding-left:14px;font-size:15px;font-style:italic;line-height:1.45;display:none}.checkin.asking .knock-reason{display:block}.knock-answers{gap:10px;max-width:400px;margin:0 auto;display:flex}.knock-answers button{letter-spacing:.06em;text-transform:uppercase;cursor:pointer;background:0 0;border-radius:8px;flex:1;padding:13px 8px;font-family:-apple-system,system-ui,sans-serif;font-size:12px;font-weight:600;transition:background .15s,color .15s}.k-yes{border:1.5px solid var(--pine);color:var(--pine-soft)}.k-yes:hover{background:var(--pine);color:var(--paper)}.k-sort{border:1.5px solid var(--ink-ghost);color:var(--ink-mut)}.k-sort:hover{background:var(--ink-mut);color:var(--paper)}.k-no{border:1.5px solid var(--clay);color:var(--clay)}.k-no:hover{background:var(--clay);color:var(--paper)}.pull{border-top:1px solid var(--hair);margin-top:22px;padding-top:20px;display:none}.pull.on{display:block}.pull-label{letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;font-family:-apple-system,system-ui,sans-serif;font-size:10px;font-weight:600}.pull-text{color:var(--ink-soft);max-width:42ch;margin:0 auto;font-size:16px;font-style:italic;line-height:1.5}.preview-row{flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 14px;margin-top:12px;display:flex}.next-knock{color:var(--ink-faint);letter-spacing:.02em;padding:8px 4px;font-family:-apple-system,system-ui,sans-serif;font-size:11px}.next-knock:empty{display:none}.preview-link{color:var(--ink-faint);text-underline-offset:2px;cursor:pointer;padding:10px 8px;font-family:-apple-system,system-ui,sans-serif;font-size:12px;text-decoration:underline;transition:color .15s;display:inline-block}.preview-link:hover{color:var(--ink-mut)}.blockend{text-align:center;background:var(--paper-warm);padding:30px 28px;display:none}.blockend.on{display:block}.be-eyebrow{color:var(--amber);margin-bottom:14px}.be-line{color:var(--ink);max-width:26ch;margin:0 auto 8px;font-size:22px;line-height:1.25}.be-where{color:var(--ink-soft);margin-bottom:24px;font-family:-apple-system,system-ui,sans-serif;font-size:14px}.be-choices{flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;display:flex}.btn-finish{background:var(--pine);color:var(--paper);cursor:pointer;border:none;border-radius:40px;padding:14px 26px;font-family:-apple-system,system-ui,sans-serif;font-size:15px;font-weight:600}.btn-finish:hover{background:#276039}.btn-more{color:var(--ink-soft);border:1.5px solid var(--paper-line);cursor:pointer;background:0 0;border-radius:40px;padding:14px 24px;font-family:-apple-system,system-ui,sans-serif;font-size:15px;font-weight:600}.btn-more:hover{border-color:var(--ink-ghost)}.be-note{color:var(--ink-ghost);max-width:34ch;margin-top:20px;margin-left:auto;margin-right:auto;font-family:-apple-system,system-ui,sans-serif;font-size:11px;line-height:1.5}.exit{padding:30px 28px;display:none}.exit.on{display:block}.exit-eyebrow{color:var(--pine-soft);margin-bottom:16px}.exit-title{color:var(--ink);margin-bottom:24px;font-size:22px;line-height:1.2}.exit-q{color:var(--ink-soft);margin-bottom:9px;font-family:-apple-system,system-ui,sans-serif;font-size:13px;font-weight:600}.hit-row{gap:9px;margin-bottom:22px;display:flex}.hit-row button{border:1.5px solid var(--paper-line);color:var(--ink-mut);cursor:pointer;background:0 0;border-radius:8px;padding:9px 20px;font-family:-apple-system,system-ui,sans-serif;font-size:13px;font-weight:600}.hit-row button.sel{border-color:var(--pine);color:var(--pine);background:var(--pine-tint)}.exit-input{border:1px solid var(--paper-line);background:var(--paper);width:100%;color:var(--ink-body);resize:none;border-radius:9px;margin-bottom:18px;padding:13px 15px;font-family:-apple-system,system-ui,sans-serif;font-size:14px}.exit-input::placeholder{color:var(--ink-ghost);font-style:italic}.exit-input.invalid{border-color:var(--clay);background:#fbf1ea}.exit-log.warn{color:var(--clay);font-weight:600}.exit-forward{color:var(--pine-soft);background:var(--pine-wash,#eef4ea);border-radius:9px;margin:4px 0 0;padding:12px 14px;font-family:-apple-system,system-ui,sans-serif;font-size:12.5px;line-height:1.5}.exit-foot{border-top:1px solid var(--hair);justify-content:space-between;align-items:center;gap:12px;margin-top:18px;padding-top:18px;display:flex}.exit-log{color:var(--ink-mut);font-family:-apple-system,system-ui,sans-serif;font-size:12px}.btn-done{background:var(--pine);color:var(--paper);cursor:pointer;white-space:nowrap;border:none;border-radius:40px;padding:11px 22px;font-family:-apple-system,system-ui,sans-serif;font-size:14px;font-weight:600}.btn-done:hover{background:#276039}.end-link{color:var(--clay)}.end-link:hover{color:#8f4a24}.alldone{text-align:center;padding:44px 28px;display:none}.alldone.on{display:block}.alldone .mark{color:var(--pine);margin-bottom:16px;font-size:40px}.alldone .msg{color:var(--ink);margin-bottom:8px;font-size:22px}.alldone .sub{color:var(--ink-mut);font-family:-apple-system,system-ui,sans-serif;font-size:13px;font-style:italic}.btn-buildnext{background:var(--pine);color:var(--paper);cursor:pointer;border:none;border-radius:40px;margin-top:28px;padding:14px 28px;font-family:-apple-system,system-ui,sans-serif;font-size:15px;font-weight:600;transition:background .15s;display:inline-block}.btn-buildnext:hover{background:#276039}.buildnext-hint{color:var(--ink-faint);max-width:38ch;margin:12px auto 0;font-family:-apple-system,system-ui,sans-serif;font-size:12px;line-height:1.5}.log-actions{border-top:1px solid var(--hair);flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px;padding-top:22px;display:flex}.btn-log{color:var(--ink-soft);border:1.5px solid var(--paper-line);cursor:pointer;background:0 0;border-radius:30px;padding:9px 16px;font-family:-apple-system,system-ui,sans-serif;font-size:12px;font-weight:600;transition:border-color .15s}.btn-log:hover{border-color:var(--ink-ghost)}.log-view{text-align:left;border-top:1px solid var(--hair);max-height:340px;margin-top:22px;padding-top:18px;display:none;overflow-y:auto}.log-view.on{display:block}.log-entry{border:1px solid var(--paper-line);background:var(--paper);border-radius:10px;margin-bottom:12px;padding:14px 16px}.log-entry .le-date{letter-spacing:.06em;text-transform:uppercase;color:var(--pine);margin-bottom:8px;font-family:-apple-system,system-ui,sans-serif;font-size:11px;font-weight:700}.log-entry .le-task{color:var(--ink);margin-bottom:10px;font-size:16px}.log-entry .le-row{color:var(--ink-soft);margin-bottom:3px;font-family:-apple-system,system-ui,sans-serif;font-size:12.5px;line-height:1.5}.log-entry .le-row b{color:var(--ink-mut);font-weight:600}.log-empty{color:var(--ink-mut);text-align:center;padding:12px;font-family:-apple-system,system-ui,sans-serif;font-size:13px}</style></head><body><div class=card id=card><div class=flash id=flash></div><div class=masthead><span class=mast-name>Focus File</span></div><div class=header><div class=header-top><div class=timer-wrap id=timerWrap><div class=elapsed><span class=big id=elapsedNum>0</span><span class=unit id=elapsedUnit> min in</span></div></div><div class=scope id=scope>9:00 – 12:00</div></div><h1 class=task-title id=taskTitle>1,500 new words on the story</h1><div class="progress-track timer-wrap" id=progressWrap style=margin-top:16px><div class=progress-fill id=progressFill></div></div></div><div class=lane id=lane><div class=lane-inner><span class=lane-label>Open:</span><span id=laneChips></span><span class=lane-rest>— rest blocked</span></div></div><div class=why id=why><div class="eyebrow why-label" id=whyLabel>Watch for</div><p id=whyText>Re-reading and tweaking notes will feel like work. It's the detour. New words only — forward.</p></div><div class="jobs hidden" id=jobsSection><div class=jobs-head><span class="eyebrow jobs-eyebrow" id=jobsEyebrow>The jobs</span><span class=counter id=counter>00 / 00 COMPLETE</span></div><div class=job-list id=jobList></div></div><div class=action id=action><button class=btn-begin id=beginBtn>Begin session <span class=arr>→</span></button><div class=checkin id=checkin><div class=checkin-head id=checkinHead><span class=checkin-dot id=checkinDot></span><span class=checkin-label id=checkinLabel>On task?</span></div><p class=knock-reason id=knockReason></p><div class=knock-answers><button class=k-yes data-a=yes>Yes</button><button class=k-sort data-a=sort-of>Sort of</button><button class=k-no data-a=no>No</button></div><div class=pull id=pull><div class=pull-label>Remember what you're after</div><p class=pull-text id=pullText></p></div></div><div class=preview-row><span class=next-knock id=nextKnock></span><span class=preview-link id=previewLink>Preview the knock</span><span class="preview-link end-link" id=endLink>End session</span></div></div><div class=blockend id=blockend><div class="eyebrow be-eyebrow" id=beEyebrow>Your block's up · 12:00</div><div class=be-line id=beLine>You said done was 1,500 new words.</div><p class=be-where>Where are you?</p><div class=be-choices><button class=btn-finish id=finishBtn>Finish here</button><button class=btn-more id=moreBtn>One more block →</button></div><p class=be-note>One more block adds ~30 min. Extending? Bump your Freedom session too.</p></div><div class=exit id=exit><div class="eyebrow exit-eyebrow">Block complete</div><div class=exit-title>A few quick things — this becomes your log.</div><div class=exit-q>Did you finish the block as planned?</div><textarea placeholder="e.g. mostly — got through the hard scene but not the ending" class=exit-input id=finishInput rows=2></textarea><div class=exit-q id=outputQ style=display:none>Output — did you hit the number?</div><input class=exit-input id=outputInput style=display:none><div class=exit-q>What, if anything, got in the way of focus?</div><textarea placeholder="e.g. kept wanting to check email; slow start" class=exit-input id=inTheWayInput rows=2></textarea><div class=exit-q>Where will the next block start?</div><textarea placeholder="e.g. edit what I just wrote, out loud" class=exit-input id=nextInput rows=2></textarea><p class=exit-forward>This saves to your log. Next, you can build your following block straight from it — carrying today's task and what got in the way.</p><div class=exit-foot><span class=exit-log id=exitLog>Saved to your log</span><button class=btn-done id=doneBtn>Save entry</button></div></div><div class=alldone id=allDone><div class=mark>✓</div><div class=msg>Entry saved.</div><div class=sub id=allDoneSub>Block by block, ritual becomes habit.</div><button class=btn-buildnext id=buildNextBtn>Build next block from this →</button><div class=buildnext-hint id=buildNextHint>Copies a ready-to-paste setup that carries this session forward. Drop it into a new chat.</div><div class=log-actions><button class=btn-log id=viewLogBtn>View log</button><button class=btn-log id=copyLastBtn>Copy latest entry</button><button class=btn-log id=copyAllBtn>Copy full log</button></div><div class=log-view id=logView></div></div></div><script>/* =====================================================================
+CONFIG — the night-before interview fills this in.
+jobsShape: "none" | "milestones" | "checklist"
+mode:      "sealed" | "lane"
+===================================================================== */
+const CONFIG={task:`1,500 new words on the story`,scope:`9:00 – 12:00`,mode:`sealed`,laneSites:[],whyLabel:`Watch for`,why:`Re-reading and tweaking notes will feel like work. It's the detour. New words only — forward.`,finishFeel:`1,500 words that didn't exist this morning. The story's further than it was — tomorrow you shape them instead of dreading the blank page.`,jobsShape:`none`,jobs:[],blockMinutes:180,knockMinMin:28,knockMaxMin:33,doneWhenShort:`1,500 new words`},TESTS={writing:{task:`1,500 new words on the story`,scope:`9:00 – 12:00`,mode:`sealed`,laneSites:[],whyLabel:`Watch for`,why:`Re-reading and tweaking notes will feel like work. It's the detour. New words only — forward.`,finishFeel:`1,500 words that didn't exist this morning. The story's further than it was — tomorrow you shape them instead of dreading the blank page.`,jobsShape:`none`,jobs:[],blockMinutes:180,knockMinMin:28,knockMaxMin:33,doneWhenShort:`1,500 new words`},notrap:{task:`1,500 new words on the story`,scope:`9:00 – 12:00`,mode:`sealed`,laneSites:[],whyLabel:`Watch for`,why:``,finishFeel:`1,500 words that didn't exist this morning. The story's further than it was — tomorrow you shape them instead of dreading the blank page.`,jobsShape:`none`,jobs:[],blockMinutes:180,knockMinMin:28,knockMaxMin:33,doneWhenShort:`1,500 new words`},writingMilestones:{task:`1,500 new words on the story`,scope:`9:00 – 12:00`,mode:`sealed`,laneSites:[],whyLabel:`Watch for`,why:`Re-reading and tweaking notes will feel like work. It's the detour. New words only — forward.`,finishFeel:`1,500 words that didn't exist this morning. The story's further than it was — tomorrow you shape them instead of dreading the blank page.`,jobsShape:`milestones`,jobs:[`500 words`,`1,000 words`,`1,500 words — done`],blockMinutes:180,knockMinMin:28,knockMaxMin:33,doneWhenShort:`1,500 new words`},jobsearch:{task:`3 applications out the door`,scope:`9:00 – 9:45`,mode:`lane`,laneSites:[`LinkedIn`,`Gmail`,`the 3 company sites`],whyLabel:`Watch for`,why:`"Researching" a company will feel like progress. It's the detour. Submit, don't browse.`,finishFeel:`Three applications actually out the door. Not tabs open, not maybes — sent. The week has a real result in it.`,jobsShape:`checklist`,jobs:[`Tailor the resume bullets for Stripe, submit`,`Write the 3-sentence cover note for Notion, submit`,`Fill out the Linear application form, submit`,`Log all three in the tracking sheet`],blockMinutes:45,knockMinMin:28,knockMaxMin:33,doneWhenShort:`3 applications sent`},study:{task:`Cranial nerves, cold from memory`,scope:`9:00 – 10:30`,mode:`sealed`,laneSites:[],whyLabel:`Watch for`,why:`Re-reading the deck will feel like studying. It's the detour. Recall with it closed, or you don't know it.`,finishFeel:`All twelve, in order, from memory — the thing I've been avoiding is just done.`,jobsShape:`checklist`,jobs:[`First pass through the whole deck, no stopping`,`Second pass — mark every card I miss`,`Drill only the missed cards until clean`,`Write all twelve from memory, deck closed`],blockMinutes:90,knockMinMin:28,knockMaxMin:33,doneWhenShort:`all twelve from memory`},research:{task:`A working outline of the proposal`,scope:`9:00 – 11:00`,mode:`lane`,laneSites:[`Google Docs`,`the funder's site`],whyLabel:`Watch for`,why:`Re-reading the guidelines will feel like progress. It's the detour. The skeleton goes down today.`,finishFeel:`A real skeleton on the page. Next session I fill it in instead of staring at a blank doc.`,jobsShape:`checklist`,jobs:[`Write the one-paragraph summary of the ask`,`List the 4 section headings from the template`,`Draft 3 bullets under each heading`,`Note every open question at the bottom`],blockMinutes:120,knockMinMin:28,knockMaxMin:33,doneWhenShort:`the outline skeleton`}};
+/* ---- Config source, in priority order:
+1. #cfg=<base64 JSON> in the URL  (how the interview delivers a session)
+2. ?test=<name>                    (built-in test modes)
+3. the CONFIG object above         (default)                              ---- */
+function decodeUrlConfig(){try{let m=(location.hash||``).match(/[#&]cfg=([^&]+)/);if(!m)return null;
+// base64url -> JSON
+let b64=m[1].replace(/-/g,`+`).replace(/_/g,`/`);for(;b64.length%4;)b64+=`=`;let json=decodeURIComponent(escape(atob(b64))),obj=JSON.parse(json);
+// fill any missing fields from the default CONFIG so nothing breaks
+return Object.assign({},CONFIG,obj)}catch{return null}}const testKey=new URLSearchParams(location.search).get(`test`),cfg=decodeUrlConfig()||(testKey&&TESTS[testKey]?TESTS[testKey]:CONFIG),$=id=>document.getElementById(id);
+/* lane */
+if($(`taskTitle`).textContent=cfg.task,$(`scope`).textContent=cfg.scope,$(`pullText`).textContent=cfg.finishFeel,$(`beLine`).textContent=`You said done was `+cfg.doneWhenShort+`.`,cfg.why&&cfg.why.trim().length>0?($(`whyLabel`).textContent=cfg.whyLabel||`Watch for`,$(`whyText`).textContent=cfg.why,$(`knockReason`).textContent=`“`+cfg.why+`”`):($(`why`).style.display=`none`,$(`knockReason`).style.display=`none`),cfg.mode===`lane`&&cfg.laneSites.length){$(`lane`).classList.add(`on`);let chipWrap=$(`laneChips`);cfg.laneSites.forEach((s,i)=>{let chip=document.createElement(`span`);chip.className=`lane-chip`,chip.textContent=s,chip.style.marginRight=`0`,chipWrap.appendChild(chip),chipWrap.appendChild(document.createTextNode(` `))})}
+/* jobs — three shapes, with a live counter */
+function pad2(n){return String(n).padStart(2,`0`)}function updateCounter(){let total=document.querySelectorAll(`.job`).length,done=document.querySelectorAll(`.job.done`).length,c=$(`counter`);c.textContent=pad2(done)+` / `+pad2(total)+` COMPLETE`,c.classList.toggle(`complete`,done===total&&total>0)}if(cfg.jobsShape!==`none`&&cfg.jobs.length){$(`jobsSection`).classList.remove(`hidden`),$(`jobsEyebrow`).textContent=cfg.jobsShape===`milestones`?`Milestones`:`The jobs`;let list=$(`jobList`);cfg.jobs.forEach(label=>{let row=document.createElement(`div`);row.className=`job`,row.innerHTML=`<span class="box"></span><span class="label"></span>`,row.querySelector(`.label`).textContent=label,row.addEventListener(`click`,()=>{row.classList.toggle(`done`),updateCounter()}),list.appendChild(row)}),updateCounter()}
+/* ===================== SESSION LOGIC ===================== */
+const LOG_KEY=`nextblock_log`,ENTRIES_KEY=`nextblock_entries`;let startTime=null,elapsedTimer=null,knockTimer=null,blockEndTimer=null,extended=0,knockCount=0,onTaskCount=0,sortOfCount=0,noCount=0,hitAnswer=null;function logRow(event,detail){let now=/* @__PURE__ */ new Date,elapsedMin=startTime?Math.round((Date.now()-startTime)/6e4):0,row=[now.toISOString(),JSON.stringify(cfg.task),elapsedMin,event,detail==null?``:JSON.stringify(detail)].join(`,`),header=`timestamp,task,elapsed_min,event,detail
+`,prior=localStorage.getItem(LOG_KEY)||`timestamp,task,elapsed_min,event,detail
+`;localStorage.setItem(LOG_KEY,prior+row+`
+`)}function randKnockDelay(){let a=cfg.knockMinMin,b=cfg.knockMaxMin;return(a+Math.random()*(b-a))*60*1e3}let nextKnockAt=null;function scheduleAsk(){clearTimeout(knockTimer);let delay=randKnockDelay();nextKnockAt=Date.now()+delay,knockTimer=setTimeout(startAsking,delay)}function updateNextKnock(){let el=$(`nextKnock`);if(!nextKnockAt||$(`checkin`).classList.contains(`asking`)){el.textContent=``;return}let remMin=Math.max(0,Math.round((nextKnockAt-Date.now())/6e4));el.textContent=remMin<=1?`Check-in any moment`:`Next check-in ~`+remMin+` min`}function updateElapsed(){if(!startTime)return;let mins=(Date.now()-startTime)/6e4;$(`elapsedNum`).textContent=Math.floor(mins);let pct=Math.min(100,mins/cfg.blockMinutes*100);$(`progressFill`).style.width=Math.max(3,pct).toFixed(1)+`%`,updateNextKnock()}
+/* ---- Begin ---- */
+$(`beginBtn`).addEventListener(`click`,()=>{
+// block-end fires at the named block length
+startTime=Date.now(),$(`beginBtn`).style.display=`none`,$(`checkin`).classList.add(`on`),$(`timerWrap`).classList.add(`on`),$(`progressWrap`).classList.add(`on`),logRow(`begin`),updateElapsed(),elapsedTimer=setInterval(updateElapsed,1e3),scheduleAsk(),blockEndTimer=setTimeout(showBlockEnd,cfg.blockMinutes*60*1e3)});
+/* ---- The nudge: timer makes the check-in actively ASK ---- */
+function knockBeep(){
+// Web Audio — a soft two-note chime, generated offline, no file needed
+try{let AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;let ctx=new AC,now=ctx.currentTime;[660,880].forEach((freq,i)=>{let osc=ctx.createOscillator(),gain=ctx.createGain();osc.type=`sine`,osc.frequency.value=freq;let t=now+i*.16;gain.gain.setValueAtTime(1e-4,t),gain.gain.exponentialRampToValueAtTime(.18,t+.02),gain.gain.exponentialRampToValueAtTime(1e-4,t+.32),osc.connect(gain).connect(ctx.destination),osc.start(t),osc.stop(t+.34)}),setTimeout(()=>ctx.close(),900)}catch{}}function knockFlash(){let f=$(`flash`);f.classList.remove(`on`),f.offsetWidth,f.classList.add(`on`)}function startAsking(){$(`checkinLabel`).textContent=`Are you on task?`,$(`checkin`).classList.add(`asking`),knockBeep(),knockFlash()}function stopAsking(){$(`checkin`).classList.remove(`asking`),$(`checkinLabel`).textContent=`On task?`}
+/* ---- Answering (buttons are always live, clickable anytime) ---- */
+document.querySelectorAll(`.knock-answers button`).forEach(b=>{b.addEventListener(`click`,()=>{let ans=b.dataset.a,wasAsking=$(`checkin`).classList.contains(`asking`);knockCount++,ans===`yes`?onTaskCount++:ans===`sort-of`?sortOfCount++:ans===`no`&&noCount++,logRow(wasAsking?`knock`:`self-check`,ans),stopAsking(),ans===`yes`?($(`pull`).classList.remove(`on`),scheduleAsk()):($(`pull`).classList.add(`on`),scheduleAsk())})});
+/* ---- Block-end ---- */
+function showBlockEnd(){clearTimeout(knockTimer),stopAsking(),$(`pull`).classList.remove(`on`),$(`action`).style.display=`none`;let label=extended>0?`Extra block's up`:`Your block's up`;$(`beEyebrow`).textContent=label+` · `+cfg.scope.split(`–`).pop().trim(),$(`blockend`).classList.add(`on`),logRow(`block-end-reached`)}
+/* ---- End session (leave early) ---- */
+$(`moreBtn`).addEventListener(`click`,()=>{extended++,logRow(`one-more-block`,extended),$(`blockend`).classList.remove(`on`),$(`action`).style.display=`block`,scheduleAsk(),blockEndTimer=setTimeout(showBlockEnd,1800*1e3)}),$(`finishBtn`).addEventListener(`click`,()=>{$(`blockend`).classList.remove(`on`),showExit()}),$(`endLink`).addEventListener(`click`,()=>{logRow(`end-session-early`),$(`blockend`).classList.remove(`on`),$(`action`).style.display=`none`,showExit()});
+/* ---- Planned-time helpers ---- */
+function parsePlanned(scope){
+// scope like "9:00 – 12:00" -> {start:"9:00", finish:"12:00"}
+let m=scope.split(/[–-]/).map(s=>s.trim());return{start:m[0]||``,finish:m[1]||``}}function nowHHMM(){return(/* @__PURE__ */ new Date()).toLocaleTimeString([],{hour:`2-digit`,minute:`2-digit`})}
+/* ---- Exit ---- */
+function showExit(){clearInterval(elapsedTimer),clearTimeout(knockTimer),clearTimeout(blockEndTimer),(cfg.jobsShape===`milestones`||/\d/.test(cfg.doneWhenShort||``))&&($(`outputQ`).style.display=`block`,$(`outputInput`).style.display=`block`,$(`outputInput`).placeholder=`e.g. `+(cfg.doneWhenShort||`the number you hit`));let jobsTotal=document.querySelectorAll(`.job`).length,jobsDone=document.querySelectorAll(`.job.done`).length;$(`exitLog`).textContent=`Saved to your log · `+knockCount+` check-ins`+(jobsTotal?`, `+jobsDone+`/`+jobsTotal+` done`:``),$(`exit`).classList.add(`on`)}[`finishInput`,`nextInput`,`outputInput`].forEach(id=>{$(id).addEventListener(`input`,()=>{$(id).value.trim()&&($(id).classList.remove(`invalid`),document.querySelector(`.exit-input.invalid`)||$(`exitLog`).classList.remove(`warn`))})}),$(`doneBtn`).addEventListener(`click`,()=>{
+// Required: finished-as-planned, where-next, and output (only when the output field is shown).
+// "What got in the way" stays optional — "nothing" is a valid answer.
+let required=[$(`finishInput`),$(`nextInput`)];$(`outputQ`).style.display!==`none`&&required.push($(`outputInput`));let firstMissing=null;if(required.forEach(el=>{el.value.trim()?el.classList.remove(`invalid`):(el.classList.add(`invalid`),firstMissing||=el)}),firstMissing){let log=$(`exitLog`);log.textContent=`Fill the highlighted fields to save.`,log.classList.add(`warn`),firstMissing.focus();return}$(`exitLog`).classList.remove(`warn`);let planned=parsePlanned(cfg.scope),actualMin=startTime?Math.round((Date.now()-startTime)/6e4):0,jobsTotal=document.querySelectorAll(`.job`).length,jobsDone=document.querySelectorAll(`.job.done`).length,entry={date:(/* @__PURE__ */ new Date()).toISOString(),task:cfg.task,mode:cfg.mode,plannedStart:planned.start,plannedFinish:planned.finish,actualStart:startTime?new Date(startTime).toLocaleTimeString([],{hour:`2-digit`,minute:`2-digit`}):``,actualFinish:nowHHMM(),actualMinutes:actualMin,plannedMinutes:cfg.blockMinutes,extended,jobsDone,jobsTotal,checkins:knockCount,onTask:onTaskCount,sortOf:sortOfCount,off:noCount,finishedAsPlanned:$(`finishInput`).value.trim(),output:$(`outputInput`).value.trim(),inTheWay:$(`inTheWayInput`).value.trim(),nextStart:$(`nextInput`).value.trim()},entries=[];try{entries=JSON.parse(localStorage.getItem(ENTRIES_KEY)||`[]`)}catch{}entries.push(entry),localStorage.setItem(ENTRIES_KEY,JSON.stringify(entries)),logRow(`exit`,{hit:entry.finishedAsPlanned,output:entry.output}),$(`exit`).classList.remove(`on`),$(`allDone`).classList.add(`on`)});
+/* ---- Log: view + copy ---- */
+function getEntries(){try{return JSON.parse(localStorage.getItem(ENTRIES_KEY)||`[]`)}catch{return[]}}function fmtDate(iso){let d=new Date(iso);return d.toLocaleDateString([],{month:`short`,day:`numeric`})+` · `+d.toLocaleTimeString([],{hour:`2-digit`,minute:`2-digit`})}function entryToText(e){let lines=[];return lines.push(fmtDate(e.date)+` — `+e.task),lines.push(`Planned `+e.plannedStart+`–`+e.plannedFinish+` (`+e.plannedMinutes+` min), actual `+e.actualStart+`–`+e.actualFinish+` (`+e.actualMinutes+` min)`+(e.extended?`, +`+e.extended+` extra block(s)`:``)),e.jobsTotal&&lines.push(`Jobs: `+e.jobsDone+`/`+e.jobsTotal+` done`),lines.push(`Check-ins: `+e.checkins+` (`+e.onTask+` on task, `+e.sortOf+` sort of, `+e.off+` off)`),e.finishedAsPlanned&&lines.push(`Finished as planned? `+e.finishedAsPlanned),e.output&&lines.push(`Output: `+e.output),e.inTheWay&&lines.push(`Got in the way: `+e.inTheWay),e.nextStart&&lines.push(`Next block starts: `+e.nextStart),lines.join(`
+`)}function renderLog(){let entries=getEntries(),v=$(`logView`);if(!entries.length){v.innerHTML=`<div class="log-empty">No entries yet.</div>`;return}v.innerHTML=``,entries.slice().reverse().forEach(e=>{let div=document.createElement(`div`);div.className=`log-entry`;let html=`<div class="le-date">`+fmtDate(e.date)+`</div>`;html+=`<div class="le-task">`+escapeHtml(e.task)+`</div>`,html+=`<div class="le-row"><b>Time:</b> planned `+e.plannedStart+`–`+e.plannedFinish+` · actual `+e.actualStart+`–`+e.actualFinish+` (`+e.actualMinutes+` min)`+(e.extended?` · +`+e.extended+` block(s)`:``)+`</div>`,e.jobsTotal&&(html+=`<div class="le-row"><b>Jobs:</b> `+e.jobsDone+`/`+e.jobsTotal+` done</div>`),html+=`<div class="le-row"><b>Check-ins:</b> `+e.checkins+` — `+e.onTask+` on task, `+e.sortOf+` sort of, `+e.off+` off</div>`,e.finishedAsPlanned&&(html+=`<div class="le-row"><b>As planned:</b> `+escapeHtml(e.finishedAsPlanned)+`</div>`),e.output&&(html+=`<div class="le-row"><b>Output:</b> `+escapeHtml(e.output)+`</div>`),e.inTheWay&&(html+=`<div class="le-row"><b>In the way:</b> `+escapeHtml(e.inTheWay)+`</div>`),e.nextStart&&(html+=`<div class="le-row"><b>Next:</b> `+escapeHtml(e.nextStart)+`</div>`),div.innerHTML=html,v.appendChild(div)})}function escapeHtml(s){return(s||``).replace(/[&<>"']/g,c=>({"&":`&amp;`,"<":`&lt;`,">":`&gt;`,'"':`&quot;`,"'":`&#39;`})[c])}function copyText(txt,btn){let done=()=>{let o=btn.textContent;btn.textContent=`Copied ✓`,setTimeout(()=>btn.textContent=o,1600)};navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(txt).then(done,()=>fallbackCopy(txt,done)):fallbackCopy(txt,done)}function fallbackCopy(txt,done){let ta=document.createElement(`textarea`);ta.value=txt,document.body.appendChild(ta),ta.select();try{document.execCommand(`copy`),done()}catch{}document.body.removeChild(ta)}$(`viewLogBtn`).addEventListener(`click`,()=>{let v=$(`logView`);v.classList.toggle(`on`),v.classList.contains(`on`)?(renderLog(),$(`viewLogBtn`).textContent=`Hide log`):$(`viewLogBtn`).textContent=`View log`}),$(`copyLastBtn`).addEventListener(`click`,e=>{let entries=getEntries();entries.length&&copyText(entryToText(entries[entries.length-1]),e.target)}),$(`copyAllBtn`).addEventListener(`click`,e=>{let entries=getEntries();entries.length&&copyText(entries.map(entryToText).join(`
+
+———
+
+`),e.target)});
+/* ---- Build next block: copy interview prompt + this session as priming ---- */
+const INTERVIEW_PROMPT=[`You run a short setup for a focus tool called Focus File, then output a finished focus file. Ask ONE question at a time, wait for the answer, keep it warm and fast. After the last question, reply with one rule and output the file. No extra questions.`,``,`Q1 — MODE. Ask what kind of work this is: Offline (writing, studying, creative, application) -> sealed (block everything). Needs internet (job search, research, brainstorm, strategy) -> lane (ask which sites the work needs; block everything else).`,`Q2 — WORK + TIME. Ask what they're working on and their window. Get the task and block length in minutes.`,`Q3 — SHAPE THE GOAL. The header (task) is the OUTCOME — the one true thing that exists when done; jobs, if any, are the STEPS. The header must never just restate the checklist. jobsShape: "none" (atomic), "milestones" (a large count, split it), or "checklist" (3-5 genuinely different actions — never invent steps; propose and let them edit). Check the jobs fill the block; if short, grow the list or shrink the block.`,`Q4 — THE TRAP (optional). Ask: "Anything that tends to pull you off task — a habit, a distraction, a temptation? I'll remind you of it. (Or skip.)" If named, set why to it phrased as the trap to avoid; if skipped, why is "".`,`Q5 — THE REWARD. Ask: "What will finishing this feel like? I'll show you this if you drift." Set finishFeel to their answer.`,``,`Then reply briefly, state the rule "When you get the pull to look something up, park it and keep going — deal with it after," and output the focus file (the frozen HTML template you have), changing ONLY the CONFIG object to match: task, scope, mode, laneSites, whyLabel, why, finishFeel, jobsShape, jobs, blockMinutes, doneWhenShort. Every value from the interview. Output the complete file in one code block, then stop.`,``,`NOTE: You'll need the focus-file HTML template. If you don't have it in this chat, ask the person to paste it before you output the file.`].join(`
+`);function buildNextPayload(e){let ctx=[];return ctx.push(`=== LAST SESSION (use this to prime the interview) ===`),ctx.push(`Task worked on: `+e.task),e.finishedAsPlanned&&ctx.push(`Finished as planned?: `+e.finishedAsPlanned),e.output&&ctx.push(`Output: `+e.output),e.inTheWay&&ctx.push(`What got in the way of focus: `+e.inTheWay),e.nextStart&&ctx.push(`Where they said the next block starts: `+e.nextStart),ctx.push(`Check-ins last time: `+e.checkins+` (`+e.onTask+` on task, `+e.sortOf+` sort of, `+e.off+` off)`),ctx.push(``),ctx.push(`HOW TO USE THIS in the interview below:`),ctx.push(`- In Q2, propose continuing from "`+(e.nextStart||e.task)+`" as the starting point (they can change it).`),ctx.push(`- In Q4, if they didn't already have a trap, gently suggest the one that tripped them up last time: "`+(e.inTheWay||`—`)+`" — ask if they want it as the reminder.`),ctx.push(`- Keep the same task thread going unless they say otherwise.`),ctx.push(`- Don't lecture about last session; just carry it forward naturally.`),ctx.push(`=== END LAST SESSION ===`),ctx.push(``),ctx.push(INTERVIEW_PROMPT),ctx.join(`
+`)}
+/* ---- Preview the knock: demo the flash + beep + asking state ---- */
+$(`buildNextBtn`).addEventListener(`click`,e=>{let entries=getEntries();entries.length&&copyText(buildNextPayload(entries[entries.length-1]),e.target)}),$(`previewLink`).addEventListener(`click`,()=>{let wasVisible=$(`checkin`).classList.contains(`on`);
+// auto-revert the preview after a moment (it's just a demo)
+$(`checkin`).classList.add(`on`),startAsking(),setTimeout(()=>{stopAsking(),wasVisible||$(`checkin`).classList.remove(`on`)},2600)});<\/script></body></html>
+```
+</script>
+  <script type="text/plain" id="m-design"><h2>Design notes</h2>
+<p><b>Focus File was built for one reason:</b> to finish a long writing project. It worked. So here it is — free, in case you have something to finish too.</p>
+<p><b>It refuses to let you stay vague.</b> In about two minutes, it asks (and keeps asking) until the work is one concrete block: what you will do, why it matters, and exactly where you will start.</p>
+<p><b>It thinks with you, not for you.</b> Use it to brainstorm and structure, but reject anything bland, wrong, or unlike you — nothing gets built until you approve it.</p>
+<p><b>It plans just enough to start.</b> Most productivity tools keep you thinking about work instead of doing it. This one is designed to end quickly: a two-minute setup, then you begin.</p>
+<p><b>It knocks while you work.</b> Every so often, the focus file knocks with your own words: what you said you would do, why it mattered to you, and your usual escape (mine: organizing notes instead of writing). It is harder to argue with your own reasons.</p>
+<p><b>Accountability matters.</b> A clear commitment written down in advance is harder to quietly renegotiate once the work begins. An hour in, the file is doing what your head cannot: holding the work, the reason, and the next step somewhere indecision and distraction cannot erase them.</p>
+<p><b>It ends with the next block already built.</b> The closing step is fast too: a 60-second exit captures what got done, how the block felt, and where tomorrow starts. That is how the book got finished: the focus file made the night before, waiting open beside the draft like a note from yesterday's self. Sit down at the set time; the deciding is already done.</p>
+<p><b>The file holds the commitment between conversations.</b> It does not interpret your life or decide what matters; it makes the intention you already chose harder to lose.</p>
+<p><b>Why a file?</b> No account, no service, nothing that can be taken away. The log stays in your browser, and the whole thing works with the Wi-Fi off — which is where most focused work happens anyway. Unplug for an hour and find out.</p>
+</script>
+  <script type="text/plain" id="m-privacy"><h2>Privacy</h2>
+<p><b>Focus File is a free self-directed tool.</b></p>
+<p>Your Focus Files and logs live on your device, not with us. We do not have accounts, storage, or a dashboard where we can see what you write. Unless you choose to send something to us, we literally cannot read it.</p>
+<p>The site copies a prompt. You paste it into your AI of choice. Anything you put into it is governed by that provider's own terms and privacy policy.</p>
+<p>Be careful with private data, and thoughtful about where you share it.</p>
+<p>Focus File is not medical or psychological advice. Use it at your own discretion.</p>
+</script>
+  <script type="text/plain" id="m-feedback"><h2>Feedback</h2>
+<p>Tell us what's working, what's not, or any new ideas.</p>
+<p>Send us an email: <a href="mailto:hello@focus-file.com">hello@focus-file.com</a></p>
+</script>
+
+  <script>
+    function copyPrompt(btn){
+      var text = document.getElementById('fullPrompt').textContent;
+      // reveal the "now paste it" links regardless of clipboard success — it's guidance either way
+      document.getElementById('afterCopy').classList.add('on');
+      function showCopied(){ var o = btn.innerHTML; btn.innerHTML = '✓&nbsp;&nbsp;Copied'; setTimeout(function(){ btn.innerHTML = o; }, 1800); }
+      function fallback(){
+        try {
+          var ta=document.createElement('textarea'); ta.value=text;
+          ta.style.position='fixed'; ta.style.opacity='0';
+          document.body.appendChild(ta); ta.focus(); ta.select();
+          document.execCommand('copy'); document.body.removeChild(ta);
+        } catch(e) {}
+        showCopied();
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(showCopied, fallback);
+      } else { fallback(); }
+    }
+    document.getElementById('copyBtn').addEventListener('click', function(){ copyPrompt(this); });
+    document.getElementById('footCopyBtn').addEventListener('click', function(){
+      window.scrollTo({top:0, behavior:'smooth'});
+      copyPrompt(this);
+    });
+
+    // modals
+    var bg = document.getElementById('modalBg'), content = document.getElementById('modalContent');
+    document.querySelectorAll('[data-modal]').forEach(function(b){
+      b.addEventListener('click', function(){
+        content.innerHTML = document.getElementById('m-' + b.dataset.modal).textContent;
+        bg.classList.add('on');
+      });
+    });
+    function closeModal(){ bg.classList.remove('on'); }
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    bg.addEventListener('click', function(e){ if(e.target===bg) closeModal(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+  </script>
+</body></html>
