@@ -24,25 +24,27 @@ The focus file runs entirely in the browser with no internet connection. The ses
 
 | File | What it is | Where it goes |
 | --- | --- | --- |
-| `index.html` | **The website.** A single self-contained landing page. The full prompt (below) is embedded inside it, so the Copy button hands out everything. This is the only file you host. | Deploy this to Vercel / any static host. |
-| `focus-file-prompt.md` | **The setup prompt.** The 5-question interview instructions plus the focus-file HTML template, in one paste-and-go document. This is what `index.html`'s Copy button copies. | Source of truth for the prompt. Not hosted separately — it's embedded in `index.html`. |
-| `focus-file.html` | **The focus file template (readable).** The un-minified version of the HTML page a session produces. Kept for reference and editing. The minified version of this is embedded inside `focus-file-prompt.md`. | Not hosted. Reference / editing only. |
+| `index.html` | **The website.** A self-contained landing page. The full prompt is embedded inside it, so the Copy button hands out everything. | **Deploy.** |
+| `sample-writing.html` | **A finished focus file** for a writing block (1,500 words). Linked from the site as a live example. | **Deploy** (the site links to it). |
+| `sample-jobsearch.html` | **A finished focus file** for a job-search block. Linked from the site as a live example. | **Deploy** (the site links to it). |
+| `focus-file-prompt.md` | **The setup prompt.** The 5-question interview plus the focus-file HTML template. This is what `index.html`'s Copy button copies. | Source only — embedded in `index.html`. |
+| `focus-file.html` | **The focus file template (readable).** The un-minified page a session produces. The minified version is embedded in `focus-file-prompt.md`. | Source only — reference / editing. |
 
-**Key point:** only `index.html` gets deployed. The other two are the product's source — they're already baked into `index.html`.
+**Deploy set:** `index.html` **plus the two `sample-*.html` files** — they must go up together, because the site's "See a finished one" links point to the samples. The `.md` and readable `.html` are source, already baked into `index.html`.
 
 ---
 
 ## Deploying to Vercel
 
-The site is one static HTML file. No build step, no framework, no dependencies.
+Static HTML files. No build step, no framework, no dependencies.
 
 **Drag-and-drop (simplest):**
-1. Put `index.html` in a folder by itself. The file must be named exactly `index.html`.
+1. Put `index.html`, `sample-writing.html`, and `sample-jobsearch.html` in a folder together. `index.html` must be named exactly that.
 2. Go to [vercel.com/new](https://vercel.com/new) and log in.
 3. Drag the folder onto the deploy area.
 4. Vercel gives you a live URL in seconds.
 
-When asked about a framework or build command, choose **"Other"** or leave it blank — it's a plain static file.
+When asked about a framework or build command, choose **"Other"** or leave it blank — it's plain static files.
 
 **Custom domain:**
 1. In the Vercel project, go to **Settings → Domains**.
