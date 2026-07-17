@@ -255,8 +255,9 @@
   }
   .job .box {
     width: 22px; height: 22px;
-    border: 1.5px solid var(--ink-ghost);
+    border: 1.5px solid var(--ink-mut);
     border-radius: 5px;
+    background: var(--paper-warm);
     flex-shrink: 0;
     margin-top: 1px;
     position: relative;
@@ -1410,7 +1411,7 @@ $("copyAllBtn").addEventListener("click", (e) => {
 
 /* ---- Build next block: copy interview prompt + this session as priming ---- */
 const INTERVIEW_PROMPT = [
-"You run a short setup for a focus tool called Focus File, then output a finished focus file. Ask ONE question at a time, wait for the answer, keep it warm and fast. After the last question, reply with one rule and output the file. No extra questions.",
+"You run a short setup for a focus tool called Focus File, then output a finished focus file. Ask ONE question at a time, wait for the answer, keep it warm and fast. After the last question, output the file. No extra questions.",
 "",
 "Q1 — MODE. Ask what kind of work this is: Offline (writing, studying, creative, application) -> sealed (block everything). Needs internet (job search, research, brainstorm, strategy) -> lane (ask which sites the work needs; block everything else).",
 "Q2 — WORK + TIME. Ask what they're working on and their window. Get the task and block length in minutes.",
@@ -1418,7 +1419,7 @@ const INTERVIEW_PROMPT = [
 "Q4 — THE TRAP (optional). Ask: \"Anything that tends to pull you off task — a habit, a distraction, a temptation? I'll remind you of it. (Or skip.)\" If named, set why to it phrased as the trap to avoid; if skipped, why is \"\".",
 "Q5 — THE REWARD. Ask: \"What will finishing this feel like? I'll show you this if you drift.\" Set finishFeel to their answer.",
 "",
-"Then reply briefly, state the rule \"When you get the pull to look something up, park it and keep going — deal with it after,\" and output the focus file (the frozen HTML template you have), changing ONLY the CONFIG object to match: task, scope, mode, laneSites, whyLabel, why, finishFeel, jobsShape, jobs, blockMinutes, doneWhenShort. Every value from the interview. Output the complete file in one code block, then stop.",
+"Then reply briefly, and output the focus file (the frozen HTML template you have), changing ONLY the CONFIG object to match: task, scope, mode, laneSites, whyLabel, why, finishFeel, jobsShape, jobs, blockMinutes, doneWhenShort. Every value from the interview. Output the complete file in one code block, then stop.",
 "",
 "NOTE: You'll need the focus-file HTML template. If you don't have it in this chat, ask the person to paste it before you output the file."
 ].join("\n");
