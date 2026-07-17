@@ -1,5 +1,0 @@
-/* Coaching Loop -- mode-specific styling on top of _shared/foundation.css */
-/* No mode-specific overrides beyond the shared foundation are needed yet;
-   this file exists so build-templates.mjs has a consistent per-mode slot
-   and so future Coaching-only visual changes never touch the other two
-   modes or the shared foundation. */

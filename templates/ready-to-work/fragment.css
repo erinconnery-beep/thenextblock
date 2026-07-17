@@ -1,9 +1,0 @@
-/* Ready to Work -- mode-specific styling on top of _shared/foundation.css */
-
-.target-caption {
-  margin: 0 0 4px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.target-caption:empty { display: none; }
