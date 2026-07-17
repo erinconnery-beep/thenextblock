@@ -25,8 +25,8 @@ The focus file runs entirely in the browser with no internet connection. The ses
 | File | What it is | Where it goes |
 | --- | --- | --- |
 | `index.html` | **The website.** A single self-contained landing page. The full prompt (below) is embedded inside it, so the Copy button hands out everything. This is the only file you host. | Deploy this to Vercel / any static host. |
-| `the-next-block.md` | **The setup prompt.** The 5-question interview instructions plus the focus-file HTML template, in one paste-and-go document. This is what `index.html`'s Copy button copies. | Source of truth for the prompt. Not hosted separately — it's embedded in `index.html`. |
-| `focus-file.html` | **The focus file template (readable).** The un-minified version of the HTML page a session produces. Kept for reference and editing. The minified version of this is embedded inside `the-next-block.md`. | Not hosted. Reference / editing only. |
+| `focus-file-prompt.md` | **The setup prompt.** The 5-question interview instructions plus the focus-file HTML template, in one paste-and-go document. This is what `index.html`'s Copy button copies. | Source of truth for the prompt. Not hosted separately — it's embedded in `index.html`. |
+| `focus-file.html` | **The focus file template (readable).** The un-minified version of the HTML page a session produces. Kept for reference and editing. The minified version of this is embedded inside `focus-file-prompt.md`. | Not hosted. Reference / editing only. |
 
 **Key point:** only `index.html` gets deployed. The other two are the product's source — they're already baked into `index.html`.
 
@@ -58,8 +58,8 @@ When asked about a framework or build command, choose **"Other"** or leave it bl
 
 Because the prompt and the focus file are embedded in `index.html`, changes flow like this:
 
-- **To change the focus file** (the page a session produces): edit `focus-file.html`, minify it, re-embed it into `the-next-block.md`, then re-embed `the-next-block.md` into `index.html`.
-- **To change the interview questions**: edit the instructions section at the top of `the-next-block.md`, then re-embed into `index.html`.
+- **To change the focus file** (the page a session produces): edit `focus-file.html`, minify it, re-embed it into `focus-file-prompt.md`, then re-embed `focus-file-prompt.md` into `index.html`.
+- **To change the interview questions**: edit the instructions section at the top of `focus-file-prompt.md`, then re-embed into `index.html`.
 - **To change the website itself** (headline, layout, modals): edit `index.html` directly.
 
 The embedding is what keeps the site self-contained — one file the Copy button can hand out in full, with no external requests.
