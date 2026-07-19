@@ -139,14 +139,21 @@
     .copy { width:100%; justify-content:center; padding:14px 26px; font-size:15px; }
     .modal { padding:28px 24px; }
   }
-</style></head>
+</style>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-oqBnf5_V4SRV4lbtttuo3.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+</head>
 <body>
 
   <header>
     <div class="nav-left">
       <span class="logo"><svg class="logo-mark" viewBox="0 0 32 32" width="19" height="19" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="7" fill="#2f6a44"/><circle cx="16" cy="16" r="6" fill="#fdfbf6"/></svg>Focus File</span>
       <nav class="nav-links">
-        <button data-modal="design">Design notes</button>
+        <button class="plausible-event-name=design_notes_click" data-modal="design">Design notes</button>
         <button data-modal="privacy">Privacy</button>
         <button data-modal="feedback">Feedback</button>
       </nav>
@@ -155,7 +162,7 @@
     <div class="notes-menu">
       <button class="notes-btn" id="notesBtn" aria-expanded="false" aria-haspopup="true">Notes ▾</button>
       <div class="notes-drop" id="notesDrop">
-        <button data-modal="design">Design notes</button>
+        <button class="plausible-event-name=design_notes_click" data-modal="design">Design notes</button>
         <button data-modal="privacy">Privacy</button>
         <button data-modal="feedback">Feedback</button>
       </div>
@@ -170,7 +177,7 @@
     <div class="promptbox">
       <div class="pb-head">
         <span class="pb-label">The prompt · paste into any AI</span>
-        <button class="copy plausible-event-name=Copy+Prompt" id="copyBtn">⧉&nbsp;&nbsp;Copy</button>
+        <button class="copy plausible-event-name=copy_prompt" id="copyBtn">⧉&nbsp;&nbsp;Copy</button>
       </div>
       <div class="pb-body">
         <div class="pb-code" id="pbCode">Run a short setup, then output a finished focus file. Ask ONE question at a time, keep it warm and fast.
@@ -186,11 +193,11 @@ Then output the focus file, changing only the config to match…</div>
         <div class="aftercopy" id="afterCopy">
           <p class="ac-line">Now open an AI and paste it into a new chat.</p>
           <p class="ac-links">
-            <a class="plausible-event-name=Open+AI" href="https://claude.ai/new" target="_blank" rel="noopener">Claude ↗</a>
+            <a class="plausible-event-name=open_ai" href="https://claude.ai/new" target="_blank" rel="noopener">Claude ↗</a>
             <span class="dot">·</span>
-            <a class="plausible-event-name=Open+AI" href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT ↗</a>
+            <a class="plausible-event-name=open_ai" href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT ↗</a>
             <span class="dot">·</span>
-            <a class="plausible-event-name=Open+AI" href="https://gemini.google.com" target="_blank" rel="noopener">Gemini ↗</a>
+            <a class="plausible-event-name=open_ai" href="https://gemini.google.com" target="_blank" rel="noopener">Gemini ↗</a>
           </p>
         </div>
       </div>
@@ -198,12 +205,12 @@ Then output the focus file, changing only the config to match…</div>
 
     <div class="steps">
       <div class="step"><div class="n">01</div><h3>2-minute interview</h3><p>It refuses vagueness, narrows the work to one finishable block, and gets honest about what will pull you away and why it matters.</p><p class="step-dl"><button class="step-link" data-modal="interview">See the 5 questions</button></p></div>
-      <div class="step"><div class="n">02</div><h3>The Focus File</h3><p>The doing happens here. A small offline dashboard holds the actions and start time, then checks in if you drift.</p><p class="step-dl">Samples: <a class="nowrap plausible-event-name=View+Sample" href="sample-writing.html" target="_blank" rel="noopener">writing block</a> · <a class="nowrap plausible-event-name=View+Sample" href="sample-jobsearch.html" target="_blank" rel="noopener">job search block</a></p></div>
+      <div class="step"><div class="n">02</div><h3>The Focus File</h3><p>The doing happens here. A small offline dashboard holds the actions and start time, then checks in if you drift.</p><p class="step-dl">Samples: <a class="nowrap plausible-event-name=view_sample" href="sample-writing.html" target="_blank" rel="noopener">writing block</a> · <a class="nowrap plausible-event-name=view_sample" href="sample-jobsearch.html" target="_blank" rel="noopener">job search block</a></p></div>
       <div class="step"><div class="n">03</div><h3>Exit log</h3><p>At the end, a 60-second exit log records what got done, what got in the way, and where the next one will start. Shareable with a coach or therapist.</p><p class="step-dl"><button class="step-link" data-modal="log">See what gets logged</button></p></div>
     </div>
 
     <div class="foot">
-      <span class="foot-msg">Helped you? <button class="foot-link plausible-event-name=Share+Clicked" id="shareBtn">Share it.</button> Could be better? <a class="foot-link plausible-event-name=Feedback+Clicked" href="mailto:erinconnery@gmail.com">Send feedback.</a></span>
+      <span class="foot-msg">Helped you? <button class="foot-link plausible-event-name=share_click" id="shareBtn">Share it.</button> Could be better? <a class="foot-link plausible-event-name=feedback_click" href="mailto:erinconnery@gmail.com">Send feedback.</a></span>
       <span class="foot-sub">Free to use and adapt &middot; MIT licensed</span>
     </div>
 
