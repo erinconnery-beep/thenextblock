@@ -97,6 +97,7 @@
     display:flex; align-items:center; justify-content:center; text-align:center; gap:16px; flex-wrap:wrap; }
   .foot .tag { font-family:var(--serif); font-style:italic; font-size:15px; color:var(--ink-mut); }
   .foot-msg { font-family:var(--sans); font-size:13.5px; color:#756f60; }
+  .foot-sub { font-family:var(--sans); font-size:11.5px; color:var(--ink-faint); width:100%; text-align:center; }
   .foot-link { font-family:var(--sans); font-size:13.5px; font-weight:700; color:var(--ink-soft);
     background:none; border:none; padding:0; cursor:pointer; text-decoration:none;
     transition:color .15s; }
@@ -178,7 +179,7 @@ Q1 — MODE. Offline work → plan to turn the internet off. Needs internet → 
 Q2 — WORK + TIME. The task and the block window.
 Q3 — SHAPE THE GOAL. The header is the outcome; the jobs are the steps. Never restate the checklist.
 Q4 — THE TRAP (optional). &quot;Anything that tends to pull you off task? I&#x27;ll remind you. (Or skip.)&quot;
-Q5 — THE REWARD. &quot;What will finishing this feel like? I&#x27;ll show you this if you drift.&quot;
+Q5 — THE REASON. &quot;Why does finishing this matter to you today? I&#x27;ll show you this if you drift.&quot;
 
 Then output the focus file, changing only the config to match…</div>
         <div class="fade" id="pbFade"></div>
@@ -202,7 +203,8 @@ Then output the focus file, changing only the config to match…</div>
     </div>
 
     <div class="foot">
-      <span class="foot-msg">Helped you? <button class="foot-link" id="shareBtn">Share it.</button> Could be better? <a class="foot-link" href="mailto:hello@focus-file.com">Send feedback.</a></span>
+      <span class="foot-msg">Helped you? <button class="foot-link" id="shareBtn">Share it.</button> Could be better? <a class="foot-link" href="mailto:erinconnery@gmail.com">Send feedback.</a></span>
+      <span class="foot-sub">Free to use, adapt, and ship &middot; MIT licensed</span>
     </div>
 
   </div>
@@ -1730,14 +1732,14 @@ $("previewLink").addEventListener("click", () => {
 </script>
   <script type="text/plain" id="m-design"><h2>Design notes</h2>
 <p>Focus File was built for one reason: to finish a long writing project. It worked. So here it is — free, in case you have something to finish too.</p>
-<p><b>It refuses to let you stay vague.</b> In about two minutes, it asks (and keeps asking) until the work is one concrete block: what you will do, why it matters, and exactly where you will start.</p>
+<p><b>It would not let me stay vague.</b> The AI forced me to be accountable to one specific, time-bound task, across very different kinds of projects. At that one narrow job — making the task small, concrete, and finishable before I started — it was honestly as effective as a human coach.</p>
+<p><b>The knock worked because the words were mine.</b> Hearing my own conviction reflected back at the moment of drift reconnected me to the larger purpose, again and again. It broke an entrenched habit of plotting and sorting notes instead of doing the braver work of discovering the plot through writing. That habit looked like work, which made it dangerous — it could destroy the block as completely as an hour on Facebook. And clicking "Yes" did something different. It reminded me I was kicking ass. It was like hitting a Mario Kart boost.</p>
+<p><b>Offline was where the work got done.</b> An offline file that still felt alive — timer, check-ins, milestones — running alongside an internet-off session was essential (mine ran on Freedom). Creating the file was psychologically powerful in itself: it put me in the mode of thinking, offline is the place where work gets done. I could not have focused with the internet available.</p>
+<p><b>The exit log compounded.</b> Day after day, its answers revealed my patterns, and I carried those discoveries into the next Focus File. I also shared them with my therapist, and together we considered how the next file could reflect those patterns back in the language most likely to interrupt them. The whole system became more effective the longer I used it. By the end, the next file was made the night before, waiting open beside the draft like a note from yesterday's self. Sit down at the set time; the deciding is already done.</p>
 <p><b>It thinks with you, not for you.</b> Use it to brainstorm and structure, but reject anything bland, wrong, or unlike you — nothing gets built until you approve it.</p>
 <p><b>It plans just enough to start.</b> Most productivity tools keep you thinking about work instead of doing it. This one is designed to end quickly: a two-minute setup, then you begin.</p>
-<p><b>It knocks while you work.</b> Every so often, the focus file knocks with your own words: what you said you would do, why it mattered to you, and your usual escape (mine: organizing notes instead of writing). It is harder to argue with your own reasons.</p>
-<p><b>Accountability matters.</b> A clear commitment written down in advance is harder to quietly renegotiate once the work begins. An hour in, the file is doing what your head cannot: holding the work, the reason, and the next step somewhere indecision and distraction cannot erase them.</p>
-<p><b>It ends with the next block already built.</b> The closing step is fast too: a 60-second exit captures what got done, what got in the way, and where tomorrow starts. That is how the book got finished: the focus file made the night before, waiting open beside the draft like a note from yesterday's self. Sit down at the set time; the deciding is already done.</p>
-<p><b>The file holds the commitment between conversations.</b> It does not interpret your life or decide what matters; it makes the intention you already chose harder to lose.</p>
-<p><b>Why a file?</b> No account, no service, nothing that can be taken away. The log stays in your browser, and the whole thing works with the Wi-Fi off — which is where most focused work happens anyway. Unplug for an hour and find out.</p>
+<p><b>The file holds the commitment between conversations.</b> It does not interpret your life or decide what matters; it makes the intention you already chose harder to lose. A clear commitment written down in advance is harder to quietly renegotiate once the work begins — an hour in, the file is doing what your head cannot: holding the work, the reason, and the next step somewhere indecision and distraction cannot erase them.</p>
+<p><b>Why a file?</b> The log stays in your browser, and the whole thing works with the Wi-Fi off — which is where most focused work happens anyway. Unplug for an hour and find out.</p>
 </script>
   <script type="text/plain" id="m-privacy"><h2>Privacy</h2>
 <p><b>Focus File is a free self-directed tool.</b></p>
@@ -1748,7 +1750,7 @@ $("previewLink").addEventListener("click", () => {
 </script>
   <script type="text/plain" id="m-feedback"><h2>Feedback</h2>
 <p>Tell us what's working, what's not, or any new ideas.</p>
-<p>Send us an email: <a href="mailto:hello@focus-file.com">hello@focus-file.com</a></p>
+<p>Send us an email: <a href="mailto:erinconnery@gmail.com">erinconnery@gmail.com</a></p>
 </script>
 
   <script type="text/plain" id="m-interview"><h2>The interview</h2>

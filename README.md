@@ -92,3 +92,7 @@ Focus File is not medical or psychological advice.
 Feedback, ideas, or problems: **hello@focus-file.com**
 
 Built by a writer who couldn't start.
+
+## License
+
+MIT — free to use, adapt, and ship, including commercially. See `LICENSE`. The only requirement is keeping the copyright notice in copies of the code.
