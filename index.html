@@ -135,7 +135,7 @@
     .foot-msg { font-size:12.5px; }
     .foot { padding-top:24px; margin-top:36px; }
     .pb-head { flex-direction:column; align-items:stretch; gap:12px; }
-    .pb-label { font-size:11px; }
+    .pb-label { font-size:11px; text-align:center; }
     .copy { width:100%; justify-content:center; padding:14px 26px; font-size:15px; }
     .modal { padding:28px 24px; }
   }
@@ -170,7 +170,7 @@
     <div class="promptbox">
       <div class="pb-head">
         <span class="pb-label">The prompt · paste into any AI</span>
-        <button class="copy" id="copyBtn">⧉&nbsp;&nbsp;Copy</button>
+        <button class="copy plausible-event-name=Copy+Prompt" id="copyBtn">⧉&nbsp;&nbsp;Copy</button>
       </div>
       <div class="pb-body">
         <div class="pb-code" id="pbCode">Run a short setup, then output a finished focus file. Ask ONE question at a time, keep it warm and fast.
@@ -186,11 +186,11 @@ Then output the focus file, changing only the config to match…</div>
         <div class="aftercopy" id="afterCopy">
           <p class="ac-line">Now open an AI and paste it into a new chat.</p>
           <p class="ac-links">
-            <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude ↗</a>
+            <a class="plausible-event-name=Open+AI" href="https://claude.ai/new" target="_blank" rel="noopener">Claude ↗</a>
             <span class="dot">·</span>
-            <a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT ↗</a>
+            <a class="plausible-event-name=Open+AI" href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT ↗</a>
             <span class="dot">·</span>
-            <a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini ↗</a>
+            <a class="plausible-event-name=Open+AI" href="https://gemini.google.com" target="_blank" rel="noopener">Gemini ↗</a>
           </p>
         </div>
       </div>
@@ -198,13 +198,13 @@ Then output the focus file, changing only the config to match…</div>
 
     <div class="steps">
       <div class="step"><div class="n">01</div><h3>2-minute interview</h3><p>It refuses vagueness, narrows the work to one finishable block, and gets honest about what will pull you away and why it matters.</p><p class="step-dl"><button class="step-link" data-modal="interview">See the 5 questions</button></p></div>
-      <div class="step"><div class="n">02</div><h3>The Focus File</h3><p>The doing happens here. A small offline dashboard holds the actions and start time, then checks in if you drift.</p><p class="step-dl">See a finished one: <a class="nowrap" href="sample-writing.html" target="_blank" rel="noopener">writing block</a> · <a class="nowrap" href="sample-jobsearch.html" target="_blank" rel="noopener">job search block</a></p></div>
+      <div class="step"><div class="n">02</div><h3>The Focus File</h3><p>The doing happens here. A small offline dashboard holds the actions and start time, then checks in if you drift.</p><p class="step-dl">See a finished one: <a class="nowrap plausible-event-name=View+Sample" href="sample-writing.html" target="_blank" rel="noopener">writing block</a> · <a class="nowrap plausible-event-name=View+Sample" href="sample-jobsearch.html" target="_blank" rel="noopener">job search block</a></p></div>
       <div class="step"><div class="n">03</div><h3>Exit log</h3><p>At the end, a 60-second exit log records what got done, what got in the way, and where the next one will start. Shareable with a coach or therapist.</p><p class="step-dl"><button class="step-link" data-modal="log">See what gets logged</button></p></div>
     </div>
 
     <div class="foot">
-      <span class="foot-msg">Helped you? <button class="foot-link" id="shareBtn">Share it.</button> Could be better? <a class="foot-link" href="mailto:erinconnery@gmail.com">Send feedback.</a></span>
-      <span class="foot-sub">Free to use, adapt, and ship &middot; MIT licensed</span>
+      <span class="foot-msg">Helped you? <button class="foot-link plausible-event-name=Share+Clicked" id="shareBtn">Share it.</button> Could be better? <a class="foot-link plausible-event-name=Feedback+Clicked" href="mailto:erinconnery@gmail.com">Send feedback.</a></span>
+      <span class="foot-sub">Free to use and adapt &middot; MIT licensed</span>
     </div>
 
   </div>
@@ -1731,15 +1731,13 @@ $("previewLink").addEventListener("click", () => {
 ```
 </script>
   <script type="text/plain" id="m-design"><h2>Design notes</h2>
-<p>Focus File was built for one reason: to finish a long writing project. It worked. So here it is — free, in case you have something to finish too.</p>
-<p><b>It would not let me stay vague.</b> The AI forced me to be accountable to one specific, time-bound task, across very different kinds of projects. At that one narrow job — making the task small, concrete, and finishable before I started — it was honestly as effective as a human coach.</p>
-<p><b>The knock worked because the words were mine.</b> Hearing my own conviction reflected back at the moment of drift reconnected me to the larger purpose, again and again. It broke an entrenched habit of plotting and sorting notes instead of doing the braver work of discovering the plot through writing. That habit looked like work, which made it dangerous — it could destroy the block as completely as an hour on Facebook. And clicking "Yes" did something different. It reminded me I was kicking ass. It was like hitting a Mario Kart boost.</p>
-<p><b>Offline was where the work got done.</b> An offline file that still felt alive — timer, check-ins, milestones — running alongside an internet-off session was essential (mine ran on Freedom). Creating the file was psychologically powerful in itself: it put me in the mode of thinking, offline is the place where work gets done. I could not have focused with the internet available.</p>
-<p><b>The exit log compounded.</b> Day after day, its answers revealed my patterns, and I carried those discoveries into the next Focus File. I also shared them with my therapist, and together we considered how the next file could reflect those patterns back in the language most likely to interrupt them. The whole system became more effective the longer I used it. By the end, the next file was made the night before, waiting open beside the draft like a note from yesterday's self. Sit down at the set time; the deciding is already done.</p>
-<p><b>It thinks with you, not for you.</b> Use it to brainstorm and structure, but reject anything bland, wrong, or unlike you — nothing gets built until you approve it.</p>
-<p><b>It plans just enough to start.</b> Most productivity tools keep you thinking about work instead of doing it. This one is designed to end quickly: a two-minute setup, then you begin.</p>
-<p><b>The file holds the commitment between conversations.</b> It does not interpret your life or decide what matters; it makes the intention you already chose harder to lose. A clear commitment written down in advance is harder to quietly renegotiate once the work begins — an hour in, the file is doing what your head cannot: holding the work, the reason, and the next step somewhere indecision and distraction cannot erase them.</p>
-<p><b>Why a file?</b> The log stays in your browser, and the whole thing works with the Wi-Fi off — which is where most focused work happens anyway. Unplug for an hour and find out.</p>
+<p>Focus File was built for one reason: to finish a long writing project. It worked. So here it is—free, in case you have something to finish too.</p>
+<p><b>It would not let me stay vague.</b> The AI forced me to commit to one specific, time-bound task across very different kinds of projects. At that one narrow job—making the work small, concrete, and finishable before I began—it was honestly as effective as a human coach. It thinks with you, not for you: reject anything bland, wrong, or unlike you. Nothing gets built until you approve it. And it plans only enough to get you moving: a two-minute setup, then you begin.</p>
+<p><b>The knock worked because the words were mine.</b> Hearing my own conviction reflected back at the moment of drift reconnected me to the larger purpose. It broke an entrenched habit of plotting and sorting notes instead of doing the braver work of discovering the plot through writing. Because that habit looked like work, it was dangerous—it could destroy the block as completely as an hour on Facebook. And clicking &ldquo;Yes&rdquo; when I was still on task reminded me I was kicking ass. It was like hitting a Mario Kart boost.</p>
+<p><b>Offline was where the work got done.</b> The file still felt alive—timer, check-ins, milestones—but it ran alongside an internet-off session. Mine used Freedom. I could not have focused with the internet available. Even creating the file was psychologically powerful: it put me in the mode of thinking, offline is where work gets done.</p>
+<p><b>The exit log compounded.</b> Day after day, it revealed my patterns, and I carried those discoveries into the next Focus File. I also shared them with my coach, and together we considered what language would be most likely to interrupt those patterns next time. The system grew more effective the longer I used it. By the end, the next file was made the night before, waiting beside the draft like a note from yesterday&rsquo;s self: sit down at the set time; the deciding is already done.</p>
+<p><b>Why a file?</b> Because it holds the commitment between conversations. A clear commitment written down in advance is harder to quietly renegotiate once the work begins. An hour in, the file is doing what your head cannot: holding the work, the reason, and the next step somewhere indecision and distraction cannot erase them. The log stays in your browser, and the whole thing works with the Wi-Fi off—which is where most focused work happens anyway.</p>
+<p>Unplug for an hour and find out.</p>
 </script>
   <script type="text/plain" id="m-privacy"><h2>Privacy</h2>
 <p><b>Focus File is a free self-directed tool.</b></p>

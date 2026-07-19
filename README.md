@@ -95,4 +95,4 @@ Built by a writer who couldn't start.
 
 ## License
 
-MIT — free to use, adapt, and ship, including commercially. See `LICENSE`. The only requirement is keeping the copyright notice in copies of the code.
+MIT — free to use and adapt, including commercially. See `LICENSE`. The only requirement is keeping the copyright notice in copies of the code.
