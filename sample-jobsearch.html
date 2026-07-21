@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Focus File</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAArklEQVR42mNgGAUDDBgJKdDPcvlPiQUXp+1hJMsBlFpMrEOY6GE5PjOZ6GE5PrOZBjoRMtHL97jsGPAQYCFX47mJmzDEjPL9KIsCSizHJ05VBxCyhFRHMFHTcnIcwURty0lVP7jKgVEHDGoHkFrIEKueiRaGkuJYkqOAkOGkhhRZaQCXJeTUBWRXRuRYRjAECDUgadE2HHzZkJahgM1sJnLa8tRslg94x2QUDDgAAOQMQCUsrPaIAAAAAElFTkSuQmCC">
 <script>
 /* Crash guard. If anything below breaks, say so instead of looking alive but dead. */
 window.__fail = function (m) {
@@ -421,7 +422,17 @@ function init() {
   $("copyBtn").onclick = function () {
     var t = logText(), b = this;
     function ok() { b.textContent = "Copied ✓"; setTimeout(function () { b.textContent = "Copy my log"; }, 1600); }
-    if (navigator.clipboard) navigator.clipboard.writeText(t).then(ok, ok); else ok();
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      try { document.execCommand("copy"); ok(); }
+      catch (e) { b.textContent = "Press Ctrl/Cmd-C"; ta.style.opacity = "1"; return; }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(ok, fallback);
+    } else { fallback(); }
   };
 
   window.__ok = true;
