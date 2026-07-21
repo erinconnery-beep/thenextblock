@@ -43,13 +43,13 @@
     padding:9px 12px; border-radius:7px; }
   .notes-drop button:hover { background:var(--pine-tint); color:var(--ink); }
 
-  .wrap { max-width:640px; margin:0 auto; padding:72px 32px 48px; flex:1;
+  .wrap { max-width:640px; margin:0 auto; padding:clamp(36px,5.5vh,72px) 32px 48px; flex:1;
     display:flex; flex-direction:column; width:100%; }
 
-  h1 { font-size:44px; font-weight:400; line-height:1.12; letter-spacing:-.015em; margin-bottom:22px; }
+  h1 { font-size:clamp(34px,5vw,44px); font-weight:400; line-height:1.12; letter-spacing:-.015em; margin-bottom:18px; }
   h1 .nowrap { white-space:nowrap; }
   .nowrap { white-space:nowrap; }
-  .pitch { font-size:18px; color:var(--ink-soft); line-height:1.6; max-width:46ch; margin-bottom:40px; }
+  .pitch { font-size:18px; color:var(--ink-soft); line-height:1.6; max-width:46ch; margin-bottom:28px; }
   .pitch b { color:var(--ink); font-weight:600; }
 
   .promptbox { background:var(--paper-warm); border:1px solid var(--paper-line);
@@ -79,6 +79,9 @@
   .ac-links a { color:var(--pine); text-decoration:underline; text-underline-offset:2px; font-weight:600; }
   .ac-links a:hover { color:#276039; }
   .ac-links .dot { color:var(--ink-faint); margin:0 8px; }
+  .ac-note { font-family:var(--sans); font-size:13.5px; color:var(--ink-faint);
+    line-height:1.5; margin-top:14px; max-width:34ch; }
+  .ac-note code { font-family:var(--mono); font-size:12.5px; color:var(--ink-mut); }
 
   .steps { display:flex; gap:24px; margin:32px 0 0; }
   .step { flex:1; }
@@ -153,7 +156,7 @@
     <div class="nav-left">
       <span class="logo"><svg class="logo-mark" viewBox="0 0 32 32" width="19" height="19" aria-hidden="true"><rect x="3" y="3" width="26" height="26" rx="7" fill="#2f6a44"/><circle cx="16" cy="16" r="6" fill="#fdfbf6"/></svg>Focus File</span>
       <nav class="nav-links">
-        <button class="plausible-event-name=design_notes_click" data-modal="design">Design notes</button>
+        <button data-modal="design">Design notes</button>
         <button data-modal="privacy">Privacy</button>
         <button data-modal="feedback">Feedback</button>
       </nav>
@@ -162,7 +165,7 @@
     <div class="notes-menu">
       <button class="notes-btn" id="notesBtn" aria-expanded="false" aria-haspopup="true">Notes ▾</button>
       <div class="notes-drop" id="notesDrop">
-        <button class="plausible-event-name=design_notes_click" data-modal="design">Design notes</button>
+        <button data-modal="design">Design notes</button>
         <button data-modal="privacy">Privacy</button>
         <button data-modal="feedback">Feedback</button>
       </div>
@@ -177,7 +180,7 @@
     <div class="promptbox">
       <div class="pb-head">
         <span class="pb-label">The prompt · paste into any AI</span>
-        <button class="copy plausible-event-name=copy_prompt" id="copyBtn">⧉&nbsp;&nbsp;Copy</button>
+        <button class="copy" id="copyBtn">⧉&nbsp;&nbsp;Copy</button>
       </div>
       <div class="pb-body">
         <div class="pb-code" id="pbCode">Run a short setup, then output a finished focus file. Ask ONE question at a time, keep it warm and fast.
@@ -193,24 +196,26 @@ Then output the focus file, changing only the config to match…</div>
         <div class="aftercopy" id="afterCopy">
           <p class="ac-line">Now open an AI and paste it into a new chat.</p>
           <p class="ac-links">
-            <a class="plausible-event-name=open_ai" href="https://claude.ai/new" target="_blank" rel="noopener">Claude ↗</a>
+            <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude ↗</a>
             <span class="dot">·</span>
-            <a class="plausible-event-name=open_ai" href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT ↗</a>
+            <a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT ↗</a>
             <span class="dot">·</span>
-            <a class="plausible-event-name=open_ai" href="https://gemini.google.com" target="_blank" rel="noopener">Gemini ↗</a>
+            <a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini ↗</a>
           </p>
+          <p class="ac-note">If your AI turns the paste into a file attachment, reply:
+            <code>Follow the instructions in this file.</code></p>
         </div>
       </div>
     </div>
 
     <div class="steps">
       <div class="step"><div class="n">01</div><h3>2-minute interview</h3><p>It refuses vagueness, narrows the work to one finishable block, and gets honest about what will pull you away and why it matters.</p><p class="step-dl"><button class="step-link" data-modal="interview">See the 5 questions</button></p></div>
-      <div class="step"><div class="n">02</div><h3>The Focus File</h3><p>The doing happens here. A small offline dashboard holds the actions and start time, then checks in if you drift.</p><p class="step-dl">Samples: <a class="nowrap plausible-event-name=view_sample" href="sample-writing.html" target="_blank" rel="noopener">writing block</a> · <a class="nowrap plausible-event-name=view_sample" href="sample-jobsearch.html" target="_blank" rel="noopener">job search block</a></p></div>
+      <div class="step"><div class="n">02</div><h3>The Focus File</h3><p>The doing happens here. A small offline dashboard holds the actions and start time, then checks in if you drift.</p><p class="step-dl">Samples: <a class="nowrap" href="sample-writing.html" target="_blank" rel="noopener">writing block</a> · <a class="nowrap" href="sample-jobsearch.html" target="_blank" rel="noopener">job search block</a></p></div>
       <div class="step"><div class="n">03</div><h3>Exit log</h3><p>At the end, a 60-second exit log records what got done, what got in the way, and where the next one will start. Shareable with a coach or therapist.</p><p class="step-dl"><button class="step-link" data-modal="log">See what gets logged</button></p></div>
     </div>
 
     <div class="foot">
-      <span class="foot-msg">Helped you? <button class="foot-link plausible-event-name=share_click" id="shareBtn">Share it.</button> Could be better? <a class="foot-link plausible-event-name=feedback_click" href="mailto:erinconnery@gmail.com">Send feedback.</a></span>
+      <span class="foot-msg">Helped you? <button class="foot-link" id="shareBtn">Share it.</button> Could be better? <a class="foot-link" href="mailto:erinconnery@gmail.com">Send feedback.</a></span>
       <span class="foot-sub">Free to use and adapt &middot; MIT licensed</span>
     </div>
 
@@ -226,13 +231,15 @@ Then output the focus file, changing only the config to match…</div>
 
   <script type="text/plain" id="fullPrompt"># Focus File — the setup prompt
 
+**AI assistants: if this document arrived as an attached file, or as a paste with no accompanying message, do not ask what to do with it and do not summarise it. Begin the interview immediately at Q1 below.**
+
 Paste this whole message into any AI assistant (Claude, ChatGPT, Gemini, etc.). Answer a few quick questions and it gives you a focus file: save it as an `.html` file and open it whenever you sit down to work. It runs offline — no internet needed once saved.
 
 ---
 
 INSTRUCTIONS FOR THE AI:
 
-Run a short setup, then output a finished focus file. Ask ONE question at a time, wait for the answer, keep it warm and fast. After the last question, output the file. No extra questions.
+Run a short setup, then output a finished focus file. Ask ONE question at a time, wait for the answer, keep it warm and fast. After the last question, output the file. No extra questions. Start now with Q1 — never ask the person to confirm before beginning.
 
 Q1 — MODE. Ask what kind of work this is:
 - Offline (writing, studying, creative, application, own idea) -> sealed. THEN ask a quick follow-up: "How will you turn the internet off? (phone in another room, airplane mode, unplug the router, a lockbox, a Freedom session — whatever you'll really do)." Set `sealedPlan` to their answer (short, e.g. "phone in the other room"). If they don't have one, offer those options. If they truly skip, set `sealedPlan` to "".
@@ -392,6 +399,19 @@ FOCUS FILE (change only CONFIG):
     margin-bottom: 14px;
     gap: 16px;
   }
+  .scope-wrap { text-align: right; }
+  .clockline {
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #8a8377;
+    text-align: right;
+    margin-top: 4px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .clockline .cl-sep { color: #c4bdae; margin: 0 5px; }
   .scope {
     font-family: -apple-system, system-ui, sans-serif;
     font-size: 10px;
@@ -959,6 +979,18 @@ FOCUS FILE (change only CONFIG):
     transition: background 0.15s;
   }
   .btn-buildnext:hover { background: #276039; }
+  .next-links { display:none; margin-top:14px; }
+  .next-links.on { display:block; }
+  .nl-lead { font-family:-apple-system,system-ui,sans-serif; font-size:13px; color:#756f60; margin-bottom:6px; }
+  .nl-row { font-family:-apple-system,system-ui,sans-serif; font-size:15px; font-weight:600; }
+  .nl-row a { color:#2d5c3b; text-decoration:underline; text-underline-offset:2px; }
+  .nl-sep { color:#c4bdae; margin:0 8px; }
+  .nl-note { font-family:-apple-system,system-ui,sans-serif; font-size:12.5px; color:#8a8377;
+    margin-top:8px; line-height:1.5; }
+  .btn-dl { display:inline-block; margin-top:12px; background:none; border:none; cursor:pointer;
+    font-family:-apple-system,system-ui,sans-serif; font-size:13px; color:#756f60;
+    text-decoration:underline; text-underline-offset:2px; padding:4px 2px; }
+  .btn-dl:hover { color:#2d5c3b; }
   .buildnext-hint {
     font-family: -apple-system, system-ui, sans-serif;
     font-size: 12px;
@@ -1057,7 +1089,10 @@ FOCUS FILE (change only CONFIG):
             <span class="big" id="elapsedNum">0</span><span class="unit" id="elapsedUnit"> min in</span>
           </div>
         </div>
-        <div class="scope" id="scope">9:00 – 12:00</div>
+        <div class="scope-wrap">
+          <div class="scope" id="scope">9:00 – 12:00</div>
+          <div class="clockline" id="clockLine"></div>
+        </div>
       </div>
       <h1 class="task-title" id="taskTitle">1,500 new words on the story</h1>
       <div class="progress-track timer-wrap" id="progressWrap" style="margin-top:16px;">
@@ -1147,18 +1182,18 @@ FOCUS FILE (change only CONFIG):
       <div class="exit-title">A few quick things — this becomes your log.</div>
 
       <label class="exit-q" for="finishInput">Did you finish the block as planned?</label>
-      <textarea class="exit-input" id="finishInput" rows="2" placeholder="e.g. mostly — got through the hard scene but not the ending"></textarea>
+      <textarea class="exit-input" id="finishInput" rows="2"></textarea>
 
       <label class="exit-q" id="outputQ" for="outputInput" style="display:none;">Output — did you hit the number?</label>
-      <input class="exit-input" id="outputInput" style="display:none;" placeholder="" />
+      <input class="exit-input" id="outputInput" style="display:none;" />
 
       <label class="exit-q" for="inTheWayInput">What, if anything, got in the way of focus?</label>
-      <textarea class="exit-input" id="inTheWayInput" rows="2" placeholder="e.g. kept wanting to check email; slow start"></textarea>
+      <textarea class="exit-input" id="inTheWayInput" rows="2"></textarea>
 
       <label class="exit-q" for="nextInput">Where will the next block start?</label>
-      <textarea class="exit-input" id="nextInput" rows="2" placeholder="e.g. edit what I just wrote, out loud"></textarea>
+      <textarea class="exit-input" id="nextInput" rows="2"></textarea>
 
-      <p class="exit-forward">This saves to your log. Next, you can build your following block straight from it — carrying today's task and what got in the way.</p>
+      <p class="exit-forward">Save this, and the next screen gives you one button that copies everything an AI needs to build your next focus file. Paste it into a new chat, answer the questions, and the next block starts where this one left off.</p>
 
       <div class="exit-foot">
         <span class="exit-log" id="exitLog">Automatic data ready</span>
@@ -1173,7 +1208,16 @@ FOCUS FILE (change only CONFIG):
       <div class="sub" id="allDoneSub">Block by block, ritual becomes habit.</div>
 
       <button class="btn-buildnext" id="buildNextBtn">Build next block from this →</button>
-      <div class="buildnext-hint" id="buildNextHint">Copies everything the next chat needs — this session, the questions, and the template. Just paste it into a new chat.</div>
+      <div class="buildnext-hint" id="buildNextHint">One click copies three things: today's session, the 5 setup questions, and the focus file template.</div>
+
+      <div class="next-links" id="nextLinks">
+        <div class="nl-lead">Paste it into a new chat:</div>
+        <div class="nl-row">
+          <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude ↗</a><span class="nl-sep">·</span><a href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT ↗</a><span class="nl-sep">·</span><a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini ↗</a>
+        </div>
+        <div class="nl-note">If the paste arrives cut off or as an attachment, tell it: <i>follow the instructions in this file.</i></div>
+      </div>
+      <button class="btn-dl" id="downloadNextBtn">or download it as a file</button>
 
       <div class="log-actions">
         <button class="btn-log" id="viewLogBtn">View log</button>
@@ -1234,11 +1278,19 @@ const params = new URLSearchParams(location.search);
 const urlCfg = decodeUrlConfig();
 const cfg = urlCfg || CONFIG;
 
+/* ---- Pristine source, captured before any rendering or state changes.
+   Build-next must hand the NEXT chat a clean template — never this file mid-use,
+   which would carry checked milestones, a running timer, and (if the log was
+   open) previously saved entries into a third-party chat. ---- */
+const PRISTINE_HTML = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+
 /* ===================== RENDER ===================== */
 const $ = id => document.getElementById(id);
 
 $("taskTitle").textContent = cfg.task;
 $("scope").textContent     = cfg.scope;
+renderClockLine();
+setInterval(renderClockLine, 20000);
 $("pullText").textContent  = cfg.finishFeel;
 $("beLine").textContent    = "You said done was " + cfg.doneWhenShort + ".";
 
@@ -1383,6 +1435,7 @@ $("beginBtn").addEventListener("click", () => {
   $("timerWrap").classList.add("on");
   $("progressWrap").classList.add("on");
   logRow("begin");
+  renderClockLine();
   updateElapsed();
   elapsedTimer = setInterval(updateElapsed, 1000);
   scheduleAsk();
@@ -1493,6 +1546,20 @@ function parsePlanned(scope) {
   const m = scope.split(/[–-]/).map(s => s.trim());
   return { start: m[0] || "", finish: m[1] || "" };
 }
+function fmtClock(d) {
+  return d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+}
+/* Header time line. States the facts, compares nothing: the log does the comparing. */
+function renderClockLine() {
+  const el = $("clockLine");
+  if (!el) return;
+  const planned = parsePlanned(cfg.scope).start;
+  const parts = [];
+  if (planned) parts.push("Planned " + planned);
+  parts.push(startTime ? "Started " + fmtClock(new Date(startTime)) : "not started");
+  parts.push("now " + nowHHMM());
+  el.innerHTML = parts.join('<span class="cl-sep">\u00b7</span>');
+}
 function nowHHMM() {
   return new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
 }
@@ -1509,7 +1576,6 @@ function showExit(endedEarly) {
   if (isCount) {
     $("outputQ").style.display = "block";
     $("outputInput").style.display = "block";
-    $("outputInput").placeholder = "e.g. " + (cfg.doneWhenShort || "the number you hit");
   }
   const jobsTotal = document.querySelectorAll(".job").length;
   const jobsDone = document.querySelectorAll(".job.done").length;
@@ -1644,8 +1710,8 @@ function renderLog() {
 function escapeHtml(s) {
   return (s || "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 }
-function copyText(txt, btn) {
-  const done = () => { const o = btn.textContent; btn.textContent = "Copied ✓"; setTimeout(() => btn.textContent = o, 1600); };
+function copyText(txt, btn, after) {
+  const done = () => { const o = btn.textContent; btn.textContent = "Copied ✓"; setTimeout(() => btn.textContent = o, 1600); if (after) after(); };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(txt).then(done, () => fallbackCopy(txt, done));
   } else { fallbackCopy(txt, done); }
@@ -1709,15 +1775,32 @@ function buildNextPayload(e) {
   ctx.push(INTERVIEW_PROMPT);
   ctx.push("");
   ctx.push("=== FOCUS FILE TEMPLATE ===");
-  // include this file's own full source so the next chat can produce the file with no extra steps
-  ctx.push("<!DOCTYPE html>\n" + document.documentElement.outerHTML);
+  // the file as delivered, not as used — see PRISTINE_HTML
+  ctx.push(PRISTINE_HTML);
   return ctx.join("\n");
 }
 
 $("buildNextBtn").addEventListener("click", (e) => {
   const entries = getEntries();
   if (!entries.length) return;
-  copyText(buildNextPayload(entries[entries.length - 1]), e.target);
+  copyText(buildNextPayload(entries[entries.length - 1]), e.target,
+           () => $("nextLinks").classList.add("on"));
+});
+
+/* Offline download — a Blob, no network. The payload is ~56KB, which some chat
+   inputs truncate on paste; attaching a file sidesteps the limit entirely. */
+function downloadText(txt, filename) {
+  const url = URL.createObjectURL(new Blob([txt], {type: "text/markdown"}));
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+$("downloadNextBtn").addEventListener("click", () => {
+  const entries = getEntries();
+  if (!entries.length) return;
+  downloadText(buildNextPayload(entries[entries.length - 1]), "focus-file-next-block.md");
+  $("nextLinks").classList.add("on");
 });
 
 /* ---- Preview the knock: demo the flash + beep + asking state ---- */
@@ -1779,6 +1862,7 @@ $("previewLink").addEventListener("click", () => {
 
   <script>
     function copyPrompt(btn){
+      track('copy_prompt');
       var text = document.getElementById('fullPrompt').textContent;
       // swap the prompt preview for the paste options, inside the box — regardless of clipboard success
       document.querySelector('.pb-body').classList.add('copied');
@@ -1798,8 +1882,25 @@ $("previewLink").addEventListener("click", () => {
     }
     document.getElementById('copyBtn').addEventListener('click', function(){ copyPrompt(this); });
 
+    // ---- analytics: explicit event calls (independent of class-based tagging) ----
+    function track(name){ try { if (window.plausible) window.plausible(name); } catch(e) {} }
+
+    // the three AI links (revealed after copy)
+    document.querySelectorAll('.ac-links a').forEach(function(a){
+      a.addEventListener('click', function(){ track('open_ai'); });
+    });
+    // the two sample links
+    document.querySelectorAll('a[href^="sample-"]').forEach(function(a){
+      a.addEventListener('click', function(){ track('view_sample'); });
+    });
+    // feedback mailto
+    document.querySelectorAll('a[href^="mailto:"]').forEach(function(a){
+      a.addEventListener('click', function(){ track('feedback_click'); });
+    });
+
     // share the site
     document.getElementById('shareBtn').addEventListener('click', function(){
+      track('share_click');
       var btn = this;
       var shareData = {
         title: 'Focus File',
@@ -1823,6 +1924,7 @@ $("previewLink").addEventListener("click", () => {
     var lastFocused = null;
     document.querySelectorAll('[data-modal]').forEach(function(b){
       b.addEventListener('click', function(){
+        if (b.dataset.modal === 'design') track('design_notes_click');
         content.innerHTML = document.getElementById('m-' + b.dataset.modal).textContent;
         // if the trigger is inside the (now-closing) Notes dropdown, return focus to the Notes button
         lastFocused = notesDrop.contains(b) ? document.getElementById('notesBtn') : b;
