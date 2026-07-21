@@ -4,6 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Focus File</title>
+  <script>
+/* CRASH GUARD — must remain the FIRST script in the file. Catches runtime
+   errors, syntax errors, and truncated files, and verifies boot completed. */
+window.__bootFail = function (msg) {
+  window.__bootFailed = true;   /* keep the FIRST, most specific message */
+  var el = document.getElementById("bootError");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "bootError";
+    el.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;background:#b5642f;color:#fff;font:600 13px/1.45 -apple-system,system-ui,sans-serif;padding:12px 16px;text-align:center;";
+    (document.body || document.documentElement).appendChild(el);
+  }
+  el.textContent = "This focus file didn't load correctly — " + msg + ". Nothing is lost: re-run the setup prompt to regenerate it.";
+};
+window.addEventListener("error", function (e) { window.__bootFail(e.message || "script error"); });
+window.addEventListener("DOMContentLoaded", function () {
+  if (!window.__focusFileBooted && !window.__bootFailed) window.__bootFail("the main script never finished");
+});
+  </script>
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAArklEQVR42mNgGAUDDBgJKdDPcvlPiQUXp+1hJMsBlFpMrEOY6GE5PjOZ6GE5PrOZBjoRMtHL97jsGPAQYCFX47mJmzDEjPL9KIsCSizHJ05VBxCyhFRHMFHTcnIcwURty0lVP7jKgVEHDGoHkFrIEKueiRaGkuJYkqOAkOGkhhRZaQCXJeTUBWRXRuRYRjAECDUgadE2HHzZkJahgM1sJnLa8tRslg94x2QUDDgAAOQMQCUsrPaIAAAAAElFTkSuQmCC">
 <style>
   :root {
@@ -950,30 +969,33 @@
 
   </div>
 
+<script id="focus-config" type="application/json">
+{
+  "templateVersion": "2026-07-20",
+  "task": "1,500 new words on the story",
+  "scope": "9:00 – 12:00",
+  "mode": "sealed",
+  "laneSites": [],
+  "sealedPlan": "phone in the other room",
+  "whyLabel": "Watch for",
+  "why": "Re-reading and tweaking notes will feel like work. It's the detour. New words only — forward.",
+  "finishFeel": "1,500 words that didn't exist this morning. The story's further than it was — tomorrow you shape them instead of dreading the blank page.",
+  "jobsShape": "none",
+  "jobs": [],
+  "blockMinutes": 180,
+  "knockMinMin": 28,
+  "knockMaxMin": 33,
+  "doneWhenShort": "1,500 new words"
+}
+</script>
 <script>
-/* =====================================================================
-   CONFIG — the night-before interview fills this in.
-   jobsShape: "none" | "milestones" | "checklist"
-   mode:      "sealed" | "lane"
-   ===================================================================== */
-const CONFIG = {
-  task: "1,500 new words on the story",
-  scope: "9:00 – 12:00",
-  mode: "sealed",                 // "sealed" | "lane"
-  laneSites: [],                  // e.g. ["LinkedIn","Gmail","the 3 company sites"]
-  sealedPlan: "phone in the other room",  // sealed mode only: how they're keeping the internet off ("" to hide)
-  whyLabel: "Watch for",          // "Watch for" (a trap) or "Remember" (a rallying cry)
-  why: "Re-reading and tweaking notes will feel like work. It's the detour. New words only — forward.",
-  finishFeel: "1,500 words that didn't exist this morning. The story's further than it was — tomorrow you shape them instead of dreading the blank page.",
-  jobsShape: "none",              // "none" | "milestones" | "checklist"
-  jobs: [],                       // labels for milestones or checklist
-  blockMinutes: 180,              // length of the block, in minutes
-  knockMinMin: 28,
-  knockMaxMin: 33,
-  doneWhenShort: "1,500 new words"  // short restatement for block-end line
-};
+/* ===================== STATE — every declaration lives here, before any code runs.
+   A TDZ ReferenceError (reading a `let` declared further down) used to kill the whole
+   script silently. Nothing executes until init() at the very bottom. ===================== */
+let cfg = null;
+let hasTrap = false;
+let PRISTINE_HTML = "";
 
-/* ---- Optional: load a named test config from the URL (?test=writing|jobsearch|study|research) ---- */
 const TESTS = {
   writing: {
     task: "1,500 new words on the story",
@@ -1058,10 +1080,39 @@ const TESTS = {
   }
 };
 
-/* ---- Config source, in priority order:
-   1. #cfg=<base64 JSON> in the URL  (how the interview delivers a session)
-   2. ?test=<name>                    (built-in test modes)
-   3. the CONFIG object above         (default)                              ---- */
+const params = new URLSearchParams(location.search); /*DEV*/
+const testKey = params.get("test"); /*DEV*/
+const $ = id => document.getElementById(id);
+
+const LOG_KEY = "nextblock_log";       // raw event stream (CSV-ish)
+const ENTRIES_KEY = "nextblock_entries"; // structured per-session entries (JSON)
+let startTime = null;
+let elapsedTimer = null;
+let knockTimer = null;
+let blockEndTimer = null;
+let extended = 0;
+let knockCount = 0;
+let onTaskCount = 0;
+let sortOfCount = 0;
+let noCount = 0;
+let hitAnswer = null;
+
+let nextKnockAt = null;
+const INTERVIEW_PROMPT = [
+"You run a short setup for a focus tool called Focus File, then output a finished focus file. Ask ONE question at a time, wait for the answer, keep it warm and fast. After the last question, output the file. No extra questions.",
+"",
+"Q1 — MODE. Ask what kind of work this is: Offline (writing, studying, creative, application) -> sealed, then ask how they'll turn the internet off (phone in another room, airplane mode, unplug router, lockbox, Freedom session) and set sealedPlan to their short answer. Needs internet (job search, research, brainstorm, strategy) -> lane (ask which sites the work needs; they block the rest with their usual blocker; leave sealedPlan empty).",
+"Q2 — WORK + TIME. Ask what they're working on and their window. Get the task and block length in minutes.",
+"Q3 — SHAPE THE GOAL. The header (task) is the OUTCOME — the one true thing that exists when done; jobs, if any, are the STEPS. The header must never just restate the checklist. jobsShape: \"none\" (atomic), \"milestones\" (a large count, split it), or \"checklist\" (3-5 genuinely different actions — never invent steps; propose and let them edit). Check the jobs fill the block; if short, grow the list or shrink the block.",
+"Q4 — THE TRAP (optional). Ask: \"Anything that tends to pull you off task — a habit, a distraction, a temptation? I'll remind you of it. (Or skip.)\" If named, set why to it phrased as the trap to avoid; if skipped, why is \"\".",
+"Q5 — THE REASON. Ask: \"Why does finishing this matter to you today? Keep it simple and true (e.g. the draft finally moves, so I stop dreading it, I can actually rest tonight).\" Set finishFeel to their answer.",
+"",
+"Then reply briefly, and output the focus file, changing ONLY the values inside the <script id=\"focus-config\"> JSON block. Never edit any other line — no HTML, CSS, or JS — and leave the selfTest function exactly as-is. Copy templateVersion through unchanged. Every value from the interview. Output the complete file in one code block, then stop.",
+"",
+"The frozen focus-file template is included at the very bottom of this message, after the line === FOCUS FILE TEMPLATE ===. Use it exactly as-is, changing only the values inside the <script id=\"focus-config\"> JSON block. You already have everything you need — do not ask the person to paste anything."
+].join("\n");
+
+/* ---- Optional: load a named test config from the URL (?test=writing|jobsearch|study|research) ---- */
 function decodeUrlConfig() {
   try {
     const hash = location.hash || "";
@@ -1079,58 +1130,10 @@ function decodeUrlConfig() {
   }
 }
 
-const params = new URLSearchParams(location.search);
-const testKey = params.get("test");
-const urlCfg = decodeUrlConfig();
-const cfg = urlCfg || (testKey && TESTS[testKey] ? TESTS[testKey] : CONFIG);
-
-/* ---- Pristine source, captured before any rendering or state changes.
-   Build-next must hand the NEXT chat a clean template — never this file mid-use,
-   which would carry checked milestones, a running timer, and (if the log was
-   open) previously saved entries into a third-party chat. ---- */
-const PRISTINE_HTML = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-
 /* ===================== RENDER ===================== */
-const $ = id => document.getElementById(id);
-
-$("taskTitle").textContent = cfg.task;
-$("scope").textContent     = cfg.scope;
-renderClockLine();
-setInterval(renderClockLine, 20000);
-$("pullText").textContent  = cfg.finishFeel;
-$("beLine").textContent    = "You said done was " + cfg.doneWhenShort + ".";
-
 /* trap (why) is optional — if empty, hide the Watch-for line and the knock's quoted reason */
-const hasTrap = cfg.why && cfg.why.trim().length > 0;
-if (hasTrap) {
-  $("whyLabel").textContent = cfg.whyLabel || "Watch for";
-  $("whyText").textContent  = cfg.why;
-  $("knockReason").textContent = "\u201C" + cfg.why + "\u201D";
-} else {
-  $("why").style.display = "none";        // no Watch-for section
-  $("knockReason").style.display = "none"; // knock just asks, quotes nothing
-}
-
 /* lane */
-if (cfg.mode === "lane" && cfg.laneSites.length) {
-  $("lane").classList.add("on");
-  const chipWrap = $("laneChips");
-  cfg.laneSites.forEach((s, i) => {
-    const chip = document.createElement("span");
-    chip.className = "lane-chip";
-    chip.textContent = s;
-    chip.style.marginRight = "0";
-    chipWrap.appendChild(chip);
-    chipWrap.appendChild(document.createTextNode(" "));
-  });
-}
-
 // sealed mode: show how they're keeping the internet off (if they gave a plan)
-if (cfg.mode === "sealed" && cfg.sealedPlan) {
-  $("sealedPlan").textContent = cfg.sealedPlan;
-  $("sealedStrip").classList.add("on");
-}
-
 /* jobs — three shapes, with a live counter */
 function pad2(n) { return String(n).padStart(2, "0"); }
 function updateCounter() {
@@ -1140,50 +1143,7 @@ function updateCounter() {
   c.textContent = pad2(done) + " / " + pad2(total) + " COMPLETE";
   c.classList.toggle("complete", done === total && total > 0);
 }
-if (cfg.jobsShape !== "none" && cfg.jobs.length) {
-  $("jobsSection").classList.remove("hidden");
-  $("jobsEyebrow").textContent = (cfg.jobsShape === "milestones") ? "Milestones" : "The jobs";
-  const list = $("jobList");
-  cfg.jobs.forEach((label, i) => {
-    const row = document.createElement("label");
-    row.className = "job";
-    row.setAttribute("for", "job-" + i);
-    const cb = document.createElement("input");
-    cb.type = "checkbox";
-    cb.className = "job-check";
-    cb.id = "job-" + i;
-    const box = document.createElement("span");
-    box.className = "box";
-    box.setAttribute("aria-hidden", "true");
-    const text = document.createElement("span");
-    text.className = "label";
-    text.textContent = label;
-    row.appendChild(cb);
-    row.appendChild(box);
-    row.appendChild(text);
-    cb.addEventListener("change", () => {
-      row.classList.toggle("done", cb.checked);
-      updateCounter();
-    });
-    list.appendChild(row);
-  });
-  updateCounter();
-}
-
 /* ===================== SESSION LOGIC ===================== */
-const LOG_KEY = "nextblock_log";       // raw event stream (CSV-ish)
-const ENTRIES_KEY = "nextblock_entries"; // structured per-session entries (JSON)
-let startTime = null;
-let elapsedTimer = null;
-let knockTimer = null;
-let blockEndTimer = null;
-let extended = 0;
-let knockCount = 0;
-let onTaskCount = 0;
-let sortOfCount = 0;
-let noCount = 0;
-let hitAnswer = null;
-
 function logRow(event, detail) {
   const now = new Date();
   const elapsedMin = startTime ? Math.round((Date.now() - startTime) / 60000) : 0;
@@ -1204,7 +1164,6 @@ function randKnockDelay() {
   return (a + Math.random() * (b - a)) * 60 * 1000;
 }
 
-let nextKnockAt = null;
 function scheduleAsk() {
   clearTimeout(knockTimer);
   const delay = randKnockDelay();
@@ -1233,22 +1192,6 @@ function updateElapsed() {
 }
 
 /* ---- Begin ---- */
-$("beginBtn").addEventListener("click", () => {
-  startTime = Date.now();
-  $("beginBtn").style.display = "none";
-  $("endLink").style.display = "";      // End session becomes available once begun
-  $("checkin").classList.add("on");     // check-in is now always visible
-  $("timerWrap").classList.add("on");
-  $("progressWrap").classList.add("on");
-  logRow("begin");
-  renderClockLine();
-  updateElapsed();
-  elapsedTimer = setInterval(updateElapsed, 1000);
-  scheduleAsk();
-  // block-end fires at the named block length
-  blockEndTimer = setTimeout(showBlockEnd, cfg.blockMinutes * 60 * 1000);
-});
-
 /* ---- The nudge: timer makes the check-in actively ASK ---- */
 function knockBeep() {
   // Web Audio — a soft two-note chime, generated offline, no file needed
@@ -1294,26 +1237,6 @@ function stopAsking() {
 }
 
 /* ---- Answering (buttons are always live, clickable anytime) ---- */
-document.querySelectorAll(".knock-answers button").forEach(b => {
-  b.addEventListener("click", () => {
-    const ans = b.dataset.a;
-    const wasAsking = $("checkin").classList.contains("asking");
-    knockCount++;
-    if (ans === "yes") onTaskCount++;
-    else if (ans === "sort-of") sortOfCount++;
-    else if (ans === "no") noCount++;
-    logRow(wasAsking ? "knock" : "self-check", ans);
-    stopAsking();
-    if (ans === "yes") {
-      $("pull").classList.remove("on");
-      scheduleAsk();          // reset the nudge timer
-    } else {
-      $("pull").classList.add("on");   // sort-of / no — show the pull
-      scheduleAsk();
-    }
-  });
-});
-
 /* ---- Block-end ---- */
 function showBlockEnd() {
   clearTimeout(knockTimer);
@@ -1325,27 +1248,7 @@ function showBlockEnd() {
   $("blockend").classList.add("on");
   logRow("block-end-reached");
 }
-$("moreBtn").addEventListener("click", () => {
-  extended++;
-  logRow("one-more-block", extended);
-  $("blockend").classList.remove("on");
-  $("action").style.display = "block";
-  scheduleAsk();
-  blockEndTimer = setTimeout(showBlockEnd, 30 * 60 * 1000); // one more ~30 min block
-});
-$("finishBtn").addEventListener("click", () => {
-  $("blockend").classList.remove("on");
-  showExit(false);   // finished normally
-});
-
 /* ---- End session (leave early) ---- */
-$("endLink").addEventListener("click", () => {
-  logRow("end-session-early");
-  $("blockend").classList.remove("on");
-  $("action").style.display = "none";
-  showExit(true);    // ended early
-});
-
 /* ---- Planned-time helpers ---- */
 function parsePlanned(scope) {
   // scope like "9:00 – 12:00" -> {start:"9:00", finish:"12:00"}
@@ -1394,78 +1297,6 @@ function showExit(endedEarly) {
 }
 
 // clear the invalid highlight (and warning) as soon as the user types in a flagged field
-["finishInput", "nextInput", "outputInput"].forEach(id => {
-  $(id).addEventListener("input", () => {
-    if ($(id).value.trim()) {
-      $(id).classList.remove("invalid");
-      if (!document.querySelector(".exit-input.invalid")) $("exitLog").classList.remove("warn");
-    }
-  });
-});
-
-$("doneBtn").addEventListener("click", () => {
-  // Required: finished-as-planned, where-next, and output (only when the output field is shown).
-  // "What got in the way" stays optional — "nothing" is a valid answer.
-  const required = [$("finishInput"), $("nextInput")];
-  if ($("outputQ").style.display !== "none") required.push($("outputInput"));
-
-  let firstMissing = null;
-  required.forEach(el => {
-    if (!el.value.trim()) {
-      el.classList.add("invalid");
-      if (!firstMissing) firstMissing = el;
-    } else {
-      el.classList.remove("invalid");
-    }
-  });
-  if (firstMissing) {
-    const log = $("exitLog");
-    log.textContent = "Fill the highlighted fields to save.";
-    log.classList.add("warn");
-    firstMissing.focus();
-    return;   // block save
-  }
-  $("exitLog").classList.remove("warn");
-
-  const planned = parsePlanned(cfg.scope);
-  const actualMin = startTime ? Math.round((Date.now() - startTime) / 60000) : 0;
-  const jobsTotal = document.querySelectorAll(".job").length;
-  const jobsDone = document.querySelectorAll(".job.done").length;
-
-  const entry = {
-    date: new Date().toISOString(),
-    task: cfg.task,
-    mode: cfg.mode,
-    plannedStart: planned.start,
-    plannedFinish: planned.finish,
-    actualStart: startTime ? new Date(startTime).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) : "",
-    actualFinish: nowHHMM(),
-    actualMinutes: actualMin,
-    plannedMinutes: cfg.blockMinutes,
-    extended: extended,
-    jobsDone: jobsDone,
-    jobsTotal: jobsTotal,
-    checkins: knockCount,
-    onTask: onTaskCount,
-    sortOf: sortOfCount,
-    off: noCount,
-    finishedAsPlanned: $("finishInput").value.trim(),
-    output: $("outputInput").value.trim(),
-    inTheWay: $("inTheWayInput").value.trim(),
-    nextStart: $("nextInput").value.trim()
-  };
-
-  // append to structured entries
-  let entries = [];
-  try { entries = JSON.parse(localStorage.getItem(ENTRIES_KEY) || "[]"); } catch (e) {}
-  entries.push(entry);
-  localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
-  logRow("exit", { hit: entry.finishedAsPlanned, output: entry.output });
-
-  $("exit").classList.remove("on");
-  $("allDone").classList.add("on");
-});
-
 /* ---- Log: view + copy ---- */
 function getEntries() {
   try { return JSON.parse(localStorage.getItem(ENTRIES_KEY) || "[]"); } catch (e) { return []; }
@@ -1528,39 +1359,7 @@ function fallbackCopy(txt, done) {
   try { document.execCommand("copy"); done(); } catch (e) {}
   document.body.removeChild(ta);
 }
-$("viewLogBtn").addEventListener("click", () => {
-  const v = $("logView");
-  v.classList.toggle("on");
-  if (v.classList.contains("on")) { renderLog(); $("viewLogBtn").textContent = "Hide log"; }
-  else $("viewLogBtn").textContent = "View log";
-});
-$("copyLastBtn").addEventListener("click", (e) => {
-  const entries = getEntries();
-  if (!entries.length) return;
-  copyText(entryToText(entries[entries.length - 1]), e.target);
-});
-$("copyAllBtn").addEventListener("click", (e) => {
-  const entries = getEntries();
-  if (!entries.length) return;
-  const all = entries.map(entryToText).join("\n\n———\n\n");
-  copyText(all, e.target);
-});
-
 /* ---- Build next block: copy interview prompt + this session as priming ---- */
-const INTERVIEW_PROMPT = [
-"You run a short setup for a focus tool called Focus File, then output a finished focus file. Ask ONE question at a time, wait for the answer, keep it warm and fast. After the last question, output the file. No extra questions.",
-"",
-"Q1 — MODE. Ask what kind of work this is: Offline (writing, studying, creative, application) -> sealed, then ask how they'll turn the internet off (phone in another room, airplane mode, unplug router, lockbox, Freedom session) and set sealedPlan to their short answer. Needs internet (job search, research, brainstorm, strategy) -> lane (ask which sites the work needs; they block the rest with their usual blocker; leave sealedPlan empty).",
-"Q2 — WORK + TIME. Ask what they're working on and their window. Get the task and block length in minutes.",
-"Q3 — SHAPE THE GOAL. The header (task) is the OUTCOME — the one true thing that exists when done; jobs, if any, are the STEPS. The header must never just restate the checklist. jobsShape: \"none\" (atomic), \"milestones\" (a large count, split it), or \"checklist\" (3-5 genuinely different actions — never invent steps; propose and let them edit). Check the jobs fill the block; if short, grow the list or shrink the block.",
-"Q4 — THE TRAP (optional). Ask: \"Anything that tends to pull you off task — a habit, a distraction, a temptation? I'll remind you of it. (Or skip.)\" If named, set why to it phrased as the trap to avoid; if skipped, why is \"\".",
-"Q5 — THE REASON. Ask: \"Why does finishing this matter to you today? Keep it simple and true (e.g. the draft finally moves, so I stop dreading it, I can actually rest tonight).\" Set finishFeel to their answer.",
-"",
-"Then reply briefly, and output the focus file, changing ONLY the CONFIG object to match: task, scope, mode, laneSites, sealedPlan, whyLabel, why, finishFeel, jobsShape, jobs, blockMinutes, doneWhenShort. Every value from the interview. Output the complete file in one code block, then stop.",
-"",
-"The frozen focus-file template is included at the very bottom of this message, after the line === FOCUS FILE TEMPLATE ===. Use it exactly as-is, changing only the CONFIG object. You already have everything you need — do not ask the person to paste anything."
-].join("\n");
-
 function buildNextPayload(e) {
   const ctx = [];
   ctx.push("=== LAST SESSION (use this to prime the interview) ===");
@@ -1586,15 +1385,6 @@ function buildNextPayload(e) {
   return ctx.join("\n");
 }
 
-$("buildNextBtn").addEventListener("click", (e) => {
-  const entries = getEntries();
-  if (!entries.length) return;
-  copyText(buildNextPayload(entries[entries.length - 1]), e.target,
-           () => $("nextLinks").classList.add("on"));
-});
-
-/* Offline download — a Blob, no network. The payload is ~56KB, which some chat
-   inputs truncate on paste; attaching a file sidesteps the limit entirely. */
 function downloadText(txt, filename) {
   const url = URL.createObjectURL(new Blob([txt], {type: "text/markdown"}));
   const a = document.createElement("a");
@@ -1602,24 +1392,328 @@ function downloadText(txt, filename) {
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-$("downloadNextBtn").addEventListener("click", () => {
-  const entries = getEntries();
-  if (!entries.length) return;
-  downloadText(buildNextPayload(entries[entries.length - 1]), "focus-file-next-block.md");
-  $("nextLinks").classList.add("on");
-});
-
 /* ---- Preview the knock: demo the flash + beep + asking state ---- */
-$("previewLink").addEventListener("click", () => {
-  const wasVisible = $("checkin").classList.contains("on");
-  $("checkin").classList.add("on");     // show it if pre-start
-  startAsking();                         // flash, beep, asking state
-  // auto-revert the preview after a moment (it's just a demo)
-  setTimeout(() => {
-    stopAsking();
-    if (!wasVisible) $("checkin").classList.remove("on");
-  }, 2600);
-});
+
+/* ---- Boot steps ---- */
+function capturePristine() {
+  /* Must run before applyConfig() mutates anything: build-next ships this string
+     as the next chat's template, so it has to be the file as delivered. */
+  PRISTINE_HTML = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+}
+
+function normalizeConfig(raw) {
+  const c = Object.assign({
+    scope: "", laneSites: [], sealedPlan: "", whyLabel: "Watch for", why: "",
+    finishFeel: "", jobsShape: "none", jobs: [], knockMinMin: 28, knockMaxMin: 33
+  }, raw || {});
+  c.task = String(c.task || "").trim();
+  c.scope = String(c.scope || "").trim();
+  c.blockMinutes = Number(c.blockMinutes);          // NOT defaulted — required; selfTest enforces
+  c.knockMinMin = Number(c.knockMinMin) || 28;
+  c.knockMaxMin = Math.max(Number(c.knockMaxMin) || 33, c.knockMinMin);
+  c.jobs = Array.isArray(c.jobs) ? c.jobs.map(String) : [];
+  c.laneSites = Array.isArray(c.laneSites) ? c.laneSites.map(String) : [];
+  c.why = String(c.why || "");
+  c.sealedPlan = String(c.sealedPlan || "");
+  c.finishFeel = String(c.finishFeel || "");
+  c.doneWhenShort = String(c.doneWhenShort || c.task);
+  c.whyLabel = c.whyLabel === "Remember" ? "Remember" : "Watch for";
+  return c;
+}
+
+function loadConfig() {
+  let fileCfg;
+  try {
+    fileCfg = JSON.parse(document.getElementById("focus-config").textContent);
+  } catch (e) {
+    window.__bootFail("the focus-config block has a JSON error (" + e.message + ")");
+    throw e;
+  }
+  if (typeof TESTS !== "undefined" && testKey && TESTS[testKey]) fileCfg = TESTS[testKey]; /*DEV*/
+  cfg = normalizeConfig(Object.assign({}, fileCfg, decodeUrlConfig() || {}));
+}
+
+function applyConfig() {
+  /* trap (why) is optional — if empty, hide the Watch-for line and the knock's quoted reason */
+  hasTrap = cfg.why && cfg.why.trim().length > 0;
+  /* =====================================================================
+     CONFIG — the night-before interview fills this in.
+     jobsShape: "none" | "milestones" | "checklist"
+     mode:      "sealed" | "lane"
+     ===================================================================== */
+  /* ---- Config source, in priority order:
+     1. #cfg=<base64 JSON> in the URL  (how the interview delivers a session)
+     2. ?test=<name>                    (built-in test modes)
+     3. the focus-config JSON island    (default)                              ---- */
+  /* ---- Pristine source, captured before any rendering or state changes.
+     Build-next must hand the NEXT chat a clean template — never this file mid-use,
+     which would carry checked milestones, a running timer, and (if the log was
+     open) previously saved entries into a third-party chat. ---- */
+  $("taskTitle").textContent = cfg.task;
+  $("scope").textContent     = cfg.scope;
+  renderClockLine();
+  setInterval(renderClockLine, 20000);
+  $("pullText").textContent  = cfg.finishFeel;
+  $("beLine").textContent    = "You said done was " + cfg.doneWhenShort + ".";
+
+  if (hasTrap) {
+    $("whyLabel").textContent = cfg.whyLabel || "Watch for";
+    $("whyText").textContent  = cfg.why;
+    $("knockReason").textContent = "\u201C" + cfg.why + "\u201D";
+  } else {
+    $("why").style.display = "none";        // no Watch-for section
+    $("knockReason").style.display = "none"; // knock just asks, quotes nothing
+  }
+
+  if (cfg.mode === "lane" && cfg.laneSites.length) {
+    $("lane").classList.add("on");
+    const chipWrap = $("laneChips");
+    cfg.laneSites.forEach((s, i) => {
+      const chip = document.createElement("span");
+      chip.className = "lane-chip";
+      chip.textContent = s;
+      chip.style.marginRight = "0";
+      chipWrap.appendChild(chip);
+      chipWrap.appendChild(document.createTextNode(" "));
+    });
+  }
+
+  if (cfg.mode === "sealed" && cfg.sealedPlan) {
+    $("sealedPlan").textContent = cfg.sealedPlan;
+    $("sealedStrip").classList.add("on");
+  }
+
+  if (cfg.jobsShape !== "none" && cfg.jobs.length) {
+    $("jobsSection").classList.remove("hidden");
+    $("jobsEyebrow").textContent = (cfg.jobsShape === "milestones") ? "Milestones" : "The jobs";
+    const list = $("jobList");
+    cfg.jobs.forEach((label, i) => {
+      const row = document.createElement("label");
+      row.className = "job";
+      row.setAttribute("for", "job-" + i);
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.className = "job-check";
+      cb.id = "job-" + i;
+      const box = document.createElement("span");
+      box.className = "box";
+      box.setAttribute("aria-hidden", "true");
+      const text = document.createElement("span");
+      text.className = "label";
+      text.textContent = label;
+      row.appendChild(cb);
+      row.appendChild(box);
+      row.appendChild(text);
+      cb.addEventListener("change", () => {
+        row.classList.toggle("done", cb.checked);
+        updateCounter();
+      });
+      list.appendChild(row);
+    });
+    updateCounter();
+  }
+
+  /* Offline download — a Blob, no network. The payload is ~56KB, which some chat
+     inputs truncate on paste; attaching a file sidesteps the limit entirely. */
+}
+
+function wireEvents() {
+  $("beginBtn").addEventListener("click", () => {
+    startTime = Date.now();
+    $("beginBtn").style.display = "none";
+    $("endLink").style.display = "";      // End session becomes available once begun
+    $("checkin").classList.add("on");     // check-in is now always visible
+    $("timerWrap").classList.add("on");
+    $("progressWrap").classList.add("on");
+    logRow("begin");
+    renderClockLine();
+    updateElapsed();
+    elapsedTimer = setInterval(updateElapsed, 1000);
+    scheduleAsk();
+    // block-end fires at the named block length
+    blockEndTimer = setTimeout(showBlockEnd, cfg.blockMinutes * 60 * 1000);
+  });
+
+  document.querySelectorAll(".knock-answers button").forEach(b => {
+    b.addEventListener("click", () => {
+      const ans = b.dataset.a;
+      const wasAsking = $("checkin").classList.contains("asking");
+      knockCount++;
+      if (ans === "yes") onTaskCount++;
+      else if (ans === "sort-of") sortOfCount++;
+      else if (ans === "no") noCount++;
+      logRow(wasAsking ? "knock" : "self-check", ans);
+      stopAsking();
+      if (ans === "yes") {
+        $("pull").classList.remove("on");
+        scheduleAsk();          // reset the nudge timer
+      } else {
+        $("pull").classList.add("on");   // sort-of / no — show the pull
+        scheduleAsk();
+      }
+    });
+  });
+
+  $("moreBtn").addEventListener("click", () => {
+    extended++;
+    logRow("one-more-block", extended);
+    $("blockend").classList.remove("on");
+    $("action").style.display = "block";
+    scheduleAsk();
+    blockEndTimer = setTimeout(showBlockEnd, 30 * 60 * 1000); // one more ~30 min block
+  });
+  $("finishBtn").addEventListener("click", () => {
+    $("blockend").classList.remove("on");
+    showExit(false);   // finished normally
+  });
+
+  $("endLink").addEventListener("click", () => {
+    logRow("end-session-early");
+    $("blockend").classList.remove("on");
+    $("action").style.display = "none";
+    showExit(true);    // ended early
+  });
+
+  ["finishInput", "nextInput", "outputInput"].forEach(id => {
+    $(id).addEventListener("input", () => {
+      if ($(id).value.trim()) {
+        $(id).classList.remove("invalid");
+        if (!document.querySelector(".exit-input.invalid")) $("exitLog").classList.remove("warn");
+      }
+    });
+  });
+
+  $("doneBtn").addEventListener("click", () => {
+    // Required: finished-as-planned, where-next, and output (only when the output field is shown).
+    // "What got in the way" stays optional — "nothing" is a valid answer.
+    const required = [$("finishInput"), $("nextInput")];
+    if ($("outputQ").style.display !== "none") required.push($("outputInput"));
+
+    let firstMissing = null;
+    required.forEach(el => {
+      if (!el.value.trim()) {
+        el.classList.add("invalid");
+        if (!firstMissing) firstMissing = el;
+      } else {
+        el.classList.remove("invalid");
+      }
+    });
+    if (firstMissing) {
+      const log = $("exitLog");
+      log.textContent = "Fill the highlighted fields to save.";
+      log.classList.add("warn");
+      firstMissing.focus();
+      return;   // block save
+    }
+    $("exitLog").classList.remove("warn");
+
+    const planned = parsePlanned(cfg.scope);
+    const actualMin = startTime ? Math.round((Date.now() - startTime) / 60000) : 0;
+    const jobsTotal = document.querySelectorAll(".job").length;
+    const jobsDone = document.querySelectorAll(".job.done").length;
+
+    const entry = {
+      date: new Date().toISOString(),
+      task: cfg.task,
+      mode: cfg.mode,
+      plannedStart: planned.start,
+      plannedFinish: planned.finish,
+      actualStart: startTime ? new Date(startTime).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) : "",
+      actualFinish: nowHHMM(),
+      actualMinutes: actualMin,
+      plannedMinutes: cfg.blockMinutes,
+      extended: extended,
+      jobsDone: jobsDone,
+      jobsTotal: jobsTotal,
+      checkins: knockCount,
+      onTask: onTaskCount,
+      sortOf: sortOfCount,
+      off: noCount,
+      finishedAsPlanned: $("finishInput").value.trim(),
+      output: $("outputInput").value.trim(),
+      inTheWay: $("inTheWayInput").value.trim(),
+      nextStart: $("nextInput").value.trim()
+    };
+
+    // append to structured entries
+    let entries = [];
+    try { entries = JSON.parse(localStorage.getItem(ENTRIES_KEY) || "[]"); } catch (e) {}
+    entries.push(entry);
+    localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+    logRow("exit", { hit: entry.finishedAsPlanned, output: entry.output });
+
+    $("exit").classList.remove("on");
+    $("allDone").classList.add("on");
+  });
+
+  $("viewLogBtn").addEventListener("click", () => {
+    const v = $("logView");
+    v.classList.toggle("on");
+    if (v.classList.contains("on")) { renderLog(); $("viewLogBtn").textContent = "Hide log"; }
+    else $("viewLogBtn").textContent = "View log";
+  });
+  $("copyLastBtn").addEventListener("click", (e) => {
+    const entries = getEntries();
+    if (!entries.length) return;
+    copyText(entryToText(entries[entries.length - 1]), e.target);
+  });
+  $("copyAllBtn").addEventListener("click", (e) => {
+    const entries = getEntries();
+    if (!entries.length) return;
+    const all = entries.map(entryToText).join("\n\n———\n\n");
+    copyText(all, e.target);
+  });
+
+  $("buildNextBtn").addEventListener("click", (e) => {
+    const entries = getEntries();
+    if (!entries.length) return;
+    copyText(buildNextPayload(entries[entries.length - 1]), e.target,
+             () => $("nextLinks").classList.add("on"));
+  });
+
+  $("downloadNextBtn").addEventListener("click", () => {
+    const entries = getEntries();
+    if (!entries.length) return;
+    downloadText(buildNextPayload(entries[entries.length - 1]), "focus-file-next-block.md");
+    $("nextLinks").classList.add("on");
+  });
+
+  $("previewLink").addEventListener("click", () => {
+    const wasVisible = $("checkin").classList.contains("on");
+    $("checkin").classList.add("on");     // show it if pre-start
+    startAsking();                         // flash, beep, asking state
+    // auto-revert the preview after a moment (it's just a demo)
+    setTimeout(() => {
+      stopAsking();
+      if (!wasVisible) $("checkin").classList.remove("on");
+    }, 2600);
+  });
+}
+
+/* ===== SELF-TEST — the setup instructions refer to this block; never modify it =====
+   Runs last inside init(); any failure throws to the crash guard and becomes a banner. */
+function selfTest() {
+  const must = (ok, what) => { if (!ok) throw new Error("self-test failed: " + what); };
+  must(typeof cfg.task === "string" && cfg.task.trim().length > 0, "task is empty");
+  must(Number(cfg.blockMinutes) > 0, "blockMinutes is not a positive number");
+  must(["sealed", "lane"].indexOf(cfg.mode) > -1, "mode must be sealed or lane");
+  must(["none", "milestones", "checklist"].indexOf(cfg.jobsShape) > -1, "unknown jobsShape");
+  must(Array.isArray(cfg.jobs), "jobs must be an array");
+  must(cfg.jobsShape === "none" || document.querySelectorAll(".job").length === cfg.jobs.length, "jobs did not render");
+  must(cfg.knockMinMin > 0 && cfg.knockMaxMin >= cfg.knockMinMin, "knock window invalid");
+  must(!!document.getElementById("beginBtn"), "begin button missing");
+}
+
+/* ===================== BOOT — the only top-level call in this file ===================== */
+function init() {
+  capturePristine();
+  loadConfig();
+  applyConfig();
+  wireEvents();
+  selfTest();
+  window.__focusFileBooted = true;
+}
+init();
 </script>
 </body>
 </html>

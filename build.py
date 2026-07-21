@@ -17,11 +17,14 @@ can land inside the *embedded* template instead of the page itself. This uses ex
 markers instead.
 """
 
+import json
 import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).parent
+
+ISLAND_RE = re.compile(r'<script id="focus-config" type="application/json">[\s\S]*?</script>')
 
 FULLPROMPT_OPEN = '<script type="text/plain" id="fullPrompt">'
 TAIL_MARKER = '<script type="text/plain" id="m-design">'
@@ -40,17 +43,100 @@ def production_template(src: str) -> str:
     comment = out.rfind('/* ---- Config source', start, after)
     cut_to = comment if comment != -1 else after
     out = out[:start] + out[cut_to:]
-    out = out.replace(
-        'const cfg = urlCfg || (testKey && TESTS[testKey] ? TESTS[testKey] : CONFIG);',
-        'const cfg = urlCfg || CONFIG;')
-    out = out.replace('const testKey = params.get("test");\n', '')
+    out = '\n'.join(l for l in out.split('\n') if '/*DEV*/' not in l)
     if 'TESTS' in out:
         sys.exit('build: TESTS still referenced after strip')
     return out
 
 
+def _strip_js_comments(js: str) -> str:
+    """Whole-line JS comments only. Never touches trailing comments, so a `//` inside
+    a string or regex literal can't be mistaken for one."""
+    out, in_block = [], False
+    for ln in js.split('\n'):
+        st = ln.strip()
+        if in_block:
+            if '*/' in st:
+                in_block = False
+                rest = st.split('*/', 1)[1].strip()
+                if rest:
+                    out.append(rest)
+            continue
+        if st.startswith('/*'):
+            if '*/' in st[2:]:
+                rest = st.split('*/', 1)[1].strip()
+                if rest:
+                    out.append(rest)
+            else:
+                in_block = True
+            continue
+        if st.startswith('//') or not st:
+            continue
+        out.append(st)
+    return '\n'.join(out)
+
+
+def compact(src: str) -> str:
+    """Shrink the shipped template without minifying it.
+
+    Line breaks are preserved — the longest line stays ~443 chars, so large pastes
+    still work (see 'Why the template is NOT minified'). What goes is comments,
+    blank lines, indentation, and CSS whitespace. The CONFIG block is held out
+    verbatim: it is what the interview rewrites and what build.py's sample regex
+    matches. focus-file.html itself stays fully readable; only output is compacted.
+    """
+    cfg_m = ISLAND_RE.search(src)
+    if not cfg_m:
+        sys.exit('build: no focus-config island found in the template')
+    cfg = cfg_m.group(0)
+    sentinel = '<!--__CONFIG_ISLAND__-->'
+    src = src.replace(cfg, sentinel)
+
+    # the crash guard is a <script> block ABOVE <style>; the main script is the LAST one.
+    guard_m = re.search(r'  <script>\n/\* CRASH GUARD[\s\S]*?</script>\n', src)
+    guard_sent = '<!--__CRASH_GUARD__-->'
+    if guard_m:
+        src = src.replace(guard_m.group(0), guard_sent + '\n')
+
+    s_i = src.find('<style>') + len('<style>')
+    s_e = src.find('</style>')
+    j_i = src.rfind('<script>') + len('<script>')
+    j_e = src.rfind('</script>')
+    if min(s_i, s_e, j_i, j_e) < 0 or not (s_e < j_i < j_e):
+        sys.exit('build: could not locate <style>/<script> regions in the template')
+
+    css = re.sub(r'/\*.*?\*/', '', src[s_i:s_e], flags=re.DOTALL)
+    css = re.sub(r'\s+', ' ', css)
+    css = re.sub(r'\s*([{;:,])\s*', r'\1', css)
+    css = re.sub(r';?\s*}', '}', css)
+    css = re.sub(r'\n\s*', '\n', css.replace('}', '}\n').strip())
+
+    js = _strip_js_comments(src[j_i:j_e])
+    ded = lambda x: '\n'.join(l.strip() for l in x.split('\n') if l.strip())
+    out = (ded(src[:s_i]) + '\n' + css + '\n' + ded(src[s_e:j_i])
+           + '\n' + js + '\n' + ded(src[j_e:]))
+    out = out.replace(sentinel, cfg)
+    if guard_m:
+        out = out.replace(guard_sent, guard_m.group(0).rstrip('\n'))
+    return out
+
+
 def main() -> None:
-    template = production_template((ROOT / 'focus-file.html').read_text())
+    readable = production_template((ROOT / 'focus-file.html').read_text())
+    template = compact(readable)
+
+    # nothing may be lost in compaction
+    ids = lambda s: set(re.findall(r'id="([^"]+)"', s))
+    fns = lambda s: set(re.findall(r'function (\w+)', s))
+    keys = lambda s: set(json.loads(ISLAND_RE.search(s).group(0)
+                         .split('>', 1)[1].rsplit('</script', 1)[0]).keys())
+    for label, f in (('element ids', ids), ('functions', fns), ('CONFIG keys', keys)):
+        lost = f(readable) - f(template)
+        if lost:
+            sys.exit(f'build: compaction dropped {label}: {sorted(lost)}')
+    if not ISLAND_RE.search(template):
+        sys.exit('build: compaction damaged the focus-config island')
+
 
     longest = max(len(l) for l in template.split('\n'))
     if longest > 2000:
@@ -85,13 +171,12 @@ def main() -> None:
     index_path.write_text(rebuilt)
 
     # 3. template + CONFIG -> samples
-    config_re = re.compile(r'const CONFIG = \{.*?\n\};', re.DOTALL)
     for name in ('sample-writing.html', 'sample-jobsearch.html'):
         path = ROOT / name
-        existing = config_re.search(path.read_text())
+        existing = ISLAND_RE.search(path.read_text())
         if not existing:
-            sys.exit(f'build: no CONFIG block found in {name}')
-        path.write_text(config_re.sub(lambda _m: existing.group(0), template, count=1))
+            sys.exit(f'build: no focus-config island found in {name}')
+        path.write_text(ISLAND_RE.sub(lambda _m: existing.group(0), template, count=1))
 
     # 4. sanity checks
     final = index_path.read_text()
